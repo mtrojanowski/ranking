@@ -1,0 +1,55 @@
+---
+
+- hosts: all
+  remote_user: root
+  become: yes
+
+  tasks:
+  - name: ensure python-apt and unzip are installed
+    apt: name='python-apt,unzip'
+
+  - name: add php repository
+    apt_repository:
+      repo: 'ppa:ondrej/php'
+      update_cache: true
+
+  - name: ensure php 7.2 is installed
+    apt: name='php7.2,php7.2-zip,php7.2-xml,php7.2-mbstring,php7.2-intl,php7.2-mongodb'
+
+  - name: get composer
+    command: /vagrant/files/getcomposer.sh
+    args:
+      creates: /usr/local/bin/composer
+
+  - name: stop apache2
+    service:
+      name: apache2
+      state: stopped
+
+  - name: create project directory
+    file:
+      src: /vagrant/src
+      dest: /var/ranking
+      state: link
+
+  - name: add mongo repository key
+    apt_key:
+      keyserver: hkp://keyserver.ubuntu.com:80
+      id: 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+
+  - name: create a list file for mongodb
+    shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+    args:
+      creates: /etc/apt/sources.list.d/mongodb-org-3.6.list
+
+  - name: install mongo
+    apt: 
+      name: mongodb-org
+      update_cache: true
+
+  - name: start mongo
+    service:
+      name: mongod
+      state: started
+
+
