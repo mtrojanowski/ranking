@@ -39,3 +39,10 @@
 
 # Backup entities generated with doctrine:generate:entities command
 **/Entity/*~
+
+.idea/*
+src/.idea/*
+.vagrant/*
+playbook.retry
+ubuntu*.log
+
