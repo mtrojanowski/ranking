@@ -17,4 +17,5 @@ RESULT=$?
 rm composer-setup.php
 
 composer config extra.symfony.allow-contrib true
+composer config "platform.ext-mongo" "1.6.16"
 exit $RESULT
