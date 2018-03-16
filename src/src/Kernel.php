@@ -16,6 +16,10 @@ class Kernel extends BaseKernel
 
     public function getCacheDir()
     {
+        if ($this->environment === 'local') {
+            return '/tmp/symfony/cache';
+        }
+
         return $this->getProjectDir().'/var/cache/'.$this->environment;
     }
 
