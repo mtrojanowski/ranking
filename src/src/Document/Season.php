@@ -21,12 +21,12 @@ class Season
 
 
     /**
-     * @MongoDB\Field(type="timestamp")
+     * @MongoDB\Field(type="date")
      */
     private $startDate;
 
     /**
-     * @MongoDB\Field(type="timestamp")
+     * @MongoDB\Field(type="date")
      */
     private $endDate;
 
