@@ -6,12 +6,13 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class TournamentRepository extends DocumentRepository
 {
-    public function getTournaments(bool $previous)
+    public function getTournaments(string $previous)
     {
         $queryBuilder = $this->createQueryBuilder();
-        $today = new \DateTime();
+        $todayDate = new \DateTime();
+        $today = $todayDate->format('Y-m-d');
 
-        if ($previous) {
+        if ($previous == 'true') {
             $queryBuilder
                 ->field('date')->lt($today);
         } else {
@@ -19,6 +20,18 @@ class TournamentRepository extends DocumentRepository
                 ->field('date')->gte($today);
         }
 
-        return $queryBuilder->getQuery()->execute();
+        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+    }
+
+    public function getLastLegacyId()
+    {
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder
+            ->sort('legacyId', -1)
+            ->limit(1);
+
+        $tournament = $queryBuilder->getQuery()->getSingleResult();
+
+        return !empty($tournament) ? $tournament->getLegacyId() : 0;
     }
 }

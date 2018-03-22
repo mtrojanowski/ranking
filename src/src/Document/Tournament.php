@@ -5,7 +5,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * Class Tournament
- * @MongoDB\Document(repositoryClass="App\Repository\TournamentRepository")
+ * @MongoDB\Document(repositoryClass="App\Repository\TournamentRepository", collection="Tournaments")
  */
 class Tournament
 {
@@ -25,7 +25,7 @@ class Tournament
     private $name;
 
     /**
-     * @MongoDB\Field(type="date")
+     * @MongoDB\Field(type="string")
      */
     private $date;
 
