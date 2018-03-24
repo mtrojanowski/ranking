@@ -5,7 +5,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * Class Player
- * @MongoDB\Document(repositoryClass="App\Repository\PlayerRepository", collection="Players")
+ * @MongoDB\Document(repositoryClass="App\Repository\PlayerRepository", collection="players")
  */
 class Player
 {

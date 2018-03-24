@@ -5,7 +5,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * Class Tournament
- * @MongoDB\Document(repositoryClass="App\Repository\TournamentRepository", collection="Tournaments")
+ * @MongoDB\Document(repositoryClass="App\Repository\TournamentRepository", collection="tournaments")
  */
 class Tournament
 {
@@ -63,6 +63,11 @@ class Tournament
      * @MongoDB\Field(type="string")
      */
     private $type;
+
+    /**
+     * @MongoDB\Field(type="int")
+     */
+    private $playersInTeam;
 
     /**
      * @MongoDB\Field(type="string")
@@ -260,4 +265,22 @@ class Tournament
     {
         $this->season = $season;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPlayersInTeam()
+    {
+        return $this->playersInTeam;
+    }
+
+    /**
+     * @param mixed $playersInTeam
+     */
+    public function setPlayersInTeam($playersInTeam)
+    {
+        $this->playersInTeam = $playersInTeam;
+    }
+
+
 }

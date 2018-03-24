@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -16,7 +17,7 @@ class AppController extends Controller
     {
         if ($this->serializer == null) {
             $encoders = [ new JsonEncoder() ];
-            $normalizers = [ new ObjectNormalizer() ];
+            $normalizers = [ new ObjectNormalizer(), new ArrayDenormalizer() ];
 
             $this->serializer = new Serializer($normalizers, $encoders);
         }
