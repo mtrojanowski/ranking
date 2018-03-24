@@ -16,6 +16,11 @@
   - name: ensure php 7.2 is installed
     apt: name='php7.2,php7.2-zip,php7.2-xml,php7.2-mbstring,php7.2-intl,php7.2-mongodb'
 
+  - name: ensure getcomposer is executable
+    file: 
+      path: /vagrant/files/getcomposer.sh
+      mode: "+x"
+
   - name: get composer
     command: /vagrant/files/getcomposer.sh
     args:

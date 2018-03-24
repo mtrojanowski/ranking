@@ -57,6 +57,11 @@ class Tournament
     /**
      * @MongoDB\Field(type="string")
      */
+    private $season;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $type;
 
     /**
@@ -238,5 +243,21 @@ class Tournament
     public function setRank($rank)
     {
         $this->rank = $rank;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSeason()
+    {
+        return $this->season;
+    }
+
+    /**
+     * @param mixed $season
+     */
+    public function setSeason($season)
+    {
+        $this->season = $season;
     }
 }

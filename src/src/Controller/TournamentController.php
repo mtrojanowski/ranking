@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Document\Tournament;
 use App\Repository\TournamentRepository;
+use App\Service\TournamentsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
@@ -36,7 +37,7 @@ class TournamentController extends AppController
     /**
      * @Route("/tournaments", name="add_tournament", methods="POST")
      */
-    public function addTournament(Request $request)
+    public function addTournament(Request $request, TournamentsService $tournamentsService)
     {
         try {
             /** @var Tournament $tournament */
@@ -49,8 +50,7 @@ class TournamentController extends AppController
             return $this->json($this->getError('Incorrect data'), 400);
         }
 
-        $lastId = $this->getMongo()->getRepository('App:Tournament')->getLastLegacyId();
-        $tournament->setLegacyId($lastId + 1);
+        $tournamentsService->prepareTournament($tournament);
 
         $manager = $this->getMongo()->getManager();
         $manager->persist($tournament);
