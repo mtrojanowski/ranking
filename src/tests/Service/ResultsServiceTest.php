@@ -16,8 +16,9 @@ class ResultsServiceTest extends TestCase
 
         $service = new ResultsService();
 
-        $tournamentResults = TestsDataProvider::getSmallSinglesLocalInputData();
-        $expectedResults = TestsDataProvider::getSmallSinglesLocalExpectedResults();
+        $testData = TestsDataProvider::getSmallSinglesLocalTestData();
+        $tournamentResults = $testData['input'];
+        $expectedResults = $testData['expectedResult'];
 
         $results = $service->createTournamentResults($tournament, $tournamentResults);
 

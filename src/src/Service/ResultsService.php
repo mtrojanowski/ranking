@@ -42,8 +42,8 @@ class ResultsService
         return $results;
     }
 
-    private function calculatePointsForLocal(int $playersOnTournament, int $playersInTeam, int $place, int $multiplier) : int
+    private function calculatePointsForLocal(int $playersOnTournament, int $playersInTeam, int $place, float $multiplier) : int
     {
-        return (int) floor(($playersOnTournament / $playersInTeam - $place) * $multiplier) + 1;
+        return (int) (floor(($playersOnTournament / $playersInTeam - $place) * $multiplier) + 1);
     }
 }
