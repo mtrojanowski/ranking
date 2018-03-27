@@ -9,20 +9,29 @@ class ResultsServiceTest extends TestCase
 {
     public function testShouldCreateResultsForLocalSinglesTournament()
     {
-        $tournament = new Tournament();
-        $tournament->setRank("local");
-        $tournament->setType("single");
-        $tournament->setPlayersInTeam(1);
+        $tournament = $this->getTournament("local", "single", 1);
+        $testData = TestsDataProvider::getSmallSinglesLocalTestData();
 
         $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
 
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForLargeLocalSinglesTournament()
+    {
+        $tournament = $this->getTournament("local", "single", 1);
         $testData = TestsDataProvider::getSmallSinglesLocalTestData();
-        $tournamentResults = $testData['input'];
-        $expectedResults = $testData['expectedResult'];
 
-        $results = $service->createTournamentResults($tournament, $tournamentResults);
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
 
-        $this->assertEquals(7, count($results));
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    private function verifyResults($results, $expectedResults)
+    {
+        $this->assertEquals(count($expectedResults), count($results));
 
         foreach ($results as $i => $result) {
             $this->assertEquals($expectedResults[$i]->getTournamentId(), $result->getTournamentId());
@@ -31,6 +40,15 @@ class ResultsServiceTest extends TestCase
             $this->assertEquals($expectedResults[$i]->getArmy(), $result->getArmy());
             $this->assertEquals($expectedResults[$i]->getPoints(), $result->getPoints());
         }
+    }
 
+    private function getTournament($rank, $type, $playersInTeam) : Tournament
+    {
+        $tournament = new Tournament();
+        $tournament->setRank($rank);
+        $tournament->setType($type);
+        $tournament->setPlayersInTeam($playersInTeam);
+
+        return $tournament;
     }
 }
