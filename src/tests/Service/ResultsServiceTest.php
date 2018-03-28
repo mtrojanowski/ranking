@@ -29,6 +29,83 @@ class ResultsServiceTest extends TestCase
         $this->verifyResults($results, $testData['expectedResult']);
     }
 
+    public function testShouldCreateResultsForVeryLargeLocalSinglesTournament()
+    {
+        $tournament = $this->getTournament("local", "single", 1);
+        $testData = TestsDataProvider::getVeryLargeSinglesLocalTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForSmallLocalThreePlayerTeamTournament()
+    {
+        $tournament = $this->getTournament("local", "team", 3);
+        $testData = TestsDataProvider::getSmallThreePlayerTeamLocalTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForLargeLocalThreePlayerTeamTournament()
+    {
+        $tournament = $this->getTournament("local", "team", 3);
+        $testData = TestsDataProvider::getLargeThreePlayerTeamLocalTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForLargeLocalFivePlayerTeamTournament()
+    {
+        $tournament = $this->getTournament("local", "team", 5);
+        $testData = TestsDataProvider::getLargeFivePlayerTeamLocalTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForSmallSinglesMasterTournament()
+    {
+        $tournament = $this->getTournament("master", "single", 1);
+        $testData = TestsDataProvider::getSmallSingleMasterTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForLargeSinglesMasterTournament()
+    {
+        $tournament = $this->getTournament("master", "single", 1);
+        $testData = TestsDataProvider::getLargeSingleMasterTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForVeryLargeSinglesMasterTournament()
+    {
+        $tournament = $this->getTournament("master", "single", 1);
+        $testData = TestsDataProvider::getVeryLargeSingleMasterTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
     private function verifyResults($results, $expectedResults)
     {
         $this->assertEquals(count($expectedResults), count($results));
