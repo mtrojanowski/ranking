@@ -82,6 +82,36 @@ class TestsDataProvider
         return self::getTournamentTestData('veryLargeSingleMaster', 1);
     }
 
+    public static function getSmallThreePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('smallThreePlayerTeamMaster', 3);
+    }
+
+    public static function getLargeThreePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('largeThreePlayerTeamMaster', 3);
+    }
+
+    public static function getVeryLargeThreePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('veryLargeThreePlayerTeamMaster', 3);
+    }
+
+    public static function getSmallFivePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('smallFivePlayerTeamMaster', 5);
+    }
+
+    public static function getLargeFivePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('largeFivePlayerTeamMaster', 5);
+    }
+
+    public static function getVeryLargeFivePlayerTeamMasterTestData() : array
+    {
+        return self::getTournamentTestData('veryLargeFivePlayerTeamMaster', 5);
+    }
+
     private static function getTournamentTestData($type, $playersInTeam = 1)
     {
         return self::getTestData(

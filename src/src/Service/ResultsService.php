@@ -19,6 +19,8 @@ class ResultsService
         } elseif ($tournament->getRank() === 'master') {
             if ($tournament->getType() === 'single') {
                 return $this->createMasterSingleResults($tournamentResults);
+            } elseif ($tournament->getType() === 'team') {
+                return $this->createMasterTeamResults($tournamentResults, $tournament->getPlayersInTeam());
             }
         }
 
@@ -27,10 +29,20 @@ class ResultsService
 
     private function createMasterSingleResults(TournamentResults $tournamentResults) : array
     {
+        return $this->createMasterResults($tournamentResults, 1);
+    }
+
+    private function createMasterTeamResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    {
+        return $this->createMasterResults($tournamentResults, $playersInTeam);
+    }
+
+    private function createMasterResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
         $playersInTournament = count($tournamentResults->getResults());
-        $multiplier1 = ( $playersInTournament > 24 ? 249 : (10*$playersInTournament - 1) ) / ( $playersInTournament / 1 - 1 );
+        $multiplier1 = ( $playersInTournament > 24 ? 249 : (10*$playersInTournament - 1) ) / ( $playersInTournament / $playersInTeam - 1 );
         $multiplier2 = ( $playersInTournament > 34 ? 50 : ($playersInTournament > 25 ? (5 * ($playersInTournament - 25)) : 0) );
 
         foreach ($tournamentResults->getResults() as $tournamentResult) {
@@ -41,7 +53,7 @@ class ResultsService
             $result->setPlayerId($tournamentResult->getPlayerId());
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
-            $result->setPoints($this->calculatePointsForMaster($playersInTournament, 1, $tournamentResult->getPlace(), $multiplier1, $multiplier2));
+            $result->setPoints($this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2));
 
             $results[] = $result;
         }
@@ -50,6 +62,16 @@ class ResultsService
     }
 
     private function createLocalTeamResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    {
+        return $this->createLocalResults($tournamentResults, $playersInTeam);
+    }
+
+    private function createLocalSinglesResults(TournamentResults $tournamentResults) : array
+    {
+        return $this->createLocalResults($tournamentResults, 1);
+    }
+
+    private function createLocalResults(TournamentResults $tournamentResults, int $playersInTeam) : array
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
@@ -65,29 +87,6 @@ class ResultsService
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
             $result->setPoints($this->calculatePointsForLocal($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier));
-
-            $results[] = $result;
-        }
-
-        return $results;
-    }
-
-    private function createLocalSinglesResults(TournamentResults $tournamentResults) : array
-    {
-        $results = [];
-        $tournamentId = $tournamentResults->getTournamentId();
-        $playersInTournament = count($tournamentResults->getResults());
-        $multiplier = ($playersInTournament > 9 ? 99 : (10 * $playersInTournament - 1)) / ( $playersInTournament / 1 - 1);
-
-        foreach ($tournamentResults->getResults() as $tournamentResult) {
-            /** @var \App\Controller\dto\Result $tournamentResult */
-            $result = new Result();
-
-            $result->setTournamentId($tournamentId);
-            $result->setPlayerId($tournamentResult->getPlayerId());
-            $result->setArmy($tournamentResult->getArmy());
-            $result->setPlace($tournamentResult->getPlace());
-            $result->setPoints($this->calculatePointsForLocal($playersInTournament, 1, $tournamentResult->getPlace(), $multiplier));
 
             $results[] = $result;
         }
