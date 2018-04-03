@@ -36,6 +36,21 @@ class Season
     private $active;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $limitOfTournaments;
+
+    /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $limitOfMasterTournaments;
+
+    /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $limitOfTeamMasterTournaments;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -114,4 +129,54 @@ class Season
     {
         $this->active = $active;
     }
+
+    /**
+     * @return mixed
+    */
+    public function getLimitOfTournaments()
+    {
+        return $this->limitOfTournaments;
+    }
+
+    /**
+     * @param mixed $limitOfTournaments
+     */
+    public function setLimitOfTournaments($limitOfTournaments): void
+    {
+        $this->limitOfTournaments = $limitOfTournaments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLimitOfMasterTournaments()
+    {
+        return $this->limitOfMasterTournaments;
+    }
+
+    /**
+     * @param mixed $limitOfMasterTournaments
+     */
+    public function setLimitOfMasterTournaments($limitOfMasterTournaments): void
+    {
+        $this->limitOfMasterTournaments = $limitOfMasterTournaments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLimitOfTeamMasterTournaments()
+    {
+        return $this->limitOfTeamMasterTournaments;
+    }
+
+    /**
+     * @param int $limitOfTeamMasterTournaments
+     */
+    public function setLimitOfTeamMasterTournaments(int $limitOfTeamMasterTournaments): void
+    {
+        $this->limitOfTeamMasterTournaments = $limitOfTeamMasterTournaments;
+    }
+
+
 }
