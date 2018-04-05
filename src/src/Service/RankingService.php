@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Document\Player;
 use App\Document\Ranking;
 use App\Document\RankingPlayer;
+use App\Document\Result;
+use App\Document\Season;
 use App\Exception\PlayerNotFoundException;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,9 +19,34 @@ class RankingService
         $this->managerRegistry = $managerRegistry;
     }
 
-    public function recalculateRanking(Ranking $currentRanking) : Ranking
+    public function recalculateRanking(Ranking $currentRanking, Season $season) : Ranking
     {
+        $newRanking = $currentRanking;
 
+        $resultsRepository = $this->managerRegistry->getRepository('App:Results');
+        $results = $resultsRepository->findBy(['playerId' => $newRanking->getPlayerId()]);
+
+        $tournamentLimit = $season->getLimitOfTournaments();
+        $tournamentsIncluded = [];
+        $tournamentsIncludedCount = 0;
+        $pointsSum = 0;
+
+        foreach ($results as $result) {
+            /** @var Result $result */
+            if ($tournamentsIncludedCount >= $tournamentLimit) {
+                break;
+            }
+
+            $pointsSum += $result->getPoints();
+            $tournamentsIncluded[] = $result->getTournamentId();
+            $tournamentsIncludedCount++;
+        }
+
+        $newRanking->setPoints($pointsSum);
+        $newRanking->setTournamentsIncluded($tournamentsIncluded);
+        $newRanking->setTournamentCount($tournamentsIncludedCount);
+
+        return $newRanking;
     }
 
     public function createInitialRanking($playerId) : Ranking
