@@ -73,7 +73,7 @@ class Ranking
     /**
      * @return mixed
      */
-    public function getPlayer()
+    public function getPlayer() : RankingPlayer
     {
         return $this->player;
     }
