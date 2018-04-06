@@ -69,62 +69,63 @@ class TestsDataProvider
 
     public static function getSmallSingleMasterTestData() : array
     {
-        return self::getTournamentTestData('smallSingleMaster', 1);
+        return self::getTournamentTestData('smallSingleMaster', 1, 'master');
     }
 
     public static function getLargeSingleMasterTestData() : array
     {
-        return self::getTournamentTestData('largeSingleMaster', 1);
+        return self::getTournamentTestData('largeSingleMaster', 1, 'master');
     }
 
     public static function getVeryLargeSingleMasterTestData() : array
     {
-        return self::getTournamentTestData('veryLargeSingleMaster', 1);
+        return self::getTournamentTestData('veryLargeSingleMaster', 1, 'master');
     }
 
     public static function getSmallThreePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('smallThreePlayerTeamMaster', 3);
+        return self::getTournamentTestData('smallThreePlayerTeamMaster', 3, 'master');
     }
 
     public static function getLargeThreePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('largeThreePlayerTeamMaster', 3);
+        return self::getTournamentTestData('largeThreePlayerTeamMaster', 3, 'master');
     }
 
     public static function getVeryLargeThreePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('veryLargeThreePlayerTeamMaster', 3);
+        return self::getTournamentTestData('veryLargeThreePlayerTeamMaster', 3, 'master');
     }
 
     public static function getSmallFivePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('smallFivePlayerTeamMaster', 5);
+        return self::getTournamentTestData('smallFivePlayerTeamMaster', 5, 'master');
     }
 
     public static function getLargeFivePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('largeFivePlayerTeamMaster', 5);
+        return self::getTournamentTestData('largeFivePlayerTeamMaster', 5, 'master');
     }
 
     public static function getVeryLargeFivePlayerTeamMasterTestData() : array
     {
-        return self::getTournamentTestData('veryLargeFivePlayerTeamMaster', 5);
+        return self::getTournamentTestData('veryLargeFivePlayerTeamMaster', 5, 'master');
     }
 
-    private static function getTournamentTestData($type, $playersInTeam = 1)
+    private static function getTournamentTestData($type, $playersInTeam = 1, $rank = 'local')
     {
         return self::getTestData(
             self::getResultsData(self::$tournaments[$type]),
-            $playersInTeam
+            $playersInTeam,
+            $rank
         );
     }
 
-    private static function getTestData(array $data, $playersInTeam) : array
+    private static function getTestData(array $data, $playersInTeam, $rank) : array
     {
         return [
             'input' => self::getInputData($data, $playersInTeam),
-            'expectedResult' => self::getExpectedResults($data, $playersInTeam)
+            'expectedResult' => self::getExpectedResults($data, $playersInTeam, $rank)
         ];
     }
 
@@ -187,7 +188,7 @@ class TestsDataProvider
         return $tournamentData;
     }
 
-    private static function getExpectedResults($inputData, $playersInTeam) : array
+    private static function getExpectedResults($inputData, $playersInTeam, $rank) : array
     {
         $results = [];
         $place = 0;
@@ -211,6 +212,8 @@ class TestsDataProvider
             $newResult->setArmy($expectedResult[1]);
             $newResult->setPlace($place);
             $newResult->setPoints($expectedResult[2]);
+            $newResult->setTournamentType($playersInTeam == 1 ? 'single' : 'team');
+            $newResult->setTournamentRank($rank);
 
             $results[] = $newResult;
         }

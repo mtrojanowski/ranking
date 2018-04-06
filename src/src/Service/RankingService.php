@@ -29,6 +29,8 @@ class RankingService
         $tournamentLimit = $season->getLimitOfTournaments();
         $tournamentsIncluded = [];
         $tournamentsIncludedCount = 0;
+        $mastersIncluded = 0;
+        $teamMastersIncluded = 0;
         $pointsSum = 0;
 
         foreach ($results as $result) {
@@ -37,9 +39,26 @@ class RankingService
                 break;
             }
 
+            if ($result->getTournamentRank() == 'master') {
+                if ($mastersIncluded >= $season->getLimitOfMasterTournaments()) {
+                    continue;
+                }
+
+                if ($result->getTournamentType() == 'team' && $teamMastersIncluded >= $season->getLimitOfTeamMasterTournaments()) {
+                    continue;
+                }
+            }
+
             $pointsSum += $result->getPoints();
             $tournamentsIncluded[] = $result->getTournamentId();
             $tournamentsIncludedCount++;
+
+            if ($result->getTournamentRank() == 'master') {
+                $mastersIncluded++;
+                if ($result->getTournamentType() == 'team') {
+                    $teamMastersIncluded++;
+                }
+            }
         }
 
         $newRanking->setPoints($pointsSum);

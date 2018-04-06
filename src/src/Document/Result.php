@@ -21,6 +21,16 @@ class Result
     /**
      * @MongoDB\Field(type="string")
      */
+    private $tournamentRank;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $tournamentType;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $playerId;
 
     /**
@@ -132,5 +142,37 @@ class Result
     public function setArmy($army)
     {
         $this->army = $army;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTournamentRank()
+    {
+        return $this->tournamentRank;
+    }
+
+    /**
+     * @param mixed $tournamentRank
+     */
+    public function setTournamentRank($tournamentRank): void
+    {
+        $this->tournamentRank = $tournamentRank;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTournamentType()
+    {
+        return $this->tournamentType;
+    }
+
+    /**
+     * @param mixed $tournamentType
+     */
+    public function setTournamentType($tournamentType): void
+    {
+        $this->tournamentType = $tournamentType;
     }
 }

@@ -182,6 +182,8 @@ class ResultsServiceTest extends TestCase
             $this->assertEquals($expectedResults[$i]->getPlace(), $result->getPlace());
             $this->assertEquals($expectedResults[$i]->getArmy(), $result->getArmy());
             $this->assertEquals($expectedResults[$i]->getPoints(), $result->getPoints());
+            $this->assertEquals($expectedResults[$i]->getTournamentRank(), $result->getTournamentRank());
+            $this->assertEquals($expectedResults[$i]->getTournamentType(), $result->getTournamentType());
         }
     }
 

@@ -12,32 +12,32 @@ class ResultsService
     {
         if ($tournament->getRank() === 'local') {
             if ($tournament->getType() === 'single') {
-                return $this->createLocalSinglesResults($tournamentResults);
+                return $this->createLocalSinglesResults($tournamentResults, $tournament->getRank(), $tournament->getType());
             } elseif ($tournament->getType() === 'team') {
-                return $this->createLocalTeamResults($tournamentResults, $tournament->getPlayersInTeam());
+                return $this->createLocalTeamResults($tournamentResults, $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType());
             }
         } elseif ($tournament->getRank() === 'master') {
             if ($tournament->getType() === 'single') {
-                return $this->createMasterSingleResults($tournamentResults);
+                return $this->createMasterSingleResults($tournamentResults, $tournament->getRank(), $tournament->getType());
             } elseif ($tournament->getType() === 'team') {
-                return $this->createMasterTeamResults($tournamentResults, $tournament->getPlayersInTeam());
+                return $this->createMasterTeamResults($tournamentResults, $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType());
             }
         }
 
         throw new InvalidTournamentException();
     }
 
-    private function createMasterSingleResults(TournamentResults $tournamentResults) : array
+    private function createMasterSingleResults(TournamentResults $tournamentResults, string $tournamentRank, string $tournamentType) : array
     {
-        return $this->createMasterResults($tournamentResults, 1);
+        return $this->createMasterResults($tournamentResults, 1, $tournamentRank, $tournamentType);
     }
 
-    private function createMasterTeamResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    private function createMasterTeamResults(TournamentResults $tournamentResults, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
     {
-        return $this->createMasterResults($tournamentResults, $playersInTeam);
+        return $this->createMasterResults($tournamentResults, $playersInTeam, $tournamentRank, $tournamentType);
     }
 
-    private function createMasterResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    private function createMasterResults(TournamentResults $tournamentResults, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
@@ -54,6 +54,8 @@ class ResultsService
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
             $result->setPoints($this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2));
+            $result->setTournamentRank($tournamentRank);
+            $result->setTournamentType($tournamentType);
 
             $results[] = $result;
         }
@@ -61,17 +63,17 @@ class ResultsService
         return $results;
     }
 
-    private function createLocalTeamResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    private function createLocalTeamResults(TournamentResults $tournamentResults, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
     {
-        return $this->createLocalResults($tournamentResults, $playersInTeam);
+        return $this->createLocalResults($tournamentResults, $playersInTeam, $tournamentRank, $tournamentType);
     }
 
-    private function createLocalSinglesResults(TournamentResults $tournamentResults) : array
+    private function createLocalSinglesResults(TournamentResults $tournamentResults, string $tournamentRank, string $tournamentType) : array
     {
-        return $this->createLocalResults($tournamentResults, 1);
+        return $this->createLocalResults($tournamentResults, 1, $tournamentRank, $tournamentType);
     }
 
-    private function createLocalResults(TournamentResults $tournamentResults, int $playersInTeam) : array
+    private function createLocalResults(TournamentResults $tournamentResults, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
@@ -87,6 +89,8 @@ class ResultsService
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
             $result->setPoints($this->calculatePointsForLocal($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier));
+            $result->setTournamentRank($tournamentRank);
+            $result->setTournamentType($tournamentType);
 
             $results[] = $result;
         }
