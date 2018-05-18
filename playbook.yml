@@ -57,4 +57,35 @@
       name: mongod
       state: started
 
+  - name: Download nodejs install script
+    get_url:
+      url: https://deb.nodesource.com/setup_10.x 
+      dest: /tmp/install_node.sh
+      mode: 777
+
+  - name: run nodejs install script
+    command: /tmp/install_node.sh
+    args:
+      creates: /etc/apt/sources.list.d/nodesource.list
+
+  - name: install nodejs
+    apt:
+      name: nodejs
+      update_cache: true
+  
+  - name: add yarn repository key
+    apt_key:
+      url: https://dl.yarnpkg.com/debian/pubkey.gpg
+      state: present
+
+  - name: add yarn source list
+    shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    args:
+      creates: /etc/apt/sources.list.d/yarn.list
+
+  - name: install yarn
+    apt:
+      name: yarn
+      install_recommends: false
+      update_cache: true
 
