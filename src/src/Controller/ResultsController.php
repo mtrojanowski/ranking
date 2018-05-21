@@ -7,13 +7,9 @@ use App\Service\RankingService;
 use App\Service\ResultsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ResultsController extends AppController
 {
-    /**
-     * @Route("tournamentResults", methods="POST")
-     */
     public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService)
     {
         try {

@@ -19,7 +19,7 @@ class Ranking
     private $playerId;
 
     /**
-     * @EmbedOne(targetDocument="RankingPlayer")
+     * @MongoDb\EmbedOne(targetDocument="RankingPlayer")
      */
     private $player;
 

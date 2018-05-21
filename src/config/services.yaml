@@ -29,3 +29,7 @@ services:
     App\Service\TournamentsService:
         arguments:
             $managerRegistry: "@doctrine_mongodb"
+
+    App\Service\RankingService:
+        arguments:
+            $managerRegistry: "@doctrine_mongodb"

@@ -3,15 +3,11 @@ namespace App\Controller;
 
 use App\Document\Player;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class PlayerController extends AppController
 {
 
-    /**
-     * @Route("/players", name="players_list", methods="GET")
-     */
     public function listPlayers() {
         $players = $this->getMongo()
             ->getRepository('App:Player')
@@ -20,9 +16,6 @@ class PlayerController extends AppController
         return $this->json($this->getSerializer()->normalize($players, 'json'));
     }
 
-    /**
-     * @Route("/players", name="create_player", methods="POST")
-     */
     public function createPlayer(Request $request) {
 
         try {

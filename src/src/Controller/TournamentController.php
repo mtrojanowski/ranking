@@ -5,15 +5,11 @@ use App\Document\Tournament;
 use App\Repository\TournamentRepository;
 use App\Service\TournamentsService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 
 class TournamentController extends AppController
 {
-    /**
-     * @Route("/tournaments", name="tournament_list", methods="GET")
-     */
     public function listTournaments(Request $request)
     {
         $previous = $request->query->get('previous');
@@ -34,9 +30,6 @@ class TournamentController extends AppController
         );
     }
 
-    /**
-     * @Route("/tournaments", name="add_tournament", methods="POST")
-     */
     public function addTournament(Request $request, TournamentsService $tournamentsService)
     {
         try {

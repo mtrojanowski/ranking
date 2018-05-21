@@ -1,3 +1,37 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+tournament_list:
+    path:     /api/tournaments
+    controller: App\Controller\TournamentController::listTournaments
+    methods:
+      - GET
+
+add_tournament:
+    path:     /api/tournaments
+    controller: App\Controller\TournamentController::addTournament
+    methods:
+      - POST
+
+players_list:
+    path: /api/players
+    controller: App\Controller\PlayerController::listPlayers
+    methods:
+      - GET
+
+create_player:
+    path: /api/players
+    controller: App\Controller\PlayerController::createPlayer
+    methods:
+      - POST
+
+tournament_results:
+    paht: /api/tournament-results
+    conroller: App\Controller\ResultsController::createTournamentResults
+    methods:
+      - POST
+
+frontend:
+    path: /{token}
+    controller: App\Controller\FrontController::front
+    methods:
+      - GET
+    requirements:
+      token: ".*"
