@@ -23,8 +23,8 @@ create_player:
       - POST
 
 tournament_results:
-    paht: /api/tournament-results
-    conroller: App\Controller\ResultsController::createTournamentResults
+    path: /api/tournament-results
+    controller: App\Controller\ResultsController::createTournamentResults
     methods:
       - POST
 
