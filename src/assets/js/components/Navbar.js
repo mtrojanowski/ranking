@@ -25,6 +25,18 @@ export default class Navbar extends Component {
                             className="nav-link">Gracze
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link
+                            to="/future-tournaments"
+                            className="nav-link">Nadchodzące turnieje
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link
+                            to="/previous-tournaments"
+                            className="nav-link">Odbyte turnieje
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>);

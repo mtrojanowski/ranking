@@ -12,7 +12,6 @@ export default class Players extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.players.length);
         if (this.state.players.length === 0) {
             Promise.resolve()
                 .then(() => getPlayers())
