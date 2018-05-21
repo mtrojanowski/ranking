@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import Players from './Players';
 import PreviousTournaments from "./PreviousTournaments";
 import FutureTournaments from "./FutureTournaments";
+import Ranking from "./Ranking";
 
 export default class Main extends Component {
     render() {
@@ -18,6 +19,7 @@ export default class Main extends Component {
                         <Route exact path="/players" component={Players} />
                         <Route exact path="/previous-tournaments" component={PreviousTournaments} />
                         <Route exact path="/future-tournaments" component={FutureTournaments} />
+                        <Route exact path="/ranking" component={Ranking} />
                     </Switch>
                 </div>
             </Router>);

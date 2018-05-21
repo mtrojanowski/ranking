@@ -28,6 +28,12 @@ tournament_results:
     methods:
       - POST
 
+ranking:
+    path: /api/ranking
+    controller: App\Controller\RankingController::list
+    methods:
+      - GET
+
 frontend:
     path: /{token}
     controller: App\Controller\FrontController::front
