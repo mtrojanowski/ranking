@@ -1,14 +1,45 @@
 import React, { Component } from 'react';
+import shortId from 'shortid';
+
+import { getPlayers } from '../services/players';
 
 export default class Players extends Component {
-    render() {
-        return (<div>
-            <div className="row">
-                <div className="large-12 columns">
-                    <h1>Gracze</h1>
+    constructor(props) {
+        super(props);
+        this.state = {
+            players: []
+        };
+    }
 
-                </div>
-            </div>
-        </div>);
+    componentDidMount() {
+        console.log(this.state.players.length);
+        if (this.state.players.length === 0) {
+            Promise.resolve()
+                .then(() => getPlayers())
+                .then((players) => this.setState({ players }));
+        }
+    }
+
+    render() {
+        return (
+            <div>
+                <h2>Lista Graczy</h2>
+                <table className="table table-striped mt-4">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th>Id</th>
+                            <th>Imię</th>
+                            <th>Miasto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {this.state.players.map(player => (<tr key={shortId()}>
+                        <th scope="row">{player.legacyId}</th>
+                        <td>{player.name}</td>
+                        <td>{player.town}</td>
+                    </tr>))}
+                    </tbody>
+                </table>
+            </div>);
     }
 }
