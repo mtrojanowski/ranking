@@ -43,6 +43,13 @@ export default class Navbar extends Component {
                             className="nav-link">Ranking
                         </Link>
                     </li>
+
+                    <li className="nav-item">
+                        <Link
+                            to="/add-tournament"
+                            className="nav-link">Dodaj turniej
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>);

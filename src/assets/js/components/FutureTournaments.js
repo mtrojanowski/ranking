@@ -20,8 +20,15 @@ export default class FutureTournaments extends Component {
     }
 
     render() {
+        const newTournamentId = this.props.location.state.newTournamentId;
+        const tournamentWasAdded = newTournamentId > 0;
         return (
+            <div>
+            {tournamentWasAdded && <div className="alert alert-success" role="alert">
+                Turniej poprawnie dodany. Jego identyfikator: {newTournamentId}.
+            </div>}
                 <TournamentsTable title="Turnieje nadchodzące" tournaments={this.state.tournaments}/>
+            </div>
         );
     }
 }
