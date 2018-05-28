@@ -15,7 +15,7 @@
         "symfony/serializer": "^4.0",
         "symfony/webpack-encore-pack": "^1.0",
         "symfony/yaml": "^4.0",
-        "symfon/twig-bundle": "v4.0.6"
+        "symfony/twig-bundle": "v4.0.6"
     },
     "require-dev": {
         "symfony/dotenv": "^4.0",
