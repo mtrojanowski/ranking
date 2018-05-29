@@ -43,7 +43,7 @@ export default class Ranking extends Component {
                             <td>{position.player.firstName}</td>
                             <td>{position.player.town}</td>
                             <td>{position.points}</td>
-                            <td>{position.tournamentsCount}</td>
+                            <td>{position.tournamentCount}</td>
                             <td>-</td>
                         </tr>);
                     })}
