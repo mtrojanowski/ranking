@@ -1,6 +1,11 @@
 <?php
 namespace App\Controller;
 
+use App\Controller\dto\RankingDto;
+use App\Controller\dto\RankingPlayerDto;
+use App\Document\Ranking;
+use App\Document\RankingPlayer;
+
 class RankingController extends AppController
 {
 
@@ -9,6 +14,19 @@ class RankingController extends AppController
             ->getRepository('App:Ranking')
             ->getRanking();
 
-        return $this->json($this->getSerializer()->normalize($players, 'json'));
+        $ranking = [];
+
+        foreach ($players as $player) {
+            /** @var Ranking $player */
+            $ranking[] = new RankingDto(
+                $player->getId(),
+                new RankingPlayerDto($player->getPlayer()->getFirstName(), $player->getPlayer()->getTown()),
+                $player->getPoints(),
+                $player->getTournamentCount(),
+                $player->getTournamentsIncluded()
+            );
+        }
+
+        return $this->json($this->getSerializer()->normalize($ranking, 'json'));
     }
 }

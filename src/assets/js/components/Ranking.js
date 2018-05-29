@@ -38,12 +38,12 @@ export default class Ranking extends Component {
                     </thead>
                     <tbody>
                     {this.state.ranking.map(position => {
-                        return (<tr key={shortId()}>
+                        return (<tr key={position.id}>
                             <th scope="row">{lp++}</th>
-                            <td>{position.player.name}</td>
+                            <td>{position.player.firstName}</td>
                             <td>{position.player.town}</td>
                             <td>{position.points}</td>
-                            <td>{position.tournamentsCount}</td>
+                            <td>{position.tournamentsIncluded} / {position.tournamentsCount}</td>
                             <td>-</td>
                         </tr>);
                     })}
