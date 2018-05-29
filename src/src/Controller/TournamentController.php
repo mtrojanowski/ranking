@@ -23,7 +23,7 @@ class TournamentController extends AppController
         $tournaments = $repository->getTournaments($previous);
 
         foreach ($tournaments as $tournament) {
-            $tournament->setDate($tournament->getDate()->format("Y-m-d"));
+            $tournament->setDate($tournament->getDate()->format("d.m.Y"));
         }
 
         return $this->json(

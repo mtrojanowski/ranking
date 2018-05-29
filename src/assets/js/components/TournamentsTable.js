@@ -13,8 +13,8 @@ export default class TournamentsTable extends Component {
                 <table className="table table-striped mt-4">
                     <thead className="thead-dark">
                     <tr>
-                        <th>Identyfikator</th>
-                        <th>Data turnieju</th>
+                        <th>Id</th>
+                        <th>Data</th>
                         <th>Nazwa</th>
                         <th>Miasto, miejsce</th>
                         <th>Organizator</th>
@@ -28,7 +28,7 @@ export default class TournamentsTable extends Component {
                     <tbody>
                     {this.props.tournaments.map(tournament => {
                         const rank = getRank(tournament.rank, tournament.type);
-                        const type = tournament.type === 'single' ? 'Single' : 'Drużynowy';
+                        const type = tournament.type === 'single' ? 'Single' : tournament.playersInTeam === 2 ? 'Parówka' : 'Drużynowy (' + tournament.playersInTeam + ')';
                         const status = tournament.status === 'OK' ? 'Zaliczony' : '-';
 
                         return (<tr key={shortId()}>
