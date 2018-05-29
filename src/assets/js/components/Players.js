@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import shortId from 'shortid';
 
 import { getPlayers } from '../services/players';
 
@@ -32,9 +31,9 @@ export default class Players extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                    {this.state.players.map(player => (<tr key={shortId()}>
+                    {this.state.players.map(player => (<tr key={player.legacyId}>
                         <th scope="row">{player.legacyId}</th>
-                        <td>{player.name}</td>
+                        <td>{player.firstName}</td>
                         <td>{player.town}</td>
                     </tr>))}
                     </tbody>

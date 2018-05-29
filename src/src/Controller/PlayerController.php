@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Controller\dto\PlayerDto;
 use App\Document\Player;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
@@ -13,7 +14,12 @@ class PlayerController extends AppController
             ->getRepository('App:Player')
             ->findAll();
 
-        return $this->json($this->getSerializer()->normalize($players, 'json'));
+        $playerDtos = [];
+        foreach ($players as $player) {
+            $playerDtos[] = $this->toPlayerDto($player);
+        }
+
+        return $this->json($this->getSerializer()->normalize($playerDtos, 'json'));
     }
 
     public function createPlayer(Request $request) {
@@ -41,5 +47,10 @@ class PlayerController extends AppController
         }
 
         return $this->json(['id' => $player->getLegacyId()], 201);
+    }
+
+    private function toPlayerDto(Player $player) : PlayerDto
+    {
+        return new PlayerDto($player->getLegacyId(), $player->getFirstName(), $player->getTown());
     }
 }

@@ -51,8 +51,9 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-            "security-checker security:check": "script"
+            "security-checker security:check": "script",
+            "yarn install": "script",
+            "if [$COMPOSER_DEV_MODE -eq 0] \n then \n yarn run encore production \n else \n yarn run encore dev \n fi": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"
