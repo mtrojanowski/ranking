@@ -20,7 +20,8 @@ export default class FutureTournaments extends Component {
     }
 
     render() {
-        const newTournamentId = this.props.location.state.newTournamentId;
+        const newTournamentId = (this.props.location !== undefined && this.props.location.state !== undefined)
+            ? this.props.location.state.newTournamentId : 0;
         const tournamentWasAdded = newTournamentId > 0;
         return (
             <div>
