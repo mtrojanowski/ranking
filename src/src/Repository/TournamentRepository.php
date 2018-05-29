@@ -20,6 +20,8 @@ class TournamentRepository extends DocumentRepository
                 ->field('date')->gte($today);
         }
 
+        $queryBuilder->sort("date", 1);
+
         return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
 
