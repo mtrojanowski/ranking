@@ -25,7 +25,7 @@ class Tournament
     private $name;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="date")
      */
     private $date;
 

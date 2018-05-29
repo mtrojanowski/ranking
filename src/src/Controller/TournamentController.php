@@ -22,6 +22,10 @@ class TournamentController extends AppController
         $repository = $this->getMongo()->getRepository('App:Tournament');
         $tournaments = $repository->getTournaments($previous);
 
+        foreach ($tournaments as $tournament) {
+            $tournament->setDate($tournament->getDate()->format("Y-m-d"));
+        }
+
         return $this->json(
             $this->getSerializer()->normalize(
                 $tournaments,
