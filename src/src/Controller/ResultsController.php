@@ -30,8 +30,12 @@ class ResultsController extends AppController
             return $this->json($this->getError('Invalid data'), 400);
         }
 
-        $tournament = $this->getMongo()->getRepository('App:Tournament')
-            ->find($tournamentResults->getTournamentId());
+        $tournamentRepository = $this->getMongo()->getRepository('App:Tournament');
+        $tournament = $tournamentRepository->find($tournamentResults->getTournamentId());
+
+        if (!$tournament) {
+            $tournament = $tournamentRepository->findOneBy(['legacyId' => $tournamentResults->getTournamentId()]);
+        }
 
         if (!$tournament) {
             return $this->json($this->getError('Invalid tournament'), 400);
