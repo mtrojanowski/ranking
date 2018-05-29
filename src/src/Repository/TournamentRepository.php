@@ -10,7 +10,7 @@ class TournamentRepository extends DocumentRepository
     {
         $queryBuilder = $this->createQueryBuilder();
         $todayDate = new \DateTime();
-        $today = $todayDate->format('Y-m-d');
+        $today = new \MongoDate($todayDate->setTime(0, 0, 0)->getTimestamp());
 
         if ($previous == 'true') {
             $queryBuilder
