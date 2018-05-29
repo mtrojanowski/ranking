@@ -23,7 +23,7 @@ class RankingService
     {
         $newRanking = $currentRanking;
 
-        $resultsRepository = $this->managerRegistry->getRepository('App:Results');
+        $resultsRepository = $this->managerRegistry->getRepository('App:Result');
         $results = $resultsRepository->findBy(['playerId' => $newRanking->getPlayerId()]);
 
         $tournamentLimit = $season->getLimitOfTournaments();
