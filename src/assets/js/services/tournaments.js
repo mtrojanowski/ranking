@@ -16,11 +16,11 @@ const getTournaments = (previous) => {
 };
 
 const getRank = (rank, type) => {
-    if (rank === 'L') {
+    if (rank === 'local') {
         return 'Lokalny';
     }
 
-    if (rank === 'M') {
+    if (rank === 'master') {
         if (type === 'single') {
             return 'Master indywidualny';
         }
