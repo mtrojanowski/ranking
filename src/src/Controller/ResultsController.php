@@ -1,7 +1,10 @@
 <?php
 namespace App\Controller;
 
+use App\Controller\dto\Result;
 use App\Controller\dto\TournamentResults;
+use App\Document\Season;
+use App\Document\Tournament;
 use App\Exception\InvalidTournamentException;
 use App\Service\RankingService;
 use App\Service\ResultsService;
@@ -31,6 +34,7 @@ class ResultsController extends AppController
         }
 
         $tournamentRepository = $this->getMongo()->getRepository('App:Tournament');
+        /** @var Tournament $tournament */
         $tournament = $tournamentRepository->find($tournamentResults->getTournamentId());
 
         if (!$tournament) {
@@ -53,15 +57,20 @@ class ResultsController extends AppController
         }
         $em->flush();
 
+        /** @var Season $season */
+        $season = $this->getMongo()->getRepository('App:Season')->find($tournament->getSeason());
+
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
         foreach ($results as $result) {
+            /** @var Result $result */
             $currentRanking = $rankingRepository->findOneBy(['playerId' => $result->getPlayerId()]);
+
 
             if (!$currentRanking) {
                 $currentRanking = $rankingService->createInitialRanking($result->getPlayerId());
             }
 
-            $em->persist($rankingService->recalculateRanking($currentRanking));
+            $em->persist($rankingService->recalculateRanking($currentRanking, $season));
         }
 
         $em->flush();

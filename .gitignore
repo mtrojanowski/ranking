@@ -46,3 +46,4 @@ src/.idea/*
 playbook.retry
 ubuntu*.log
 
+/backup/*

@@ -72,7 +72,7 @@ class RankingService
     {
         $playerRepository = $this->managerRegistry->getRepository('App:Player');
         /** @var Player $player */
-        $player = $playerRepository->find($playerId);
+        $player = $playerRepository->findOneBy([ 'legacyId' => $playerId ]);
 
         if (!$player) {
             throw new PlayerNotFoundException($playerId);
