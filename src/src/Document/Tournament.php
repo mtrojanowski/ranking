@@ -75,6 +75,11 @@ class Tournament
     private $rank;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $status;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -282,5 +287,20 @@ class Tournament
         $this->playersInTeam = $playersInTeam;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 
 }

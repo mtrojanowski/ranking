@@ -21,6 +21,7 @@ class TournamentsService
         $activeSeason = $seasonRepository->getActiveSeason();
 
         $tournament->setSeason($activeSeason->getId());
+        $tournament->setStatus("NEW");
 
         $lastId = $this->managerRegistry->getRepository('App:Tournament')->getLastLegacyId();
         $tournament->setLegacyId($lastId + 1);

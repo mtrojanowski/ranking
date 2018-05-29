@@ -29,6 +29,7 @@ export default class TournamentsTable extends Component {
                     {this.props.tournaments.map(tournament => {
                         const rank = getRank(tournament.rank, tournament.type);
                         const type = tournament.type === 'single' ? 'Single' : 'Drużynowy';
+                        const status = tournament.status === 'OK' ? 'Zaliczony' : '-';
 
                         return (<tr key={shortId()}>
                             <th scope="row">{tournament.legacyId}</th>
@@ -40,7 +41,7 @@ export default class TournamentsTable extends Component {
                             <td>{tournament.points}</td>
                             <td>{type}</td>
                             <td><a href={tournament.rulesUrl} target="_blank">Strona</a></td>
-                            <td>-</td>
+                            <td>{status}</td>
                         </tr>);
                     })}
                     </tbody>
