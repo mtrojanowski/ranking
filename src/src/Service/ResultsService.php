@@ -8,6 +8,9 @@ use App\Exception\InvalidTournamentException;
 
 class ResultsService
 {
+    private $headJudgePoints = 150;
+    private $lineJudgePoints = 100;
+
     public function createTournamentResults(Tournament $tournament, TournamentResults $tournamentResults) : array
     {
         if ($tournament->getRank() === 'local') {
@@ -41,7 +44,8 @@ class ResultsService
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
-        $playersInTournament = count($tournamentResults->getResults());
+        $playersInTournament = count(array_filter($tournamentResults->getResults(), function ($results) { return !$results->getJudge(); }));
+
         $multiplier1 = ( $playersInTournament > 24 ? 249 : (10*$playersInTournament - 1) ) / ( $playersInTournament / $playersInTeam - 1 );
         $multiplier2 = ( $playersInTournament > 34 ? 50 : ($playersInTournament > 25 ? (5 * ($playersInTournament - 25)) : 0) );
 
@@ -53,7 +57,18 @@ class ResultsService
             $result->setPlayerId($tournamentResult->getPlayerId());
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
-            $result->setPoints($this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2));
+
+            $points = 0;
+            if ($tournamentResult->getJudge() == 0) {
+                $points = $this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
+            } elseif ($tournamentResult->getJudge() == 1) {
+                $points = $this->headJudgePoints;
+            }
+            elseif ($tournamentResult->getJudge() == 2) {
+                $points = $this->lineJudgePoints;
+            }
+            $result->setPoints($points);
+
             $result->setTournamentRank($tournamentRank);
             $result->setTournamentType($tournamentType);
 

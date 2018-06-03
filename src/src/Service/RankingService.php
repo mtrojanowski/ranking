@@ -32,6 +32,7 @@ class RankingService
         $mastersIncluded = 0;
         $teamMastersIncluded = 0;
         $pointsSum = 0;
+        $headJudgeBonusReceived = 0;
 
         foreach ($results as $result) {
             /** @var Result $result */
@@ -39,7 +40,7 @@ class RankingService
                 break;
             }
 
-            if ($result->getTournamentRank() == 'master') {
+            if ($result->getTournamentRank() == 'master' && $result->getJudge() === 0) {
                 if ($mastersIncluded >= $season->getLimitOfMasterTournaments()) {
                     continue;
                 }
@@ -49,21 +50,30 @@ class RankingService
                 }
             }
 
+            if ($result->getJudge() === 1 && $headJudgeBonusReceived === 1) {
+                continue;
+            }
+
             $pointsSum += $result->getPoints();
             $tournamentsIncluded[] = $result->getTournamentId();
             $tournamentsIncludedCount++;
 
-            if ($result->getTournamentRank() == 'master') {
+            if ($result->getTournamentRank() == 'master' && $result->getJudge() === 0) {
                 $mastersIncluded++;
                 if ($result->getTournamentType() == 'team') {
                     $teamMastersIncluded++;
                 }
+            }
+
+            if ($result->getJudge() === 1) {
+                $headJudgeBonusReceived = 1;
             }
         }
 
         $newRanking->setPoints($pointsSum);
         $newRanking->setTournamentsIncluded($tournamentsIncluded);
         $newRanking->setTournamentCount($tournamentsIncludedCount);
+        $newRanking->setHeadJudgeBonusReceived($headJudgeBonusReceived);
 
         return $newRanking;
     }

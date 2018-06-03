@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Controller\dto\Result;
 use App\Document\Tournament;
 use App\Tests\Service\TestsDataProvider;
 use PHPUnit\Framework\TestCase;
@@ -165,6 +166,59 @@ class ResultsServiceTest extends TestCase
     {
         $tournament = $this->getTournament("master", "team", 5);
         $testData = TestsDataProvider::getVeryLargeFivePlayerTeamMasterTestData();
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsMasterWithJudgesTournament()
+    {
+        $tournament = $this->getTournament("master", "single", 1);
+        $testData = TestsDataProvider::getLargeSingleMasterTestData();
+        $headJudge = new Result();
+        $headJudge->setPlace(0);
+        $headJudge->setPlayerId(7000);
+        $headJudge->setArmy("");
+        $headJudge->setJudge(1);
+
+
+        $lineJudge = new Result();
+        $lineJudge->setPlace(0);
+        $lineJudge->setPlayerId(7002);
+        $lineJudge->setArmy("");
+        $lineJudge->setJudge(2);
+
+        $testResults = $testData['input']->getResults();
+        $testResults[] = $headJudge;
+        $testResults[] = $lineJudge;
+        $testData['input']->setResults($testResults);
+
+        /** @var \App\Document\Result $aResult */
+        $aResult = $testData['expectedResult'][0];
+        $newHeadJudgeResult = new \App\Document\Result();
+        $newHeadJudgeResult->setTournamentId($aResult->getTournamentId());
+        $newHeadJudgeResult->setPlayerId(7000);
+        $newHeadJudgeResult->setArmy("");
+        $newHeadJudgeResult->setPlace(0);
+        $newHeadJudgeResult->setPoints(150);
+        $newHeadJudgeResult->setTournamentType('single');
+        $newHeadJudgeResult->setTournamentRank('master');
+        $newHeadJudgeResult->setJudge(1);
+
+        $newLineJudgeResult = new \App\Document\Result();
+        $newLineJudgeResult->setTournamentId($aResult->getTournamentId());
+        $newLineJudgeResult->setPlayerId(7002);
+        $newLineJudgeResult->setArmy("");
+        $newLineJudgeResult->setPlace(0);
+        $newLineJudgeResult->setPoints(100);
+        $newLineJudgeResult->setTournamentType('single');
+        $newLineJudgeResult->setTournamentRank('master');
+        $newLineJudgeResult->setJudge(2);
+
+        $testData['expectedResult'][] = $newHeadJudgeResult;
+        $testData['expectedResult'][] = $newLineJudgeResult;
 
         $service = new ResultsService();
         $results = $service->createTournamentResults($tournament, $testData['input']);

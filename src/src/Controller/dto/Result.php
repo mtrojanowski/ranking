@@ -6,6 +6,7 @@ class Result
     private $playerId;
     private $army;
     private $place;
+    private $judge;
 
     /**
      * @return mixed
@@ -55,5 +56,22 @@ class Result
         $this->place = $place;
     }
 
+    /**
+     * @param int $judge
+     * 0 - regular player
+     * 1 - head judge
+     * 2 - line judge
+     */
+    public function setJudge($judge)
+    {
+        $this->judge = $judge;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getJudge()
+    {
+        return $this->judge;
+    }
 }

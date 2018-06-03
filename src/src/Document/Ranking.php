@@ -39,6 +39,11 @@ class Ranking
     private $tournamentsIncluded;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $headJudgeBonusReceived;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -132,5 +137,21 @@ class Ranking
     public function setTournamentsIncluded($tournamentsIncluded): void
     {
         $this->tournamentsIncluded = $tournamentsIncluded;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHeadJudgeBonusReceived()
+    {
+        return $this->headJudgeBonusReceived;
+    }
+
+    /**
+     * @param mixed $headJudgeBonusReceived
+     */
+    public function setHeadJudgeBonusReceived($headJudgeBonusReceived)
+    {
+        $this->headJudgeBonusReceived = $headJudgeBonusReceived;
     }
 }

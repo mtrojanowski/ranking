@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 class RankingServiceTest extends TestCase
 {
     private $playerId = '1234-1234';
+    private $legacyId = '1234';
     private $currentRanking;
     private $season;
 
@@ -33,6 +34,7 @@ class RankingServiceTest extends TestCase
     {
         $player = new Player();
         $player->setId($this->playerId);
+        $player->setLegacyId($this->legacyId);
         $player->setAssociation('Ad Astra');
         $player->setFirstName('Michal');
 
@@ -40,16 +42,16 @@ class RankingServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $playerRepository->expects($this->once())
-            ->method('find')
-            ->with($this->playerId)
+            ->method('findOneBy')
+            ->with(['legacyId' => $this->legacyId])
             ->willReturn($player);
 
         $registry = $this->getRegistryMock('App:Player', $playerRepository);
 
         $rankingService = new RankingService($registry);
-        $initialRanking = $rankingService->createInitialRanking($this->playerId);
+        $initialRanking = $rankingService->createInitialRanking($this->legacyId);
 
-        $this->assertEquals($this->playerId, $initialRanking->getPlayerId());
+        $this->assertEquals($this->legacyId, $initialRanking->getPlayerId());
         $this->assertEquals(0, $initialRanking->getPoints());
         $this->assertEquals('Ad Astra', $initialRanking->getPlayer()->getAssociation());
         $this->assertEquals('Michal', $initialRanking->getPlayer()->getFirstName());
@@ -60,7 +62,7 @@ class RankingServiceTest extends TestCase
     public function testShouldCountRankingPointsForFewerThanMaxTournamentsInSeason()
     {
         $resultsRepository = $this->getResultsRepositoryMock($this->getLocalTournamentsResults(8));
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -71,10 +73,61 @@ class RankingServiceTest extends TestCase
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
+    public function testShouldCountRankingPointsWithJudgeBonus()
+    {
+        $resultsRepository = $this->getResultsRepositoryMock(
+            array_merge($this->getLocalTournamentsResults(6), $this->getLineJudgeBonus(1))
+        );
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
+
+        $rankingService = new RankingService($registry);
+        $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
+
+        $this->assertEquals(700, $newRanking->getPoints());
+        $this->assertEquals(7, $newRanking->getTournamentCount());
+        $this->assertEquals(['1', '2', '3', '4', '5', '6', '401'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals($this->playerId, $newRanking->getPlayerId());
+    }
+
+    public function testShouldCountRankingPointsWithOnlyOneHeadJudgeBonus()
+    {
+        $resultsRepository = $this->getResultsRepositoryMock(
+            array_merge($this->getHeadJudgeBonus(2), $this->getLocalTournamentsResults(6))
+        );
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
+
+        $rankingService = new RankingService($registry);
+        $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
+
+        $this->assertEquals(750, $newRanking->getPoints());
+        $this->assertEquals(7, $newRanking->getTournamentCount());
+        $this->assertEquals(['301', '1', '2', '3', '4', '5', '6'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals($this->playerId, $newRanking->getPlayerId());
+    }
+
+    public function testShouldCountRankingPointsWithJudgeBonusAsALocalTournament()
+    {
+        $resultsRepository = $this->getResultsRepositoryMock(
+            array_merge(
+                $this->getMasterTournamentsResults('single', 4),
+                $this->getHeadJudgeBonus(2),
+                $this->getLocalTournamentsResults(10))
+        );
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
+
+        $rankingService = new RankingService($registry);
+        $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
+
+        $this->assertEquals(1850, $newRanking->getPoints());
+        $this->assertEquals(10, $newRanking->getTournamentCount());
+        $this->assertEquals(['101', '102', '103', '104', '301', '1', '2', '3', '4', '5'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals($this->playerId, $newRanking->getPlayerId());
+    }
+
     public function testShouldCountRankingPointsForMoreThanMaxTournamentsInSeason()
     {
         $resultsRepository = $this->getResultsRepositoryMock($this->getLocalTournamentsResults(12));
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -90,7 +143,7 @@ class RankingServiceTest extends TestCase
         $resultsRepository = $this->getResultsRepositoryMock(
             array_merge($this->getSingleMasterTournamentsResults(2), $this->getLocalTournamentsResults(7))
         );
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -106,7 +159,7 @@ class RankingServiceTest extends TestCase
         $resultsRepository = $this->getResultsRepositoryMock(
             array_merge($this->getSingleMasterTournamentsResults(6), $this->getLocalTournamentsResults(5))
         );
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -126,7 +179,7 @@ class RankingServiceTest extends TestCase
                 $this->getSingleMasterTournamentsResults(3, 20)
             )
         );
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -146,7 +199,7 @@ class RankingServiceTest extends TestCase
                 $this->getLocalTournamentsResults(8)
             )
         );
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -168,7 +221,7 @@ class RankingServiceTest extends TestCase
                 $this->getLocalTournamentsResults(5)
             )
         );
-        $registry = $this->getRegistryMock('App:Results', $resultsRepository);
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
 
         $rankingService = new RankingService($registry);
         $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
@@ -219,32 +272,56 @@ class RankingServiceTest extends TestCase
 
     private function getMasterTournamentsResults($type, int $count, int $points = 300) : array
     {
-        $results = [];
-
-        for ($i = 1; $i <= $count; $i++) {
-            $result = new Result();
-            $result->setPoints($points);
-            $result->setTournamentId($i + ($type == 'single' ? 100 : 200));
-            $result->setTournamentRank('master');
-            $result->setTournamentType($type);
-            $results[] = $result;
-        }
-
-        return $results;
+        return $this->getTournamentsResults($count, 'master', $type, $points, 0);
     }
 
     private function getLocalTournamentsResults(int $count) : array
     {
+        return $this->getTournamentsResults($count, 'local', 'single',100, 0);
+    }
+
+    private function getLineJudgeBonus(int $count) : array
+    {
+        return $this->getTournamentsResults($count, 'master', 'single', 100, 2);
+    }
+
+    private function getHeadJudgeBonus(int $count) : array
+    {
+        return $this->getTournamentsResults($count, 'master', 'single', 150, 1);
+    }
+
+    private function getTournamentsResults(int $count, string $rank, string $type, int $points, int $judge) : array
+    {
         $results = [];
 
         for ($i = 1; $i <= $count; $i++) {
+            $idModifier = 0;
+            if ($rank == 'master') {
+                if ($type == 'single') {
+                    $idModifier = 100;
+                } else {
+                    $idModifier = 200;
+                }
+            }
+
+            if ($judge == 1) {
+                $idModifier = 300;
+            }
+
+            if ($judge == 2) {
+                $idModifier = 400;
+            }
+
             $result = new Result();
-            $result->setPoints(100);
-            $result->setTournamentId($i);
-            $result->setTournamentRank('local');
+            $result->setPoints($points);
+            $result->setTournamentId($i + $idModifier);
+            $result->setTournamentRank($rank);
+            $result->setTournamentType($type);
+            $result->setJudge($judge);
             $results[] = $result;
         }
 
         return $results;
     }
+
 }

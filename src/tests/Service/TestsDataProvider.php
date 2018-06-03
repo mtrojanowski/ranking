@@ -177,6 +177,7 @@ class TestsDataProvider
             $result->setPlace($place);
             $result->setPlayerId($data[0]);
             $result->setArmy($data[1]);
+            $result->setJudge(0);
 
             $results[] = $result;
         }
@@ -214,6 +215,7 @@ class TestsDataProvider
             $newResult->setPoints($expectedResult[2]);
             $newResult->setTournamentType($playersInTeam == 1 ? 'single' : 'team');
             $newResult->setTournamentRank($rank);
+            $newResult->setJudge(0);
 
             $results[] = $newResult;
         }

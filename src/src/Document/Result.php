@@ -49,6 +49,14 @@ class Result
     private $army;
 
     /**
+     * @MongoDB\Field(type="integer")
+     * 0 - regular player,
+     * 1 - head judge,
+     * 2 - line judge
+     */
+    private $judge;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -174,5 +182,21 @@ class Result
     public function setTournamentType($tournamentType): void
     {
         $this->tournamentType = $tournamentType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJudge()
+    {
+        return $this->judge;
+    }
+
+    /**
+     * @param mixed $judge
+     */
+    public function setJudge($judge)
+    {
+        $this->judge = $judge;
     }
 }
