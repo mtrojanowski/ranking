@@ -102,11 +102,11 @@ export default class AddTournament extends Component {
 
                     <p>Ranga</p>
                     <div className="form-check">
-                        <input className="form-check-input" type="radio" name="rank" id="rank_local" value="L" checked={tournamentData.rank === 'L' } onChange={(e) => this.handleChange('rank', e)} />
+                        <input className="form-check-input" type="radio" name="rank" id="rank_local" value="local" checked={tournamentData.rank === 'local' } onChange={(e) => this.handleChange('rank', e)} />
                         <label className="form-check-label" htmlFor="type_local">Lokalny</label>
                     </div>
                     <div className="form-check">
-                        <input className="form-check-input" type="radio" name="rank" id="rank_master" value="M" checked={tournamentData.rank === 'M' } onChange={(e) => this.handleChange('rank', e)} />
+                        <input className="form-check-input" type="radio" name="rank" id="rank_master" value="master" checked={tournamentData.rank === 'master' } onChange={(e) => this.handleChange('rank', e)} />
                         <label className="form-check-label" htmlFor="rank_master">Master</label>
                     </div>
 
