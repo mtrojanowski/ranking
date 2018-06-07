@@ -35,10 +35,10 @@ class ResultsController extends AppController
 
         $tournamentRepository = $this->getMongo()->getRepository('App:Tournament');
         /** @var Tournament $tournament */
-        $tournament = $tournamentRepository->find((int)$tournamentResults->getTournamentId());
+        $tournament = $tournamentRepository->find((int) $tournamentResults->getTournamentId());
 
         if (!$tournament) {
-            $tournament = $tournamentRepository->findOneBy(['legacyId' => $tournamentResults->getTournamentId()]);
+            $tournament = $tournamentRepository->findOneBy(['legacyId' => (int) $tournamentResults->getTournamentId()]);
         }
 
         if (!$tournament) {
