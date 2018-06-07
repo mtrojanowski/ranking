@@ -15,7 +15,7 @@ class PlayerDto
      * @param $nickname
      * @param $town
      */
-    public function __construct($legacyId, $firstName, $town, $nickname)
+    public function __construct($legacyId, $firstName, $nickname, $town)
     {
         $this->legacyId = $legacyId;
         $this->firstName = $firstName;
