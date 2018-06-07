@@ -12,16 +12,19 @@ namespace App\Controller\dto;
 class RankingPlayerDto
 {
     private $firstName;
+    private $nickname;
     private $town;
 
     /**
      * RankingPlayerDto constructor.
      * @param $firstName
+     * @param $nickname
      * @param $town
      */
-    public function __construct($firstName, $town)
+    public function __construct($firstName, $nickname, $town)
     {
         $this->firstName = $firstName;
+        $this->nickname = $nickname;
         $this->town = $town;
     }
 
@@ -31,6 +34,14 @@ class RankingPlayerDto
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
     }
 
     /**

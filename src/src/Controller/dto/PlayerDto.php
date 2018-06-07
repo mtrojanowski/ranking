@@ -5,18 +5,21 @@ class PlayerDto
 {
     private $legacyId;
     private $firstName;
+    private $nickname;
     private $town;
 
     /**
      * PlayerDto constructor.
      * @param $legacyId
      * @param $firstName
+     * @param $nickname
      * @param $town
      */
-    public function __construct($legacyId, $firstName, $town)
+    public function __construct($legacyId, $firstName, $town, $nickname)
     {
         $this->legacyId = $legacyId;
         $this->firstName = $firstName;
+        $this->nickname = $nickname;
         $this->town = $town;
     }
 
@@ -34,6 +37,14 @@ class PlayerDto
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
     }
 
     /**

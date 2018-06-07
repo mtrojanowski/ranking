@@ -51,6 +51,6 @@ class PlayerController extends AppController
 
     private function toPlayerDto(Player $player) : PlayerDto
     {
-        return new PlayerDto($player->getLegacyId(), $player->getFirstName(), $player->getTown());
+        return new PlayerDto($player->getLegacyId(), $player->getFirstName(), $player->getNickname(), $player->getTown());
     }
 }

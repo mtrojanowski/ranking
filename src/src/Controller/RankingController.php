@@ -20,7 +20,7 @@ class RankingController extends AppController
             /** @var Ranking $player */
             $ranking[] = new RankingDto(
                 $player->getId(),
-                new RankingPlayerDto($player->getPlayer()->getFirstName(), $player->getPlayer()->getTown()),
+                new RankingPlayerDto($player->getPlayer()->getFirstName(), $player->getPlayer()->getNickname(), $player->getPlayer()->getTown()),
                 $player->getPoints(),
                 $player->getTournamentCount(),
                 $player->getTournamentsIncluded()

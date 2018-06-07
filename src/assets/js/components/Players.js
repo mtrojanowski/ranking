@@ -27,6 +27,7 @@ export default class Players extends Component {
                         <tr>
                             <th>Id</th>
                             <th>Imię</th>
+                            <th>Nick</th>
                             <th>Miasto</th>
                         </tr>
                     </thead>
@@ -34,6 +35,7 @@ export default class Players extends Component {
                     {this.state.players.map(player => (<tr key={player.legacyId}>
                         <th scope="row">{player.legacyId}</th>
                         <td>{player.firstName}</td>
+                        <td>{player.nickname}</td>
                         <td>{player.town}</td>
                     </tr>))}
                     </tbody>
