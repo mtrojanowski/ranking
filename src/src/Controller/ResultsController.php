@@ -55,6 +55,7 @@ class ResultsController extends AppController
         foreach ($results as $result) {
             $em->persist($result);
         }
+        $tournament->setStatus('OK');
         $em->flush();
 
         /** @var Season $season */
