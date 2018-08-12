@@ -40,6 +40,12 @@ recalculate_ranking:
     methods:
       - PUT
 
+individual_ranking:
+    path: /api/ranking/{seasonId}/{playerId}
+    controller: App\Controller\RankingController::individual
+    methods:
+      - GET
+
 frontend:
     path: /{token}
     controller: App\Controller\FrontController::front

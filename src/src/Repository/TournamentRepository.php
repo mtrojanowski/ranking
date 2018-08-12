@@ -36,4 +36,13 @@ class TournamentRepository extends DocumentRepository
 
         return !empty($tournament) ? $tournament->getLegacyId() : 0;
     }
+
+    public function findTournaments(array $tournamentIds)
+    {
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->field('legacyId')->in($tournamentIds);
+        $queryBuilder->sort('date', -1);
+
+        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+    }
 }
