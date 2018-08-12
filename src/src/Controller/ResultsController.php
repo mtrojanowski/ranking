@@ -68,7 +68,7 @@ class ResultsController extends AppController
 
 
             if (!$currentRanking) {
-                $currentRanking = $rankingService->createInitialRanking($result->getPlayerId());
+                $currentRanking = $rankingService->createInitialRanking($result->getPlayerId(), $season->getId());
             }
 
             $em->persist($rankingService->recalculateRanking($currentRanking, $season));

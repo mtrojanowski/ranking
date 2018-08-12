@@ -51,6 +51,11 @@ class Season
     private $limitOfTeamMasterTournaments;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $limitOfPairMasterTournaments;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -178,5 +183,19 @@ class Season
         $this->limitOfTeamMasterTournaments = $limitOfTeamMasterTournaments;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getLimitOfPairMasterTournaments()
+    {
+        return $this->limitOfPairMasterTournaments;
+    }
 
+    /**
+     * @param mixed $limitOfPairMasterTournaments
+     */
+    public function setLimitOfPairMasterTournaments($limitOfPairMasterTournaments)
+    {
+        $this->limitOfPairMasterTournaments = $limitOfPairMasterTournaments;
+    }
 }
