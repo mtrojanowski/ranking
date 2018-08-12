@@ -60,7 +60,7 @@ const prepareData = (tournamentData) => ({
     rulesUrl: tournamentData.rulesUrl,
     date: tournamentData.date,
     rank: tournamentData.rank,
-    type: tournamentData.type === 'double' ? 'team' : tournamentData.type,
+    type: tournamentData.type,
     playersInTeam: tournamentData.type === 'team' ? tournamentData.playersInTeam : (tournamentData.type === 'double' ? 2 : 1)
 });
 

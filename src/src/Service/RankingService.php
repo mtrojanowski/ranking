@@ -31,6 +31,7 @@ class RankingService
         $tournamentsIncludedCount = 0;
         $mastersIncluded = 0;
         $teamMastersIncluded = 0;
+        $doubleMastersIncluded = 0;
         $pointsSum = 0;
         $headJudgeBonusReceived = 0;
 
@@ -48,6 +49,10 @@ class RankingService
                 if ($result->getTournamentType() == 'team' && $teamMastersIncluded >= $season->getLimitOfTeamMasterTournaments()) {
                     continue;
                 }
+
+                if ($result->getTournamentType() == 'double' && $doubleMastersIncluded >= $season->getLimitOfPairMasterTournaments()) {
+                    continue;
+                }
             }
 
             if ($result->getJudge() === 1 && $headJudgeBonusReceived === 1) {
@@ -62,6 +67,8 @@ class RankingService
                 $mastersIncluded++;
                 if ($result->getTournamentType() == 'team') {
                     $teamMastersIncluded++;
+                } elseif ($result->getTournamentType() == 'double') {
+                    $doubleMastersIncluded++;
                 }
             }
 
