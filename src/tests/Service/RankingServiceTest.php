@@ -39,6 +39,8 @@ class RankingServiceTest extends TestCase
         $player->setAssociation('Ad Astra');
         $player->setFirstName('Michal');
 
+        $seasonId = "abcdefghij";
+
         $playerRepository = $this->getMockBuilder(PlayerRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -50,13 +52,14 @@ class RankingServiceTest extends TestCase
         $registry = $this->getRegistryMock('App:Player', $playerRepository);
 
         $rankingService = new RankingService($registry);
-        $initialRanking = $rankingService->createInitialRanking($this->legacyId);
+        $initialRanking = $rankingService->createInitialRanking($this->legacyId, $seasonId);
 
         $this->assertEquals($this->legacyId, $initialRanking->getPlayerId());
         $this->assertEquals(0, $initialRanking->getPoints());
         $this->assertEquals('Ad Astra', $initialRanking->getPlayer()->getAssociation());
         $this->assertEquals('Michal', $initialRanking->getPlayer()->getFirstName());
         $this->assertEquals(0, $initialRanking->getTournamentCount());
+        $this->assertEquals($seasonId, $initialRanking->getSeasonId());
         $this->assertEquals([], $initialRanking->getTournamentsIncluded());
     }
 

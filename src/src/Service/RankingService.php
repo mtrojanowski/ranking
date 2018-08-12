@@ -96,7 +96,7 @@ class RankingService
         return $rankingData;
     }
 
-    public function createInitialRanking($playerId) : Ranking
+    public function createInitialRanking($playerId, $seasonId) : Ranking
     {
         $playerRepository = $this->managerRegistry->getRepository('App:Player');
         /** @var Player $player */
@@ -116,6 +116,7 @@ class RankingService
 
         $ranking = new Ranking();
         $ranking->setPlayerId($playerId);
+        $ranking->setSeasonId($seasonId);
         $ranking->setPoints(0);
         $ranking->setTournamentCount(0);
         $ranking->setTournamentsIncluded([]);

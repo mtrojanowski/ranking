@@ -16,6 +16,11 @@ class Ranking
     /**
      * @MongoDB\Field(type="string")
      */
+    private $seasonId;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $playerId;
 
     /**
@@ -153,5 +158,21 @@ class Ranking
     public function setHeadJudgeBonusReceived($headJudgeBonusReceived)
     {
         $this->headJudgeBonusReceived = $headJudgeBonusReceived;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSeasonId()
+    {
+        return $this->seasonId;
+    }
+
+    /**
+     * @param mixed $seasonId
+     */
+    public function setSeasonId($seasonId)
+    {
+        $this->seasonId = $seasonId;
     }
 }

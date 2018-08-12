@@ -51,7 +51,7 @@ class Season
     private $limitOfTeamMasterTournaments;
 
     /**
-     * @MongoDB\Field(type="integet")
+     * @MongoDB\Field(type="integer")
      */
     private $limitOfPairMasterTournaments;
 

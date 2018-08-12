@@ -34,6 +34,12 @@ ranking:
     methods:
       - GET
 
+recalculate_ranking:
+    path: /api/ranking-commands/recalculate
+    controller: App\Controller\SeasonController::recalculateRanking
+    methods:
+      - PUT
+
 frontend:
     path: /{token}
     controller: App\Controller\FrontController::front
