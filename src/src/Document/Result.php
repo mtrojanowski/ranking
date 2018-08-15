@@ -16,6 +16,11 @@ class Result
     /**
      * @MongoDB\Field(type="string")
      */
+    private $seasonId;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $tournamentId;
 
     /**
@@ -198,5 +203,21 @@ class Result
     public function setJudge($judge)
     {
         $this->judge = $judge;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSeasonId()
+    {
+        return $this->seasonId;
+    }
+
+    /**
+     * @param mixed $seasonId
+     */
+    public function setSeasonId($seasonId)
+    {
+        $this->seasonId = $seasonId;
     }
 }
