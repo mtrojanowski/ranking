@@ -8,6 +8,7 @@ use App\Document\Result;
 use App\Document\Season;
 use App\Exception\PlayerNotFoundException;
 use App\Helper\RankingData;
+use App\Repository\ResultsRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 class RankingService
@@ -23,8 +24,9 @@ class RankingService
     {
         $newRanking = $currentRanking;
 
+        /** @var ResultsRepository $resultsRepository */
         $resultsRepository = $this->managerRegistry->getRepository('App:Result');
-        $results = $resultsRepository->findBy(['playerId' => $newRanking->getPlayerId()]);
+        $results = $resultsRepository->getPlayersResults($currentRanking->getPlayerId(), $season->getId());
 
         $rankingData = new RankingData($results, $season->getLimitOfTournaments());
 
@@ -47,7 +49,7 @@ class RankingService
                 break;
             }
 
-            if ($result->getTournamentRank() == 'master' && $result->getJudge() === 0) {
+            if ($result->getTournamentRank() == 'master' && !$result->getJudge()) {
                 if ($rankingData->getMastersIncluded() >= $season->getLimitOfMasterTournaments()) {
                     $rankingData->setResults($this->changeMastersToLocals(array_slice($rankingData->getResults(), $key)));
                     return $rankingData;
@@ -82,7 +84,7 @@ class RankingService
             $rankingData->addIncludedTournament($result->getTournamentId());
             $rankingData->increaseTournamentsIncludedCount();
 
-            if ($result->getTournamentRank() == 'master' && $result->getJudge() === 0) {
+            if ($result->getTournamentRank() == 'master' && !$result->getJudge()) {
                 $rankingData->increaseMastersIncluded();
                 if ($result->getTournamentType() == 'team') {
                     $rankingData->increaseTeamMastersIncluded();
