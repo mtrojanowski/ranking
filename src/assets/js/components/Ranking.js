@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import shortId from 'shortid';
 
 import { getRanking } from '../services/ranking';
+import {Link} from "react-router-dom";
 
 export default class Ranking extends Component {
     constructor(props) {
@@ -46,7 +46,10 @@ export default class Ranking extends Component {
                             <td>{position.player.town}</td>
                             <td>{position.points}</td>
                             <td>{position.tournamentCount}</td>
-                            <td>-</td>
+                            <td><Link
+                                to={"/ranking/individual/" + position.player.legacyId}
+                                className="nav-link">Wyniki
+                            </Link></td>
                         </tr>);
                     })}
                     </tbody>

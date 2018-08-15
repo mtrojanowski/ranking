@@ -5,4 +5,9 @@ const getRanking = () => {
         .then(response => response.json());
 };
 
-export { getRanking }
+const getIndividualRanking = (playerId) => {
+    return fetch('/api/ranking/5b0d7c33fd0f9b6a4991169b/' + playerId)
+        .then(response => response.json());
+};
+
+export { getRanking, getIndividualRanking }

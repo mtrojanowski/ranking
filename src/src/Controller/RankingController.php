@@ -6,7 +6,6 @@ use App\Controller\dto\IndividualRankingTournamentDto;
 use App\Controller\dto\RankingDto;
 use App\Controller\dto\RankingPlayerDto;
 use App\Document\Ranking;
-use App\Document\RankingPlayer;
 use App\Document\Result;
 use App\Document\Tournament;
 
@@ -24,7 +23,7 @@ class RankingController extends AppController
             /** @var Ranking $player */
             $ranking[] = new RankingDto(
                 $player->getId(),
-                new RankingPlayerDto($player->getPlayer()->getFirstName(), $player->getPlayer()->getNickname(), $player->getPlayer()->getTown()),
+                new RankingPlayerDto($player->getPlayerId(), $player->getPlayer()->getFirstName(), $player->getPlayer()->getNickname(), $player->getPlayer()->getTown()),
                 $player->getPoints(),
                 $player->getTournamentCount(),
                 $player->getTournamentsIncluded()
@@ -76,7 +75,7 @@ class RankingController extends AppController
         }
 
         $individualRanking = new IndividualRankingDto($rankingData->getPoints(),
-            new RankingPlayerDto($rankingData->getPlayer()->getFirstName(), $rankingData->getPlayer()->getNickname(), $rankingData->getPlayer()->getTown()),
+            new RankingPlayerDto($rankingData->getPlayerId(), $rankingData->getPlayer()->getFirstName(), $rankingData->getPlayer()->getNickname(), $rankingData->getPlayer()->getTown()),
             $individualTournaments
         );
 

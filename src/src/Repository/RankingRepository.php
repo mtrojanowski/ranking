@@ -9,7 +9,7 @@ class RankingRepository extends DocumentRepository
     {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder
-            ->sort(['points' => -1, 'tournamentsCount' => 1]);
+            ->sort(['points' => -1, 'tournamentsCount' => -1]);
 
         return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
