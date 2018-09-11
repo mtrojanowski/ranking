@@ -115,6 +115,7 @@ class RankingService
         $rankingPlayer->setAssociation($player->getAssociation());
         $rankingPlayer->setTown($player->getTown());
         $rankingPlayer->setEmail($player->getEmail());
+        $rankingPlayer->setCountry($player->getCountry());
 
         $ranking = new Ranking();
         $ranking->setPlayerId($playerId);
