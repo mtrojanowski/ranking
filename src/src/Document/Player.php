@@ -15,7 +15,7 @@ class Player
     private $id;
 
     /**
-     * @MongoDB\Field(type="integer") @MongoDB\UniqueIndex
+     * @MongoDB\Field(type="string") @MongoDB\UniqueIndex
      */
     private $legacyId;
 
