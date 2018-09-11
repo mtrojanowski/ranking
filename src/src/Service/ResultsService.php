@@ -4,12 +4,21 @@ namespace App\Service;
 use App\Controller\dto\TournamentResults;
 use App\Document\Result;
 use App\Document\Tournament;
+use App\Exception\HeadJudgeBonusException;
 use App\Exception\InvalidTournamentException;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class ResultsService
 {
     private $headJudgePoints = 150;
     private $lineJudgePoints = 100;
+
+    private $managerRegistry;
+
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
 
     public function createTournamentResults(Tournament $tournament, TournamentResults $tournamentResults) : array
     {
@@ -62,6 +71,9 @@ class ResultsService
             if ($tournamentResult->getJudge() == 0) {
                 $points = $this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
             } elseif ($tournamentResult->getJudge() == 1) {
+                if ($this->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId)) {
+                    throw new HeadJudgeBonusException();
+                }
                 $points = $this->headJudgePoints;
             }
             elseif ($tournamentResult->getJudge() == 2) {
@@ -76,6 +88,14 @@ class ResultsService
         }
 
         return $results;
+    }
+
+    private function playerHasHeadJudgeBonus($playerId, $seasonId): bool
+    {
+        $headJudgeBonusesInSeason = $this->managerRegistry->getRepository('App:Results')
+            ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId, 'judge' => 1]);
+
+        return isset($headJudgeBonusesInSeason[0]);
     }
 
     private function createLocalTeamResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
