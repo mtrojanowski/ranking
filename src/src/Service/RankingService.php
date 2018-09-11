@@ -4,7 +4,7 @@ namespace App\Service;
 use App\Document\Player;
 use App\Document\Ranking;
 use App\Document\RankingPlayer;
-use App\Document\Result;
+use App\Model\Result;
 use App\Document\Season;
 use App\Exception\PlayerNotFoundException;
 use App\Helper\RankingData;
@@ -28,7 +28,7 @@ class RankingService
         $resultsRepository = $this->managerRegistry->getRepository('App:Result');
         $results = $resultsRepository->getPlayersResults($currentRanking->getPlayerId(), $season->getId());
 
-        $rankingData = new RankingData($results, $season->getLimitOfTournaments());
+        $rankingData = new RankingData($this->mapResults($results), $season->getLimitOfTournaments());
 
         while (isset($rankingData->getResults()[0])) {
             $rankingData = $this->sumPointsForRanking($rankingData, $season);
@@ -40,6 +40,29 @@ class RankingService
         $newRanking->setHeadJudgeBonusReceived($rankingData->getHeadJudgeBonusReceived());
 
         return $newRanking;
+    }
+
+    private function mapResults($results)
+    {
+        $mappedResults = [];
+        foreach ($results as $result) {
+            /** @var Result $result */
+            $mapped = new Result();
+            $mapped->setId($result->getId());
+            $mapped->setSeasonId($result->getSeasonId());
+            $mapped->setTournamentId($result->getTournamentId());
+            $mapped->setTournamentRank($result->getTournamentRank());
+            $mapped->setTournamentType($result->getTournamentType());
+            $mapped->setPlayerId($result->getPlayerId());
+            $mapped->setPlace($result->getPlace());
+            $mapped->setPoints($result->getPoints());
+            $mapped->setArmy($result->getArmy());
+            $mapped->setJudge($result->getJudge());
+
+            $mappedResults[] = $mapped;
+        }
+
+        return $mappedResults;
     }
 
     private function sumPointsForRanking(RankingData $rankingData, Season $season): RankingData {
