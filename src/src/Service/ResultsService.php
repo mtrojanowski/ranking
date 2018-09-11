@@ -92,7 +92,7 @@ class ResultsService
 
     private function playerHasHeadJudgeBonus($playerId, $seasonId): bool
     {
-        $headJudgeBonusesInSeason = $this->managerRegistry->getRepository('App:Results')
+        $headJudgeBonusesInSeason = $this->managerRegistry->getRepository('App:Result')
             ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId, 'judge' => 1]);
 
         return isset($headJudgeBonusesInSeason[0]);
