@@ -53,7 +53,7 @@ class ResultsService
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
-        $playersInTournament = count(array_filter($tournamentResults->getResults(), function ($results) { return !$results->getJudge(); }));
+        $playersInTournament = count(array_filter($tournamentResults->getResults(), function ($results) { return $results->getPlace() > 0; }));
 
         $multiplier1 = ( $playersInTournament > 24 ? 249 : (10*$playersInTournament - 1) ) / ( $playersInTournament / $playersInTeam - 1 );
         $multiplier2 = ( $playersInTournament > 34 ? 50 : ($playersInTournament > 25 ? (5 * ($playersInTournament - 25)) : 0) );
