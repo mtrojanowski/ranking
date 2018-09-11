@@ -66,19 +66,7 @@ class RankingService
                 }
             }
 
-            if ($result->getJudge() && $rankingData->getHeadJudgeBonusReceived() >= 2) {
-                continue;
-            }
-
             $points = $result->getPoints();
-            if ($result->getJudge() > 0) {
-                $rankingData->setheadJudgeBonusReceived($rankingData->getHeadJudgeBonusReceived() + 1) ;
-                if ($rankingData->getHeadJudgeBonusReceived() == 1) {
-                    $points = 150;
-                } else {
-                    $points = 100;
-                }
-            }
 
             $rankingData->addPointsToSum($points);
             $rankingData->addIncludedTournament($result->getTournamentId());

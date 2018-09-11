@@ -2,8 +2,12 @@
 namespace App\Service;
 
 use App\Controller\dto\Result;
+use App\Controller\dto\TournamentResults;
 use App\Document\Tournament;
+use App\Exception\HeadJudgeBonusException;
+use App\Repository\ResultsRepository;
 use App\Tests\Service\TestsDataProvider;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
 
 class ResultsServiceTest extends TestCase
@@ -13,7 +17,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "single", 1);
         $testData = TestsDataProvider::getSmallSinglesLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -24,7 +28,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "single", 1);
         $testData = TestsDataProvider::getSmallSinglesLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -35,7 +39,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "single", 1);
         $testData = TestsDataProvider::getVeryLargeSinglesLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -46,7 +50,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "team", 3);
         $testData = TestsDataProvider::getSmallThreePlayerTeamLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -57,7 +61,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "team", 3);
         $testData = TestsDataProvider::getLargeThreePlayerTeamLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -68,7 +72,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("local", "team", 5);
         $testData = TestsDataProvider::getLargeFivePlayerTeamLocalTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -79,7 +83,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "single", 1);
         $testData = TestsDataProvider::getSmallSingleMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -90,7 +94,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "single", 1);
         $testData = TestsDataProvider::getLargeSingleMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -101,7 +105,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "single", 1);
         $testData = TestsDataProvider::getVeryLargeSingleMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -112,7 +116,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 3);
         $testData = TestsDataProvider::getSmallThreePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -123,7 +127,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 3);
         $testData = TestsDataProvider::getLargeThreePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -134,7 +138,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 3);
         $testData = TestsDataProvider::getVeryLargeThreePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -145,7 +149,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 5);
         $testData = TestsDataProvider::getSmallFivePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -156,7 +160,7 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 5);
         $testData = TestsDataProvider::getLargeFivePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -167,11 +171,48 @@ class ResultsServiceTest extends TestCase
         $tournament = $this->getTournament("master", "team", 5);
         $testData = TestsDataProvider::getVeryLargeFivePlayerTeamMasterTestData();
 
-        $service = new ResultsService();
+        $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
     }
+
+    public function testShouldThrowErrorWhenMoreThanOneHeadJudgeBonusUsedInASeason()
+    {
+        $tournament = $this->getTournament('master', 'single', 1);
+        $testData = TestsDataProvider::getLargeSingleMasterTestData();
+
+        /** @var TournamentResults $results */
+        $results  = $testData['input'];
+        $tournamentResults = $results->getResults();
+        $headJudgeResult = new Result();
+        $headJudgeResult->setPlace(0);
+        $headJudgeResult->setPlayerId(1000);
+        $headJudgeResult->setJudge(1);
+        $tournamentResults[] = $headJudgeResult;
+        $results->setResults($tournamentResults);
+
+        $testData['input'] = $results;
+
+        $resultsRepository = $this->createMock(ResultsRepository::class);
+        $resultsRepository
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(['playerId' => 1000, 'seasonId' => "1234", 'judge' => 1])
+            ->willReturn([new Result()]);
+
+
+        $managerRegistry = $this->getManagerRegistry();
+        $managerRegistry->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($resultsRepository);
+
+        $service = new ResultsService($managerRegistry);
+        $this->expectException(HeadJudgeBonusException::class);
+
+        $service->createTournamentResults($tournament, $testData['input']);
+    }
+
 
     public function testShouldCreateResultsMasterWithJudgesTournament()
     {
@@ -220,7 +261,20 @@ class ResultsServiceTest extends TestCase
         $testData['expectedResult'][] = $newHeadJudgeResult;
         $testData['expectedResult'][] = $newLineJudgeResult;
 
-        $service = new ResultsService();
+        $resultsRepository = $this->createMock(ResultsRepository::class);
+        $resultsRepository
+            ->expects($this->once())
+            ->method('findBy')
+            ->with(['playerId' => 7000, 'seasonId' => '1234', 'judge' => 1])
+            ->willReturn([]);
+
+
+        $managerRegistry = $this->getManagerRegistry();
+        $managerRegistry->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($resultsRepository);
+
+        $service = new ResultsService($managerRegistry);
         $results = $service->createTournamentResults($tournament, $testData['input']);
 
         $this->verifyResults($results, $testData['expectedResult']);
@@ -247,7 +301,13 @@ class ResultsServiceTest extends TestCase
         $tournament->setRank($rank);
         $tournament->setType($type);
         $tournament->setPlayersInTeam($playersInTeam);
+        $tournament->setSeason('1234');
 
         return $tournament;
+    }
+
+    private function getManagerRegistry()
+    {
+        return $this->createMock(ManagerRegistry::class);
     }
 }
