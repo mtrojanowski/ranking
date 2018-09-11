@@ -47,6 +47,11 @@ class Player
     /**
      * @MongoDB\Field(type="string")
      */
+    private $country;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     private $email;
 
     /**
@@ -175,5 +180,21 @@ class Player
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function setCountry($country): void
+    {
+        $this->country = $country;
     }
 }
