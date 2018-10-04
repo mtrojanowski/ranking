@@ -154,7 +154,7 @@ class RankingService
         $newResults = [];
         foreach ($results as $key => $result) {
             /** @var Result $result */
-            if ($result->getTournamentRank() == 'master') {
+            if ($result->getTournamentRank() == 'master' && !$result->getJudge()) {
                 if ($type === null || ($type !== null && $result->getTournamentType() == $type)) {
                     $result->setPoints(round($result->getPoints() / 3));
                     $result->setTournamentRank('local');
