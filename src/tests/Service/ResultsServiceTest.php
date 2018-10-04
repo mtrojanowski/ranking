@@ -45,6 +45,17 @@ class ResultsServiceTest extends TestCase
         $this->verifyResults($results, $testData['expectedResult']);
     }
 
+    public function testShouldCreateResultsForLargeDoublesLocalTournament()
+    {
+        $tournament = $this->getTournament("local", "double", 2);
+        $testData = TestsDataProvider::getLargeDoubleLocalTestData();
+
+        $service = new ResultsService($this->getManagerRegistry());
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
     public function testShouldCreateResultsForSmallLocalThreePlayerTeamTournament()
     {
         $tournament = $this->getTournament("local", "team", 3);
@@ -93,6 +104,17 @@ class ResultsServiceTest extends TestCase
     {
         $tournament = $this->getTournament("master", "single", 1);
         $testData = TestsDataProvider::getLargeSingleMasterTestData();
+
+        $service = new ResultsService($this->getManagerRegistry());
+        $results = $service->createTournamentResults($tournament, $testData['input']);
+
+        $this->verifyResults($results, $testData['expectedResult']);
+    }
+
+    public function testShouldCreateResultsForLargeDoublesMasterTournament()
+    {
+        $tournament = $this->getTournament("master", "double", 2);
+        $testData = TestsDataProvider::getLargeDoubleMasterTestData();
 
         $service = new ResultsService($this->getManagerRegistry());
         $results = $service->createTournamentResults($tournament, $testData['input']);
