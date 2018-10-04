@@ -31,6 +31,7 @@ export default class Ranking extends Component {
                         <th>Lp.</th>
                         <th>Imię</th>
                         <th>Nick</th>
+                        <th>Klub</th>
                         <th>Miasto</th>
                         <th>Suma</th>
                         <th>Turnieje</th>
@@ -43,6 +44,7 @@ export default class Ranking extends Component {
                             <th scope="row">{lp++}</th>
                             <td>{position.player.firstName}</td>
                             <td>{position.player.nickname}</td>
+                            <td>{position.player.association}</td>
                             <td>{position.player.town}</td>
                             <td>{position.points}</td>
                             <td>{position.tournamentCount}</td>

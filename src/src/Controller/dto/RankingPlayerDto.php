@@ -16,6 +16,7 @@ class RankingPlayerDto
     private $nickname;
     private $town;
     private $country;
+    private $association;
 
     /**
      * RankingPlayerDto constructor.
@@ -24,14 +25,16 @@ class RankingPlayerDto
      * @param $nickname
      * @param $town
      * @param $country
+     * @param $association
      */
-    public function __construct($legacyId, $firstName, $nickname, $town, $country)
+    public function __construct($legacyId, $firstName, $nickname, $town, $country, $association)
     {
         $this->legacyId = $legacyId;
         $this->firstName = $firstName;
         $this->nickname = $nickname;
         $this->town = $town;
         $this->country = $country;
+        $this->association = $association;
     }
 
     /**
@@ -72,5 +75,13 @@ class RankingPlayerDto
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAssociation()
+    {
+        return $this->association;
     }
 }
