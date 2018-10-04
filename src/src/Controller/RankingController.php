@@ -61,6 +61,7 @@ class RankingController extends AppController
             ->findTournaments($tournamentIds);
 
         $individualTournaments = [];
+        $includedTournaments = $rankingData->getTournamentsIncluded();
 
         foreach ($tournaments as $tournament) {
             /** @var Tournament $tournament */
@@ -77,7 +78,8 @@ class RankingController extends AppController
                 $result->getPlace(),
                 $result->getPoints(),
                 $result->getArmy(),
-                in_array($tournament->getLegacyId(), $rankingData->getTournamentsIncluded()),
+                isset($includedTournaments[$tournament->getLegacyId()]),
+                isset($includedTournaments[$tournament->getLegacyId()]) ? $includedTournaments[$tournament->getLegacyId()] : 0,
                 $result->getJudge() ?: 0
             );
         }

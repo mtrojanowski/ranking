@@ -51,13 +51,15 @@ export default class Individual extends Component {
                         const rankType = ranks[tournament.tournamentRank] + " " + tournamentTypes[tournament.tournamentType];
                         const playersInTeam = tournament.tournamentType === 'team' ? `(${tournament.tournamentPlayersInTeam})` : '';
 
+                        const originalPoints = tournament.tournamentPointsIncluded && tournament.playersPoints !== tournament.originalPoints ? ' (' + tournament.originalPoints + ')' : '';
+
                         return <tr className={`${includedClass} ${judgeClass}`} key={tournament.id}>
                             <td>{tournament.legacyId}</td>
                             <td>{tournament.tournamentName}</td>
                             <td>{tournament.tournamentDate}</td>
                             <td>{rankType} {playersInTeam}</td>
                             <td className="centered">{tournament.playersPlace}</td>
-                            <td className="centered " >{tournament.playersPoints}</td>
+                            <td className="centered " >{tournament.playersPoints}<span className="originalPoints">{originalPoints}</span></td>
                             <td className="centered">{tournament.playersArmy}</td>
                         </tr>
                     })}

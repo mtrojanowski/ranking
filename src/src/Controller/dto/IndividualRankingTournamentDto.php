@@ -14,6 +14,7 @@ class IndividualRankingTournamentDto
     private $playersPoints;
     private $playersArmy;
     private $tournamentPointsIncluded;
+    private $originalPoints;
     private $playerWasAJudge;
 
     /**
@@ -29,9 +30,10 @@ class IndividualRankingTournamentDto
      * @param int $playersPoints
      * @param string $playersArmy
      * @param bool $tournamentPointsIncluded
+     * @param int $originalPoints
      * @param bool $playerWasAJudge
      */
-    public function __construct(string $tournamentId, int $legacyId, string $tournamentDate, string $tournamentName, string $tournamentRank, string $tournamentType, int $tournamentPlayersInTeam, int $playersPlace, int $playersPoints, string $playersArmy, bool $tournamentPointsIncluded, bool $playerWasAJudge)
+    public function __construct(string $tournamentId, int $legacyId, string $tournamentDate, string $tournamentName, string $tournamentRank, string $tournamentType, int $tournamentPlayersInTeam, int $playersPlace, int $playersPoints, string $playersArmy, bool $tournamentPointsIncluded, int $originalPoints, bool $playerWasAJudge)
     {
         $this->tournamentId = $tournamentId;
         $this->legacyId = $legacyId;
@@ -44,6 +46,7 @@ class IndividualRankingTournamentDto
         $this->playersPoints = $playersPoints;
         $this->playersArmy = $playersArmy;
         $this->tournamentPointsIncluded = $tournamentPointsIncluded;
+        $this->originalPoints = $originalPoints;
         $this->playerWasAJudge = $playerWasAJudge;
     }
 
@@ -142,5 +145,13 @@ class IndividualRankingTournamentDto
     public function getLegacyId(): int
     {
         return $this->legacyId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginalPoints(): int
+    {
+        return $this->originalPoints;
     }
 }

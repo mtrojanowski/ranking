@@ -12,6 +12,7 @@ class Result
     private $playerId;
     private $place;
     private $points;
+    private $originalPoints;
     private $army;
     private $judge;
 
@@ -173,5 +174,21 @@ class Result
     public function setSeasonId($seasonId)
     {
         $this->seasonId = $seasonId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOriginalPoints()
+    {
+        return $this->originalPoints;
+    }
+
+    /**
+     * @param mixed $originalPoints
+     */
+    public function setOriginalPoints($originalPoints): void
+    {
+        $this->originalPoints = $originalPoints;
     }
 }

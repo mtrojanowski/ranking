@@ -120,11 +120,12 @@ class RankingData
     }
 
     /**
-     * @param int $tournament
+     * @param int $tournamentId
+     * @param int $originalPoints
      */
-    public function addIncludedTournament($tournament)
+    public function addIncludedTournament(int $tournamentId, int $originalPoints)
     {
-        $this->tournamentsIncluded[] = $tournament;
+        $this->tournamentsIncluded[$tournamentId] = $originalPoints;
     }
 
     /**
