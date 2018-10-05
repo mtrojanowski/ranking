@@ -33,3 +33,7 @@
     font-size: 0.8em;
     font-style: italic;
 }
+
+.master-points-as-local {
+    background: rgba(0, 0, 0, 0.1);
+}

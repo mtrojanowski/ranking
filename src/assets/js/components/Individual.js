@@ -72,6 +72,9 @@ export default class Individual extends Component {
                     <div className="legend tournament-included">Turniej zaliczony do rankingu</div>
                     <div className="legend judge-included">Premia sędziowska, zaliczona do rankingu</div>
                     <div className="legend judge-not-included">Premia sędziowska, niezaliczona do rankingu</div>
+                    <div className="legend master-points-as-local">W przypadku mastera zaliczonego
+                        jako lokal punkty w&nbsp;nawiasie pokazują ile rzeczywiście zostało doliczonych do rankingu
+                        , np. 240 <span className="originalPoints">(80)</span></div>
                 </div>
             </div>
         );
