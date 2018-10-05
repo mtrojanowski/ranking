@@ -21,9 +21,17 @@ class RankingController extends AppController
 
         foreach ($players as $player) {
             /** @var Ranking $player */
+            $playerData = $player->getPlayer();
             $ranking[] = new RankingDto(
                 $player->getId(),
-                new RankingPlayerDto($player->getPlayerId(), $player->getPlayer()->getFirstName(), $player->getPlayer()->getNickname(), $player->getPlayer()->getTown(), $player->getPlayer()->getCountry()),
+                new RankingPlayerDto(
+                    $player->getPlayerId(),
+                    $playerData->getFirstName(),
+                    $playerData->getNickname(),
+                    $playerData->getTown(),
+                    $playerData->getCountry(),
+                    $playerData->getAssociation()
+                ),
                 $player->getPoints(),
                 $player->getTournamentCount(),
                 $player->getTournamentsIncluded()
@@ -53,6 +61,7 @@ class RankingController extends AppController
             ->findTournaments($tournamentIds);
 
         $individualTournaments = [];
+        $includedTournaments = $rankingData->getTournamentsIncluded();
 
         foreach ($tournaments as $tournament) {
             /** @var Tournament $tournament */
@@ -69,13 +78,23 @@ class RankingController extends AppController
                 $result->getPlace(),
                 $result->getPoints(),
                 $result->getArmy(),
-                in_array($tournament->getLegacyId(), $rankingData->getTournamentsIncluded()),
+                isset($includedTournaments[$tournament->getLegacyId()]),
+                isset($includedTournaments[$tournament->getLegacyId()]) ? $includedTournaments[$tournament->getLegacyId()] : 0,
                 $result->getJudge() ?: 0
             );
         }
 
-        $individualRanking = new IndividualRankingDto($rankingData->getPoints(),
-            new RankingPlayerDto($rankingData->getPlayerId(), $rankingData->getPlayer()->getFirstName(), $rankingData->getPlayer()->getNickname(), $rankingData->getPlayer()->getTown(), $rankingData->getPlayer()->getCountry()),
+        $playerData = $rankingData->getPlayer();
+        $individualRanking = new IndividualRankingDto(
+            $rankingData->getPoints(),
+            new RankingPlayerDto(
+                $rankingData->getPlayerId(),
+                $playerData->getFirstName(),
+                $playerData->getNickname(),
+                $playerData->getTown(),
+                $playerData->getCountry(),
+                $playerData->getAssociation()
+            ),
             $individualTournaments
         );
 

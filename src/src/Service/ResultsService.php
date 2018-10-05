@@ -25,13 +25,13 @@ class ResultsService
         if ($tournament->getRank() === 'local') {
             if ($tournament->getType() === 'single') {
                 return $this->createLocalSinglesResults($tournamentResults, $tournament->getSeason(), $tournament->getRank(), $tournament->getType());
-            } elseif ($tournament->getType() === 'team') {
+            } elseif ($tournament->getType() === 'team' || $tournament->getType() === 'double' ) {
                 return $this->createLocalTeamResults($tournamentResults, $tournament->getSeason(), $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType());
             }
         } elseif ($tournament->getRank() === 'master') {
             if ($tournament->getType() === 'single') {
                 return $this->createMasterSingleResults($tournamentResults, $tournament->getSeason(), $tournament->getRank(), $tournament->getType());
-            } elseif ($tournament->getType() === 'team') {
+            } elseif ($tournament->getType() === 'team' || $tournament->getType() === 'double' ) {
                 return $this->createMasterTeamResults($tournamentResults, $tournament->getSeason(), $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType());
             }
         }

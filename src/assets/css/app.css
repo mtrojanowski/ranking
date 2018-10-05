@@ -28,3 +28,8 @@
 .centered {
     text-align: center;
 }
+
+.originalPoints {
+    font-size: 0.8em;
+    font-style: italic;
+}

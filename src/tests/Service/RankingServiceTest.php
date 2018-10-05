@@ -62,7 +62,7 @@ class RankingServiceTest extends TestCase
         $this->assertEquals('Michal', $initialRanking->getPlayer()->getFirstName());
         $this->assertEquals(0, $initialRanking->getTournamentCount());
         $this->assertEquals($seasonId, $initialRanking->getSeasonId());
-        $this->assertEquals([], $initialRanking->getTournamentsIncluded());
+        $this->assertEquals([], array_keys($initialRanking->getTournamentsIncluded()));
     }
 
     public function testShouldCountRankingPointsForFewerThanMaxTournamentsInSeason()
@@ -75,7 +75,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(800, $newRanking->getPoints());
         $this->assertEquals(8, $newRanking->getTournamentCount());
-        $this->assertEquals(['1', '2', '3', '4', '5', '6', '7', '8'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['1', '2', '3', '4', '5', '6', '7', '8'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -95,7 +95,27 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1850, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '102', '103', '104', '301', '401', '402', '1', '2', '3'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '102', '103', '104', '301', '401', '402', '1', '2', '3'], array_keys($newRanking->getTournamentsIncluded()));
+        $this->assertEquals($this->playerId, $newRanking->getPlayerId());
+    }
+
+    public function testShouldCountRankingPointsWhithJudgeBonusAndMastersOverLimit()
+    {
+        $resultsRepository = $this->getResultsRepositoryMock(
+            array_merge(
+                $this->getMasterTournamentsResults('single', 6),
+                $this->getHeadJudgeBonus(1),
+                $this->getLineJudgeBonus(2),
+                $this->getLocalTournamentsResults(10))
+        );
+        $registry = $this->getRegistryMock('App:Result', $resultsRepository);
+
+        $rankingService = new RankingService($registry);
+        $newRanking = $rankingService->recalculateRanking($this->currentRanking, $this->season);
+
+        $this->assertEquals(1850, $newRanking->getPoints());
+        $this->assertEquals(10, $newRanking->getTournamentCount());
+        $this->assertEquals(['101', '102', '103', '104', '301', '105', '106', '401', '402', '1'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -109,7 +129,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1000, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -125,7 +145,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1300, $newRanking->getPoints());
         $this->assertEquals(9, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '102', '1', '2', '3', '4', '5', '6', '7'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '102', '1', '2', '3', '4', '5', '6', '7'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -141,7 +161,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1700, $newRanking->getPoints());
         $this->assertEquals(9, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '102', '103', '104', '105', '106', '1', '2', '3'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '102', '103', '104', '105', '106', '1', '2', '3'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -161,7 +181,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1600, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '102', '103', '1', '2', '3', '4', '5', '6', '7'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '102', '103', '1', '2', '3', '4', '5', '6', '7'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -170,7 +190,7 @@ class RankingServiceTest extends TestCase
         $resultsRepository = $this->getResultsRepositoryMock(
             array_merge(
                 $this->getSingleMasterTournamentsResults(4),
-                $this->getSingleMasterTournamentsResults(2, 270),
+                $this->getSingleMasterTournamentsResults(2, 270, 10000),
                 $this->getLocalTournamentsResults(5),
                 $this->getLocalTournamentsResults(1, 60)
 
@@ -183,7 +203,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1790, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '102', '103', '104', '1', '2', '3', '4', '5', '101'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '102', '103', '104', '1', '2', '3', '4', '5', '10101'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -203,7 +223,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1600, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '201', '202', '203', '1', '2', '3', '4', '5', '6'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '201', '202', '203', '1', '2', '3', '4', '5', '6'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -223,7 +243,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1400, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '501', '502', '503', '1', '2', '3', '4', '5', '6'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '501', '502', '503', '1', '2', '3', '4', '5', '6'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -234,7 +254,7 @@ class RankingServiceTest extends TestCase
                 $this->getSingleMasterTournamentsResults(1),
                 $this->getTeamMasterTournamentsResults(3),
                 $this->getLocalTournamentsResults(3),
-                $this->getSingleMasterTournamentsResults(3, 90),
+                $this->getSingleMasterTournamentsResults(3, 90, 10000),
                 $this->getLocalTournamentsResults(5, 20)
             )
         );
@@ -245,7 +265,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1450, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '201', '202', '203', '1', '2', '3', '101', '102', '103'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '201', '202', '203', '1', '2', '3', '10101', '10102', '10103'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -268,7 +288,7 @@ class RankingServiceTest extends TestCase
 
         $this->assertEquals(1800, $newRanking->getPoints());
         $this->assertEquals(10, $newRanking->getTournamentCount());
-        $this->assertEquals(['101', '501', '201', '202', '203', '502', '503', '1', '2', '3'], $newRanking->getTournamentsIncluded());
+        $this->assertEquals(['101', '501', '201', '202', '203', '502', '503', '1', '2', '3'], array_keys($newRanking->getTournamentsIncluded()));
         $this->assertEquals($this->playerId, $newRanking->getPlayerId());
     }
 
@@ -300,9 +320,9 @@ class RankingServiceTest extends TestCase
         return $registry;
     }
 
-    private function getSingleMasterTournamentsResults(int $count, int $points = 300) : array
+    private function getSingleMasterTournamentsResults(int $count, int $points = 300, $idprefix = 0) : array
     {
-        return $this->getMasterTournamentsResults('single', $count, $points);
+        return $this->getMasterTournamentsResults('single', $count, $points, $idprefix);
     }
 
     private function getTeamMasterTournamentsResults(int $count, int $points = 300) : array
@@ -315,9 +335,9 @@ class RankingServiceTest extends TestCase
         return $this->getMasterTournamentsResults('double', $count, $points);
     }
 
-    private function getMasterTournamentsResults($type, int $count, int $points = 300) : array
+    private function getMasterTournamentsResults($type, int $count, int $points = 300, $idprefix = 0) : array
     {
-        return $this->getTournamentsResults($count, 'master', $type, $points, 0);
+        return $this->getTournamentsResults($count, 'master', $type, $points, 0, $idprefix);
     }
 
     private function getLocalTournamentsResults(int $count, int $points = 100) : array
@@ -335,7 +355,7 @@ class RankingServiceTest extends TestCase
         return $this->getTournamentsResults($count, 'master', 'single', 150, 1);
     }
 
-    private function getTournamentsResults(int $count, string $rank, string $type, int $points, int $judge) : array
+    private function getTournamentsResults(int $count, string $rank, string $type, int $points, int $judge, $idPrefix = 0) : array
     {
         $results = [];
 
@@ -358,6 +378,8 @@ class RankingServiceTest extends TestCase
             if ($judge == 2) {
                 $idModifier = 400;
             }
+
+            $idModifier += $idPrefix;
 
             $result = new Result();
             $result->setPoints($points);

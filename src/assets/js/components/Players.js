@@ -28,6 +28,7 @@ export default class Players extends Component {
                             <th>Id</th>
                             <th>Imię</th>
                             <th>Nick</th>
+                            <th>Klub</th>
                             <th>Miasto</th>
                         </tr>
                     </thead>
@@ -36,6 +37,7 @@ export default class Players extends Component {
                         <th scope="row">{player.legacyId}</th>
                         <td>{player.firstName}</td>
                         <td>{player.nickname}</td>
+                        <td>{player.association}</td>
                         <td>{player.town}</td>
                     </tr>))}
                     </tbody>

@@ -39,9 +39,9 @@ class Ranking
     private $tournamentCount;
 
     /**
-     * @MongoDB\Field(type="collection")
+     * @MongoDB\Field(type="hash")
      */
-    private $tournamentsIncluded;
+    private $tournamentsIncluded = [];
 
     /**
      * @MongoDB\Field(type="integer")

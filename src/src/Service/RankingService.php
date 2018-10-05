@@ -56,6 +56,7 @@ class RankingService
             $mapped->setPlayerId($result->getPlayerId());
             $mapped->setPlace($result->getPlace());
             $mapped->setPoints($result->getPoints());
+            $mapped->setOriginalPoints($result->getPoints());
             $mapped->setArmy($result->getArmy());
             $mapped->setJudge($result->getJudge());
 
@@ -92,7 +93,7 @@ class RankingService
             $points = $result->getPoints();
 
             $rankingData->addPointsToSum($points);
-            $rankingData->addIncludedTournament($result->getTournamentId());
+            $rankingData->addIncludedTournament($result->getTournamentId(), $result->getPoints());
             $rankingData->increaseTournamentsIncludedCount();
 
             if ($result->getTournamentRank() == 'master' && !$result->getJudge()) {
@@ -154,7 +155,7 @@ class RankingService
         $newResults = [];
         foreach ($results as $key => $result) {
             /** @var Result $result */
-            if ($result->getTournamentRank() == 'master') {
+            if ($result->getTournamentRank() == 'master' && !$result->getJudge()) {
                 if ($type === null || ($type !== null && $result->getTournamentType() == $type)) {
                     $result->setPoints(round($result->getPoints() / 3));
                     $result->setTournamentRank('local');
