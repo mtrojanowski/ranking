@@ -17,4 +17,14 @@ class ResultsRepository extends DocumentRepository
 
         return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
+
+    public function deleteTournamentResults(string $tournamentId)
+    {
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder
+            ->remove()
+            ->field('tournamentId')->equals($tournamentId);
+
+        return $queryBuilder->getQuery()->execute();
+    }
 }

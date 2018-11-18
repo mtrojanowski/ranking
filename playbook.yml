@@ -89,3 +89,6 @@
       install_recommends: false
       update_cache: true
 
+  - name: ensure php 7.2 is the default
+    shell: update-alternatives --set php /usr/bin/php7.2
+

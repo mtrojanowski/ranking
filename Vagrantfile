@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+# Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for

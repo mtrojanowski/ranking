@@ -5,15 +5,18 @@ use App\Controller\dto\Result;
 use App\Controller\dto\TournamentResults;
 use App\Document\Season;
 use App\Document\Tournament;
+use App\Exception\IncorrectPlayersException;
 use App\Exception\InvalidTournamentException;
+use App\Repository\ResultsRepository;
 use App\Service\RankingService;
 use App\Service\ResultsService;
+use App\Service\TournamentsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ResultsController extends AppController
 {
-    public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService)
+    public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService, TournamentsService $tournamentsService)
     {
         try {
             /** @var TournamentResults $tournamentResults */
@@ -51,6 +54,14 @@ class ResultsController extends AppController
             return $this->json($this->getError('Unsupported tournament type'), 400);
         }
 
+        try {
+            $tournamentsService->verifyTournamentPlayers($tournamentResults);
+        } catch (IncorrectPlayersException $e) {
+            return $this->json($this->getError($e->getMessage()), 422);
+        }
+
+        $this->removeCurrentTournamentResults($tournament->getLegacyId());
+
         $em = $this->getMongo()->getManager();
         foreach ($results as $result) {
             $em->persist($result);
@@ -77,5 +88,11 @@ class ResultsController extends AppController
         $em->flush();
 
         return $this->json(['message' => 'Tournament results saved'], 201);
+    }
+
+    private function removeCurrentTournamentResults(string $tournamentId) {
+        /** @var ResultsRepository $resultsRepository */
+        $resultsRepository = $this->getMongo()->getRepository('App:Result');
+        $resultsRepository->deleteTournamentResults($tournamentId);
     }
 }
