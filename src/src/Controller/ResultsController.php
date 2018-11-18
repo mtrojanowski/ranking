@@ -7,6 +7,7 @@ use App\Document\Season;
 use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
 use App\Exception\InvalidTournamentException;
+use App\Repository\ResultsRepository;
 use App\Service\RankingService;
 use App\Service\ResultsService;
 use App\Service\TournamentsService;
@@ -59,6 +60,8 @@ class ResultsController extends AppController
             return $this->json($this->getError($e->getMessage()), 422);
         }
 
+        $this->removeCurrentTournamentResults($tournament->getLegacyId());
+
         $em = $this->getMongo()->getManager();
         foreach ($results as $result) {
             $em->persist($result);
@@ -85,5 +88,11 @@ class ResultsController extends AppController
         $em->flush();
 
         return $this->json(['message' => 'Tournament results saved'], 201);
+    }
+
+    private function removeCurrentTournamentResults(string $tournamentId) {
+        /** @var ResultsRepository $resultsRepository */
+        $resultsRepository = $this->getMongo()->getRepository('App:Result');
+        $resultsRepository->deleteTournamentResults($tournamentId);
     }
 }
