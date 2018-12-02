@@ -37,3 +37,7 @@
 .master-points-as-local {
     background: rgba(0, 0, 0, 0.1);
 }
+
+.react-datepicker-wrapper {
+    display: block;
+}
