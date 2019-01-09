@@ -75,7 +75,7 @@ class ResultsController extends AppController
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
         foreach ($results as $result) {
             /** @var Result $result */
-            $currentRanking = $rankingRepository->findOneBy(['playerId' => $result->getPlayerId()]);
+            $currentRanking = $rankingRepository->findOneBy(['playerId' => $result->getPlayerId(), 'seasonId' => $season->getId()]);
 
 
             if (!$currentRanking) {

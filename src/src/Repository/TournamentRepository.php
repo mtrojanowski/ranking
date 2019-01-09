@@ -6,11 +6,16 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class TournamentRepository extends DocumentRepository
 {
+    const ACTIVE_SEASON_ID = "5c36642979dab7965c7e5d23";
+
     public function getTournaments(string $previous)
     {
         $queryBuilder = $this->createQueryBuilder();
         $todayDate = new \DateTime();
         $today = new \MongoDate($todayDate->setTime(0, 0, 0)->getTimestamp());
+
+        $queryBuilder
+            ->field("season")->equals(self::ACTIVE_SEASON_ID);
 
         if ($previous == 'true') {
             $queryBuilder
