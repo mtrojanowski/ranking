@@ -79,4 +79,8 @@ const createTournament = (tournamentData) =>
                 }
             ).then((response) => response.json()));
 
-export { getFutureTournaments, getPreviousTournaments, getRank, createTournament }
+const getTournament = (tournamentId) =>
+     fetch('/api/tournaments/' + tournamentId)
+        .then(response => response.json());
+
+export { getFutureTournaments, getPreviousTournaments, getRank, createTournament, getTournament }

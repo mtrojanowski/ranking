@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
+import DatePicker from 'react-datepicker';
 
 import {createTournament} from "../services/tournaments";
-import {Redirect} from "react-router-dom";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 export default class AddTournament extends Component {
     constructor(props) {
         super(props);
+        const currentDate = new Date();
+        const inAWeek = new Date();
+        inAWeek.setDate(currentDate.getDate() + 7);
+
         this.state = {
             tournamentData: {
                 name: '',
@@ -13,15 +21,21 @@ export default class AddTournament extends Component {
                 venue: '',
                 points: 0,
                 rulesUrl: '',
-                date: '',
+                date: inAWeek,
                 organiser: '.',
                 type: 'single',
-                rank: 'L',
+                rank: 'local',
                 playersInTeam: 3
             },
             hasError: false,
             tournamentId: 0
         };
+    }
+
+    handleChangeDate(date) {
+        const tournamentData = this.state.tournamentData;
+        tournamentData.date = date;
+        this.setState({ tournamentData });
     }
 
     addTournament(event) {
@@ -43,7 +57,7 @@ export default class AddTournament extends Component {
     render() {
         const { hasError, tournamentData, tournamentId } = this.state;
         const redirectToList = tournamentId > 0;
-        console.log(tournamentId);
+
         const playersInTeamClass = tournamentData.type === 'team' ? 'form-group visible' : 'form-group invisible';
 
         return (
@@ -79,7 +93,13 @@ export default class AddTournament extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="date">Data</label>
-                        <input type="text" className="form-control" id="date" placeholder="Data" value={tournamentData.date} onChange={(e) => this.handleChange('date', e)} />
+                        <DatePicker
+                            dropdownMode="select"
+                            selected={this.state.tournamentData.date}
+                            onChange={(date)  => this.handleChangeDate(date)}
+                            dateFormat="dd/MM/y"
+                            className="form-control"
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="organiser">Organizator</label>

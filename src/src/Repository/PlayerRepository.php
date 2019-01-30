@@ -14,4 +14,13 @@ class PlayerRepository extends DocumentRepository
 
         return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
+
+    function getPlayersByIds(array $playerIds) {
+        $queryBuilder = $this->createQueryBuilder();
+        $queryBuilder->select()
+            ->field('legacyId')
+            ->in($playerIds);
+
+        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+    }
 }
