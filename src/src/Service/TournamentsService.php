@@ -33,6 +33,10 @@ class TournamentsService
         return $tournament;
     }
 
+    /**
+     * @param TournamentResults $results
+     * @throws IncorrectPlayersException
+     */
     public function verifyTournamentPlayers(TournamentResults $results)
     {
         $playerIds = [];
@@ -55,5 +59,7 @@ class TournamentsService
 
             throw new IncorrectPlayersException($playersNotInDb);
         }
+
+        $this->managerRegistry->getManager()->clear();
     }
 }
