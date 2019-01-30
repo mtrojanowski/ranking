@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { getIndividualRanking } from '../services/ranking';
 import { ranks, tournamentTypes } from '../const/tournaments';
+import {Link} from "react-router-dom";
 
 export default class Individual extends Component {
     constructor(props) {
@@ -55,7 +56,7 @@ export default class Individual extends Component {
 
                         return <tr className={`${includedClass} ${judgeClass}`} key={tournament.id}>
                             <td>{tournament.legacyId}</td>
-                            <td>{tournament.tournamentName}</td>
+                            <td><Link to={'/tournament/' + tournament.tournamentId}>{tournament.tournamentName}</Link></td>
                             <td>{tournament.tournamentDate}</td>
                             <td>{rankType} {playersInTeam}</td>
                             <td className="centered">{tournament.playersPlace}</td>
