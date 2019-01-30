@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import shortId from 'shortid';
 
 import { getRank } from '../services/tournaments';
+import {Link} from "react-router-dom";
 
 export default class TournamentsTable extends Component {
 
@@ -30,11 +31,17 @@ export default class TournamentsTable extends Component {
                         const rank = getRank(tournament.rank, tournament.type);
                         const type = tournament.type === 'single' ? 'Single' : tournament.playersInTeam === 2 ? 'Parówka' : 'Drużynowy (' + tournament.playersInTeam + ')';
                         const status = tournament.status === 'OK' ? 'Zaliczony' : '-';
+                        const showResultsLink = tournament.status === 'OK';
 
                         return (<tr key={shortId()}>
                             <th scope="row">{tournament.legacyId}</th>
                             <td>{tournament.date}</td>
-                            <td>{tournament.name}</td>
+                            <td>
+                                {!showResultsLink && <span>{tournament.name}</span>}
+                                {showResultsLink && <span>
+                                    <Link to={'/tournament/' + tournament.id}>{tournament.name}</Link>
+                                </span>}
+                            </td>
                             <td>{tournament.town}, {tournament.venue}</td>
                             <td>{tournament.organiser}</td>
                             <td>{rank}</td>

@@ -4,6 +4,12 @@ tournament_list:
     methods:
       - GET
 
+tournament_data:
+    path:     /api/tournaments/{id}
+    controller: App\Controller\TournamentController::getTournament
+    methods:
+      - GET
+
 add_tournament:
     path:     /api/tournaments
     controller: App\Controller\TournamentController::addTournament

@@ -41,3 +41,7 @@
 .react-datepicker-wrapper {
     display: block;
 }
+
+.tournament-data-id {
+    font-size: 0.6em;
+}
