@@ -6,7 +6,7 @@ const getRanking = () => {
 };
 
 const getIndividualRanking = (playerId) => {
-    return fetch('/api/ranking/5b0d7c33fd0f9b6a4991169b/' + playerId)
+    return fetch('/api/ranking/5c36642979dab7965c7e5d23/' + playerId)
         .then(response => response.json());
 };
 
