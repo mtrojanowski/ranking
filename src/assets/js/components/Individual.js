@@ -13,15 +13,24 @@ export default class Individual extends Component {
                 tournaments: {},
                 points: null
             },
-            playerId: props.match.params.playerId
+            playerId: props.match.params.playerId,
+            seasonId: props.match.params.seasonId
         };
     }
 
     componentDidMount() {
         if (this.state.result.player === null) {
             Promise.resolve()
-                .then(() => getIndividualRanking(this.state.playerId))
+                .then(() => getIndividualRanking(this.state.playerId, this.state.seasonId))
                 .then((result) => this.setState({ result }));
+        }
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.match.params.seasonId !== this.state.seasonId) {
+            Promise.resolve()
+                .then(() => getIndividualRanking(nextProps.match.params.playerId, nextProps.match.params.seasonId))
+                .then((result) => this.setState({ result, seasonId: nextProps.match.params.seasonId }));
         }
     }
 
