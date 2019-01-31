@@ -40,6 +40,12 @@ ranking:
     methods:
       - GET
 
+archive_ranking:
+    path: /api/ranking/{seasonId}
+    controller: App\Controller\RankingController::list
+    methods:
+      - GET
+
 recalculate_ranking:
     path: /api/ranking-commands/recalculate
     controller: App\Controller\SeasonController::recalculateRanking

@@ -23,6 +23,7 @@ export default class Main extends Component {
                         <Route exact path="/previous-tournaments" component={PreviousTournaments} />
                         <Route exact path="/future-tournaments" component={FutureTournaments} />
                         <Route exact path="/ranking" component={Ranking} />
+                        <Route path="/ranking/:seasonId" component={Ranking} />
                         <Route path="/ranking/individual/:playerId" component={Individual} />
                         <Route exact path="/add-tournament" component={AddTournament} />
                         <Route path="/tournament/:tournamentId" component={TournamentResults} />

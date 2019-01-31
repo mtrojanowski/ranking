@@ -1,7 +1,9 @@
 import fetch from 'node-fetch';
 
-const getRanking = () => {
-    return fetch('/api/ranking')
+const getRanking = (seasonId) => {
+    const url = '/api/ranking' + (seasonId === undefined ? '' : '/' + seasonId );
+
+    return fetch(url)
         .then(response => response.json());
 };
 

@@ -43,6 +43,14 @@ export default class Navbar extends Component {
                             className="nav-link">Ranking
                         </Link>
                     </li>
+                    <li className="dropdown nav-item">
+                        <a href="" id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">
+                            Rankingi archiwalne
+                        </a>
+                        <div className="dropdown-menu nav-item" aria-labelledby="dLabel">
+                            <Link to="/ranking/5b0d7c33fd0f9b6a4991169b" className="nav-link text-dark">Sezon 2018</Link>
+                        </div>
+                    </li>
 
                     <li className="nav-item">
                         <Link

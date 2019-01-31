@@ -7,15 +7,23 @@ export default class Ranking extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ranking: []
+            ranking: [],
+            seasonId: props.match.params.seasonId
         };
     }
 
     componentDidMount() {
-        if (this.state.ranking.length === 0) {
+        Promise.resolve()
+            .then(() => getRanking(this.state.seasonId))
+            .then((ranking) => this.setState({ ranking }));
+    }
+
+    componentWillReceiveProps(nextProps, nextContent) {
+        const seasonId = nextProps.match.params.seasonId;
+        if (seasonId !== this.state.seasonId) {
             Promise.resolve()
-                .then(() => getRanking())
-                .then((ranking) => this.setState({ ranking }));
+                .then(() => getRanking(seasonId))
+                .then((ranking) => this.setState({ seasonId, ranking }));
         }
     }
 

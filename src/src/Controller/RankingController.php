@@ -8,15 +8,25 @@ use App\Controller\dto\RankingPlayerDto;
 use App\Document\Ranking;
 use App\Document\Result;
 use App\Document\Tournament;
+use App\Repository\RankingRepository;
+use App\Repository\SeasonRepository;
 
 class RankingController extends AppController
 {
 
-    public function list() {
-        $players = $this->getMongo()
-            ->getRepository('App:Ranking')
-            ->getRanking();
+    public function list(string $seasonId = null) {
+        /** @var RankingRepository $rankingRepository */
+        $rankingRepository = $this->getMongo()
+            ->getRepository('App:Ranking');
 
+        if (!$seasonId) {
+            /** @var SeasonRepository $seasonRepository */
+            $seasonRepository = $this->getMongo()->getRepository('App:Season');
+            $season = $seasonRepository->getActiveSeason();
+            $seasonId = $season->getId();
+        }
+
+        $players = $rankingRepository->getRanking($seasonId);
         $ranking = [];
 
         foreach ($players as $player) {
