@@ -29,6 +29,7 @@ export default class Ranking extends Component {
 
     render() {
         let lp = 1;
+        const { seasonId, ranking } = this.state;
 
         return (
             <div>
@@ -47,7 +48,7 @@ export default class Ranking extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.ranking.map(position => {
+                    {ranking.map(position => {
                         return (<tr key={position.id}>
                             <th scope="row">{lp++}</th>
                             <td>{position.player.firstName}</td>
@@ -57,7 +58,7 @@ export default class Ranking extends Component {
                             <td>{position.points}</td>
                             <td>{position.tournamentCount}</td>
                             <td><Link
-                                to={"/ranking/individual/" + position.player.legacyId}
+                                to={"/ranking/" + (seasonId !== undefined ? seasonId + '/' : '') + "individual/" + position.player.legacyId}
                                 className="nav-link">Wyniki
                             </Link></td>
                         </tr>);

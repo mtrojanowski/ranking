@@ -7,8 +7,11 @@ const getRanking = (seasonId) => {
         .then(response => response.json());
 };
 
-const getIndividualRanking = (playerId) => {
-    return fetch('/api/ranking/5c36642979dab7965c7e5d23/' + playerId)
+const getIndividualRanking = (playerId, seasonId) => {
+    if (seasonId === undefined) {
+        seasonId = '5c36642979dab7965c7e5d23';
+    }
+    return fetch('/api/ranking/' + seasonId + '/' + playerId)
         .then(response => response.json());
 };
 
