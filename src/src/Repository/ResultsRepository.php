@@ -41,5 +41,7 @@ class ResultsRepository extends DocumentRepository
             ->field('playerId')->equals($playerId)
             ->field('seasonId')->equals($seasonId)
             ->sort(['points' => -1, 'tournamentRank' => -1]);
+
+        return $queryBuilder;
     }
 }

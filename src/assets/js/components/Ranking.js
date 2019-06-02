@@ -10,13 +10,14 @@ export default class Ranking extends Component {
         this.state = {
             ranking: [],
             seasonId: props.match.params.seasonId,
+            army: props.match.params.army,
             rankingLastModified: null
         };
     }
 
     componentDidMount() {
         Promise.resolve()
-            .then(() => getRanking(this.state.seasonId))
+            .then(() => getRanking(this.state.seasonId, this.state.army))
             .then((rankingData) => this.setState({ ranking: rankingData, rankingLastModified: rankingData.rankingLastModified }));
     }
 

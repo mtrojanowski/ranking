@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RankingController extends AppController
 {
 
-    public function list(string $seasonId = null, Request $request) {
+    public function list(Request $request, string $seasonId = null) {
         /** @var RankingRepository $rankingRepository */
         $rankingRepository = $this->getMongo()
             ->getRepository('App:Ranking');
@@ -31,7 +31,8 @@ class RankingController extends AppController
             $season = $seasonRepository->find($seasonId);
         }
 
-        $players = $rankingRepository->getRanking($seasonId, $request->get('army'));
+        $army = $request->get('army') ?: "";
+        $players = $rankingRepository->getRanking($seasonId, $army);
         $ranking = [];
 
         foreach ($players as $player) {
