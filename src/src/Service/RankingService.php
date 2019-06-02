@@ -26,7 +26,16 @@ class RankingService
 
         /** @var ResultsRepository $resultsRepository */
         $resultsRepository = $this->managerRegistry->getRepository('App:Result');
-        $results = $resultsRepository->getPlayersResults($currentRanking->getPlayerId(), $season->getId());
+
+        if ($currentRanking->getArmy() == "") {
+            $results = $resultsRepository->getPlayersResults($currentRanking->getPlayerId(), $season->getId());
+        } else {
+            $results = $resultsRepository->getPlayersResultsForArmy(
+                $currentRanking->getPlayerId(),
+                $season->getId(),
+                $currentRanking->getArmy()
+            );
+        }
 
         $rankingData = new RankingData($this->mapResults($results), $season->getLimitOfTournaments());
 
@@ -110,7 +119,7 @@ class RankingService
         return $rankingData;
     }
 
-    public function createInitialRanking($playerId, $seasonId) : Ranking
+    public function createInitialRanking($playerId, $seasonId, $army = "") : Ranking
     {
         $playerRepository = $this->managerRegistry->getRepository('App:Player');
         /** @var Player $player */
@@ -136,6 +145,7 @@ class RankingService
         $ranking->setTournamentCount(0);
         $ranking->setTournamentsIncluded([]);
         $ranking->setPlayer($rankingPlayer);
+        $ranking->setArmy($army);
 
         return $ranking;
     }
