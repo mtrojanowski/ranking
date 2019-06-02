@@ -3,6 +3,7 @@ namespace App\Service;
 
 use App\Controller\dto\TournamentResults;
 use App\Controller\dto\Result;
+use App\Document\Player;
 use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
 use App\Repository\PlayerRepository;
@@ -50,9 +51,15 @@ class TournamentsService
         $playersInDb = $playerRepository->getPlayersIds($playerIds);
 
         if (count($playersInDb) !== count($playerIds)) {
+            $dbPlayerIds = [];
+            foreach ($playersInDb as $player) {
+                /** @var Player $player */
+                $dbPlayerIds[] = $player->getLegacyId();
+            }
+
             $playersNotInDb = [];
             foreach ($playerIds as $player) {
-                if (!array_search($player, $playersInDb)) {
+                if (array_search($player, $dbPlayerIds) === false) {
                     $playersNotInDb[] = $player;
                 }
             }
@@ -60,6 +67,6 @@ class TournamentsService
             throw new IncorrectPlayersException($playersNotInDb);
         }
 
-        $this->managerRegistry->getManager()->clear();
+        $this->managerRegistry->getManager()->clear('Player');
     }
 }

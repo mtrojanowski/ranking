@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\dto\IndividualRankingDto;
 use App\Controller\dto\IndividualRankingTournamentDto;
+use App\Controller\dto\RankingDataDto;
 use App\Controller\dto\RankingDto;
 use App\Controller\dto\RankingPlayerDto;
 use App\Document\Ranking;
@@ -19,11 +20,14 @@ class RankingController extends AppController
         $rankingRepository = $this->getMongo()
             ->getRepository('App:Ranking');
 
+        /** @var SeasonRepository $seasonRepository */
+        $seasonRepository = $this->getMongo()->getRepository('App:Season');
+
         if (!$seasonId) {
-            /** @var SeasonRepository $seasonRepository */
-            $seasonRepository = $this->getMongo()->getRepository('App:Season');
             $season = $seasonRepository->getActiveSeason();
             $seasonId = $season->getId();
+        } else {
+            $season = $seasonRepository->find($seasonId);
         }
 
         $players = $rankingRepository->getRanking($seasonId);
@@ -48,7 +52,9 @@ class RankingController extends AppController
             );
         }
 
-        return $this->json($this->getSerializer()->normalize($ranking, 'json'));
+        $rankingData = new RankingDataDto($ranking, $season->getRankingLastModified());
+
+        return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
     }
 
     public function individual($seasonId, $playerId) {

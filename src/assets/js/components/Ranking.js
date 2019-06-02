@@ -2,20 +2,22 @@ import React, { Component } from 'react';
 
 import { getRanking } from '../services/ranking';
 import {Link} from "react-router-dom";
+import ModificationDate from "./ModificationDate";
 
 export default class Ranking extends Component {
     constructor(props) {
         super(props);
         this.state = {
             ranking: [],
-            seasonId: props.match.params.seasonId
+            seasonId: props.match.params.seasonId,
+            rankingLastModified: null
         };
     }
 
     componentDidMount() {
         Promise.resolve()
             .then(() => getRanking(this.state.seasonId))
-            .then((ranking) => this.setState({ ranking }));
+            .then((rankingData) => this.setState({ ranking: rankingData, rankingLastModified: rankingData.rankingLastModified }));
     }
 
     componentWillReceiveProps(nextProps, nextContent) {
@@ -29,11 +31,12 @@ export default class Ranking extends Component {
 
     render() {
         let lp = 1;
-        const { seasonId, ranking } = this.state;
+        const { seasonId, ranking, rankingLastModified } = this.state;
 
         return (
             <div>
                 <h2>Ranking</h2>
+                <ModificationDate rankingLastModified={rankingLastModified} />
                 <table className="table table-striped mt-4">
                     <thead className="thead-dark">
                     <tr>
