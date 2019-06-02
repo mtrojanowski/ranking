@@ -39,7 +39,7 @@ class SeasonController extends AppController
 
         foreach ($rankings as $playerInRanking) {
             /** @var Ranking $playerInRanking */
-            $playersInRanking = $playerInRanking->getPlayerId();
+            $playersInRanking[] = $playerInRanking->getPlayerId();
         }
 
         $resultsRepository = $this->getMongo()->getRepository('App:Result');

@@ -18,15 +18,23 @@ export default class Ranking extends Component {
     componentDidMount() {
         Promise.resolve()
             .then(() => getRanking(this.state.seasonId, this.state.army))
-            .then((rankingData) => this.setState({ ranking: rankingData, rankingLastModified: rankingData.rankingLastModified }));
+            .then((rankingData) => this.setState({ ranking: rankingData.ranking, rankingLastModified: rankingData.rankingLastModified }));
     }
 
     componentWillReceiveProps(nextProps, nextContent) {
         const seasonId = nextProps.match.params.seasonId;
-        if (seasonId !== this.state.seasonId) {
+        const army = nextProps.match.params.army;
+        if (seasonId !== this.state.seasonId || army !== this.state.army) {
+            const newSeason = seasonId !== this.state.seasonId ? seasonId : this.state.seasonId;
+            const newArmy  = army !== this.state.army ? army : this.state.army;
             Promise.resolve()
-                .then(() => getRanking(seasonId))
-                .then((ranking) => this.setState({ seasonId, ranking }));
+                .then(() => getRanking(newSeason, newArmy))
+                .then((rankingData) => this.setState({
+                    seasonId: newSeason,
+                    ranking: rankingData.ranking,
+                    rankingLastModified: rankingData.rankingLastModified,
+                    army: newArmy
+                }));
         }
     }
 

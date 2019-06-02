@@ -14,7 +14,7 @@ class RankingDataDto
      * @param array $ranking
      * @param \DateTime $rankingLastModified
      */
-    public function __construct(array $ranking, \DateTime $rankingLastModified)
+    public function __construct(array $ranking, \DateTime $rankingLastModified = null)
     {
         $this->ranking = $ranking;
         $this->rankingLastModified = $rankingLastModified;
@@ -31,7 +31,7 @@ class RankingDataDto
     /**
      * @return \DateTime
      */
-    public function getRankingLastModified(): \DateTime
+    public function getRankingLastModified()
     {
         return $this->rankingLastModified;
     }
