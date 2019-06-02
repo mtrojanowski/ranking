@@ -42,7 +42,7 @@ class SeasonController extends AppController
             $playersInRanking = $playerInRanking->getPlayerId();
         }
 
-        $resultsRepository = $this->getMongo()->getRepository('App:Results');
+        $resultsRepository = $this->getMongo()->getRepository('App:Result');
 
         $armies = [
             "UD",
