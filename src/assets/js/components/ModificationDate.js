@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 export default class ModificationDate extends Component {
     render() {
         const { lastModified } = this.props;
-        const showModificationDate = lastModified !== null;
+        const showModificationDate = lastModified !== undefined && lastModified !== null;
+        console.log(lastModified);
         return (<div className="modification-date">
             {showModificationDate && <div>
-                Ranking ostatnio zmodyfikowany: {{ lastModified }}
+                ostatnio zmodyfikowany: { lastModified }
             </div>}
         </div>);
     }
 }
-
-ModificationDate.propTypes = {
-    rankingLastModified: PropTypes.string.isRequired()
-};
