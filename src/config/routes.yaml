@@ -56,7 +56,7 @@ initalize_army_ranking:
     path: /api/ranking-commands/initialize-armies
     controller: App\Controller\SeasonController::initializeArmyRankings
     methods:
-    - PUT
+      - PUT
 
 individual_ranking:
     path: /api/ranking/{seasonId}/{playerId}
