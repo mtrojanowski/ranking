@@ -48,22 +48,22 @@ export default class Navbar extends Component {
                             Rankingi armijne
                         </a>
                         <div className="dropdown-menu nav-item" aria-labelledby="dLabel">
-                            <Link to="/ranking?army=BH" className="nav-link text-dark">Beast Herds</Link>
-                            <Link to="/ranking?army=DL" className="nav-link text-dark">Daemon Legions</Link>
-                            <Link to="/ranking?army=DE" className="nav-link text-dark">Dread Elves</Link>
-                            <Link to="/ranking?army=DH" className="nav-link text-dark">Dwarven Holds</Link>
-                            <Link to="/ranking?army=EOS" className="nav-link text-dark">Empire of Sonnstahl</Link>
-                            <Link to="/ranking?army=HE" className="nav-link text-dark">Highborn Elves</Link>
-                            <Link to="/ranking?army=ID" className="nav-link text-dark">Infernal Dwarves</Link>
-                            <Link to="/ranking?army=KOE" className="nav-link text-dark">Kingdom of Equitaine</Link>
-                            <Link to="/ranking?army=OK" className="nav-link text-dark">Ogre Khans</Link>
-                            <Link to="/ranking?army=OG" className="nav-link text-dark">Orcs and Goblins</Link>
-                            <Link to="/ranking?army=SA" className="nav-link text-dark">Saurian Ancients</Link>
-                            <Link to="/ranking?army=SE" className="nav-link text-dark">Sylvan Elves</Link>
-                            <Link to="/ranking?army=VS" className="nav-link text-dark">The Vermin Swarm</Link>
-                            <Link to="/ranking?army=UD" className="nav-link text-dark">Undying Dynasties</Link>
-                            <Link to="/ranking?army=VC" className="nav-link text-dark">Vampire Covenant</Link>
-                            <Link to="/ranking?army=WDG" className="nav-link text-dark">Warriors of the Dark Gods</Link>
+                            <Link to="/army-ranking/BH" className="nav-link text-dark">Beast Herds</Link>
+                            <Link to="/army-ranking/DL" className="nav-link text-dark">Daemon Legions</Link>
+                            <Link to="/army-ranking/DE" className="nav-link text-dark">Dread Elves</Link>
+                            <Link to="/army-ranking/DH" className="nav-link text-dark">Dwarven Holds</Link>
+                            <Link to="/army-ranking/EOS" className="nav-link text-dark">Empire of Sonnstahl</Link>
+                            <Link to="/army-ranking/HE" className="nav-link text-dark">Highborn Elves</Link>
+                            <Link to="/army-ranking/ID" className="nav-link text-dark">Infernal Dwarves</Link>
+                            <Link to="/army-ranking/KOE" className="nav-link text-dark">Kingdom of Equitaine</Link>
+                            <Link to="/army-ranking/OK" className="nav-link text-dark">Ogre Khans</Link>
+                            <Link to="/army-ranking/OG" className="nav-link text-dark">Orcs and Goblins</Link>
+                            <Link to="/army-ranking/SA" className="nav-link text-dark">Saurian Ancients</Link>
+                            <Link to="/army-ranking/SE" className="nav-link text-dark">Sylvan Elves</Link>
+                            <Link to="/army-ranking/VS" className="nav-link text-dark">The Vermin Swarm</Link>
+                            <Link to="/army-ranking/UD" className="nav-link text-dark">Undying Dynasties</Link>
+                            <Link to="/army-ranking/VC" className="nav-link text-dark">Vampire Covenant</Link>
+                            <Link to="/army-ranking/WDG" className="nav-link text-dark">Warriors of the Dark Gods</Link>
                         </div>
                     </li>
                     <li className="dropdown nav-item">
