@@ -85,6 +85,9 @@ class ResultsController extends AppController
             $em->persist($rankingService->recalculateRanking($currentRanking, $season));
         }
 
+        $season->setRankingLastModified(new \DateTime());
+        $em->persist($season);
+
         $em->flush();
 
         return $this->json(['message' => 'Tournament results saved'], 201);

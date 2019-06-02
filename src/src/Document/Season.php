@@ -56,6 +56,11 @@ class Season
     private $limitOfPairMasterTournaments;
 
     /**
+     * @MongoDB\Field(type="timestamp")
+     */
+    private $rankingLastModified;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -198,4 +203,22 @@ class Season
     {
         $this->limitOfPairMasterTournaments = $limitOfPairMasterTournaments;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRankingLastModified()
+    {
+        return $this->rankingLastModified;
+    }
+
+    /**
+     * @param mixed $rankingLastModified
+     */
+    public function setRankingLastModified($rankingLastModified): void
+    {
+        $this->rankingLastModified = $rankingLastModified;
+    }
+
+
 }
