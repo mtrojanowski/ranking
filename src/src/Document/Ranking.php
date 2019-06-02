@@ -49,6 +49,11 @@ class Ranking
     private $headJudgeBonusReceived;
 
     /**
+     * @MongoDb\Field(type="string")
+     */
+    private $army;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -174,5 +179,21 @@ class Ranking
     public function setSeasonId($seasonId)
     {
         $this->seasonId = $seasonId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArmy(): string
+    {
+        return $this->army;
+    }
+
+    /**
+     * @param string $army
+     */
+    public function setArmy(string $army): void
+    {
+        $this->army = $army;
     }
 }

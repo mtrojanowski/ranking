@@ -75,7 +75,10 @@ class ResultsController extends AppController
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
         foreach ($results as $result) {
             /** @var Result $result */
-            $currentRanking = $rankingRepository->findOneBy(['playerId' => $result->getPlayerId(), 'seasonId' => $season->getId()]);
+            $currentRanking = $rankingRepository->findOneBy([
+                'playerId' => $result->getPlayerId(),
+                'seasonId' => $season->getId()
+            ]);
 
 
             if (!$currentRanking) {
@@ -83,6 +86,22 @@ class ResultsController extends AppController
             }
 
             $em->persist($rankingService->recalculateRanking($currentRanking, $season));
+
+            $currentArmyRanking = $rankingRepository->findOneBy([
+                'playerId' => $result->getPlayerId(),
+                'seasonId' => $season->getId(),
+                'army' => $result->getArmy()
+            ]);
+
+            if (!$currentArmyRanking) {
+                $currentArmyRanking = $rankingService->createInitialRanking(
+                    $result->getPlayerId(),
+                    $season->getId(),
+                    $result->getArmy()
+                );
+            }
+
+            $em->persist($rankingService->recalculateRanking($currentArmyRanking, $season));
         }
 
         $season->setRankingLastModified(new \DateTime());

@@ -11,11 +11,12 @@ use App\Document\Result;
 use App\Document\Tournament;
 use App\Repository\RankingRepository;
 use App\Repository\SeasonRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class RankingController extends AppController
 {
 
-    public function list(string $seasonId = null) {
+    public function list(string $seasonId = null, Request $request) {
         /** @var RankingRepository $rankingRepository */
         $rankingRepository = $this->getMongo()
             ->getRepository('App:Ranking');
@@ -30,7 +31,7 @@ class RankingController extends AppController
             $season = $seasonRepository->find($seasonId);
         }
 
-        $players = $rankingRepository->getRanking($seasonId);
+        $players = $rankingRepository->getRanking($seasonId, $request->get('army'));
         $ranking = [];
 
         foreach ($players as $player) {
