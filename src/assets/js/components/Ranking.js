@@ -45,7 +45,7 @@ export default class Ranking extends Component {
         return (
             <div>
                 <h2>Ranking</h2>
-                <ModificationDate rankingLastModified={rankingLastModified} />
+                <ModificationDate lastModified={rankingLastModified} />
                 <table className="table table-striped mt-4">
                     <thead className="thead-dark">
                     <tr>

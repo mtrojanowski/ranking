@@ -104,7 +104,8 @@ class ResultsController extends AppController
             $em->persist($rankingService->recalculateRanking($currentArmyRanking, $season));
         }
 
-        $season->setRankingLastModified(new \DateTime());
+        $datetime = new \DateTime();
+        $season->setRankingLastModified($datetime->getTimestamp());
         $em->persist($season);
 
         $em->flush();
