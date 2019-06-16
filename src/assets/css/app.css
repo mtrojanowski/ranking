@@ -45,3 +45,9 @@
 .tournament-data-id {
     font-size: 0.6em;
 }
+
+.nav-season-separator {
+    padding-left: 1em;
+    border-bottom: 1px solid grey;
+    margin-bottom: 0;
+}
