@@ -205,7 +205,7 @@ class Season
     }
 
     /**
-     * @return mixed
+     * @return \MongoTimestamp
      */
     public function getRankingLastModified()
     {

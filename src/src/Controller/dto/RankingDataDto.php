@@ -29,11 +29,11 @@ class RankingDataDto
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getRankingLastModified()
     {
-        return $this->rankingLastModified;
+        return $this->rankingLastModified->format('Y-m-d H:i');
     }
 
 }
