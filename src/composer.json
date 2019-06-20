@@ -6,16 +6,17 @@
         "ext-iconv": "*",
         "alcaeus/mongo-php-adapter": "^1.1",
         "doctrine/mongodb-odm-bundle": "^3.4",
-        "sensiolabs/security-checker": "^4.1",
+        "sensiolabs/security-checker": "^6.0",
         "symfony/console": "^4.0",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^4.0",
         "symfony/lts": "^4@dev",
+        "symfony/monolog-bundle": "^3.4",
         "symfony/property-access": "^4.0",
         "symfony/serializer": "^4.0",
+        "symfony/twig-bundle": "v4.0.6",
         "symfony/webpack-encore-pack": "^1.0",
-        "symfony/yaml": "^4.0",
-        "symfony/twig-bundle": "v4.0.6"
+        "symfony/yaml": "^4.0"
     },
     "require-dev": {
         "symfony/dotenv": "^4.0",
