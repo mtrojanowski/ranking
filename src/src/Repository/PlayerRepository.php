@@ -12,7 +12,7 @@ class PlayerRepository extends DocumentRepository
             ->field('legacyId')
             ->in($playerIds);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->hydrate(false)->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
 
     function getPlayersByIds(array $playerIds) {

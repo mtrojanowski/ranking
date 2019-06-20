@@ -53,8 +53,7 @@ class TournamentsService
         if (count($playersInDb) !== count($playerIds)) {
             $dbPlayerIds = [];
             foreach ($playersInDb as $player) {
-                /** @var Player $player */
-                $dbPlayerIds[] = $player->getLegacyId();
+                $dbPlayerIds[] = $player['legacyId'];
             }
 
             $playersNotInDb = [];
@@ -66,7 +65,5 @@ class TournamentsService
 
             throw new IncorrectPlayersException($playersNotInDb);
         }
-
-        $this->managerRegistry->getManager()->clear('App:Player');
     }
 }
