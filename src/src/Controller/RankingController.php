@@ -54,7 +54,8 @@ class RankingController extends AppController
             );
         }
 
-        $rankingData = new RankingDataDto($ranking, new \DateTime('@'.$season->getRankingLastModified()));
+        $modificationDate = $season->getRankingLastModified() != null ? new \DateTime('@'.$season->getRankingLastModified()) : null;
+        $rankingData = new RankingDataDto($ranking, $modificationDate);
 
         return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
     }
