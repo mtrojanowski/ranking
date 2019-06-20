@@ -67,6 +67,6 @@ class TournamentsService
             throw new IncorrectPlayersException($playersNotInDb);
         }
 
-        $this->managerRegistry->getManager()->clear('Player');
+        $this->managerRegistry->getManager()->clear('App:Player');
     }
 }
