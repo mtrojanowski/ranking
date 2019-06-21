@@ -1,6 +1,7 @@
 const ranks = {
     'local': 'Lokalny',
-    'master': 'Master'
+    'master': 'Master',
+    'league': 'Liga lokalna'
 };
 
 const tournamentTypes = {

@@ -22,7 +22,7 @@ class ResultsService
 
     public function createTournamentResults(Tournament $tournament, TournamentResults $tournamentResults) : array
     {
-        if ($tournament->getRank() === 'local') {
+        if ($tournament->getRank() === 'local' || $tournament->getRank() === 'league') {
             if ($tournament->getType() === 'single') {
                 return $this->createLocalSinglesResults($tournamentResults, $tournament->getSeason(), $tournament->getRank(), $tournament->getType());
             } elseif ($tournament->getType() === 'team' || $tournament->getType() === 'double' ) {
