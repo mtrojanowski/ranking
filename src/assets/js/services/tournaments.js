@@ -28,6 +28,10 @@ const getRank = (rank, type) => {
         return 'Master drużynowy';
     }
 
+    if (rank === 'league') {
+        return 'Liga lokalna';
+    }
+
     return '';
 };
 

@@ -129,6 +129,10 @@ export default class AddTournament extends Component {
                         <input className="form-check-input" type="radio" name="rank" id="rank_master" value="master" checked={tournamentData.rank === 'master' } onChange={(e) => this.handleChange('rank', e)} />
                         <label className="form-check-label" htmlFor="rank_master">Master</label>
                     </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="rank" id="rank_league" value="league" checked={tournamentData.rank === 'league' } onChange={(e) => this.handleChange('rank', e)} />
+                        <label className="form-check-label" htmlFor="rank_league">Liga lokalna</label>
+                    </div>
 
                     <div className={playersInTeamClass} >
                         <label htmlFor="playersInTeam">Liczba graczy w drużynie</label>

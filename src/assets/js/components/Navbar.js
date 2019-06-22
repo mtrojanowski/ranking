@@ -10,7 +10,11 @@ export default class Navbar extends Component {
         const playersActive = path === '/players' ? 'active' : '';
         const playersClasses = 'nav-item ' + playersActive;
 
-        return (<div className="menu navbar navbar-expand-sm  navbar-dark bg-dark">
+        return (<div className="menu navbar navbar-expand-md  navbar-dark bg-dark">
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle menu">
+                <span className="navbar-toggler-icon" />
+            </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
                     <li className={homeClasses}>
