@@ -9,8 +9,8 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="/build/js/app.css?v=1" />
-    <link rel="stylesheet" href="/build/css/app.css?v=6" />
+    {{ encore_entry_link_tags('css/app') }}
+    {{ encore_entry_link_tags('js/app') }}
 
 </head>
 <body>
@@ -19,7 +19,7 @@
     <div id="footer"></div>
 </div>
 
-<script src="/build/js/app.js?v=12"></script>
+{{ encore_entry_script_tags('js/app') }}
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
