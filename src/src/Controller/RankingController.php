@@ -8,6 +8,7 @@ use App\Controller\dto\RankingDto;
 use App\Controller\dto\RankingPlayerDto;
 use App\Document\Ranking;
 use App\Document\Result;
+use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\RankingRepository;
 use App\Repository\SeasonRepository;
@@ -15,6 +16,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RankingController extends AppController
 {
+
+    private static $armies = [
+        "UD" => "Undying Dynasties",
+        "WDG" => "Warriors of the Dark Gods",
+        "DE" => "Dread Elves",
+        "EOS" => "Empire of Sonnstahl",
+        "KOE" => "Kingdom of Equitaine",
+        "VC" => "Vampire Covenant",
+        "VS" => "The Vermin Swarm",
+        "SE" => "Sylvan Elves",
+        "HE" => "Highborn Elves",
+        "OG" => "Orcs and Goblins",
+        "BH" => "Beast Herds",
+        "DH" => "Dwarven Holds",
+        "OK" => "Ogre Khans",
+        "DL" => "Daemonic Legion",
+        "SA" => "Saurian Ancients",
+        "ID" => "Infernal Dwrves",
+    ];
 
     public function list(Request $request, string $seasonId = null) {
         /** @var RankingRepository $rankingRepository */
@@ -55,7 +75,7 @@ class RankingController extends AppController
         }
 
         $modificationDate = $season->getRankingLastModified() != null ? new \DateTime('@'.$season->getRankingLastModified()) : null;
-        $rankingData = new RankingDataDto($ranking, $modificationDate);
+        $rankingData = new RankingDataDto($ranking, $modificationDate, $this->generateRankingTitle($season, $army));
 
         return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
     }
@@ -118,5 +138,21 @@ class RankingController extends AppController
         );
 
         return $this->json($this->getSerializer()->normalize($individualRanking, 'json'));
+    }
+
+    private function generateRankingTitle(Season $season, string $army): string {
+        $title = "Ranking ";
+
+        if ($army == "") {
+            $title .= "generalny";
+        } else {
+            $title .= "armijny - ".self::$armies[$army];
+        }
+
+        if (!$season->getActive()) {
+            $title .= ", sezon ".$season->getName();
+        }
+
+        return $title;
     }
 }

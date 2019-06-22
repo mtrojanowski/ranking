@@ -11,14 +11,19 @@ export default class Ranking extends Component {
             ranking: [],
             seasonId: props.match.params.seasonId,
             army: props.match.params.army,
-            rankingLastModified: null
+            rankingLastModified: null,
+            rankingTitle: "Ranking"
         };
     }
 
     componentDidMount() {
         Promise.resolve()
             .then(() => getRanking(this.state.seasonId, this.state.army))
-            .then((rankingData) => this.setState({ ranking: rankingData.ranking, rankingLastModified: rankingData.rankingLastModified }));
+            .then((rankingData) => this.setState({
+                ranking: rankingData.ranking,
+                rankingLastModified: rankingData.rankingLastModified,
+                rankingTitle: rankingData.rankingTitle
+            }));
     }
 
     componentWillReceiveProps(nextProps, nextContent) {
@@ -33,6 +38,7 @@ export default class Ranking extends Component {
                     seasonId: newSeason,
                     ranking: rankingData.ranking,
                     rankingLastModified: rankingData.rankingLastModified,
+                    rankingTitle: rankingData.rankingTitle,
                     army: newArmy
                 }));
         }
@@ -40,11 +46,11 @@ export default class Ranking extends Component {
 
     render() {
         let lp = 1;
-        const { seasonId, ranking, rankingLastModified } = this.state;
+        const { seasonId, ranking, rankingLastModified, rankingTitle } = this.state;
 
         return (
             <div>
-                <h2>Ranking</h2>
+                <h2>{rankingTitle}</h2>
                 <ModificationDate lastModified={rankingLastModified} />
                 <table className="table table-striped mt-4">
                     <thead className="thead-dark">
