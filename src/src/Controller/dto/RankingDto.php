@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: michal.trojanowski
- * Date: 29/05/2018
- * Time: 21:07
- */
 
 namespace App\Controller\dto;
 
@@ -16,6 +10,7 @@ class RankingDto
     private $points;
     private $tournamentCount;
     private $tournamentsIncluded;
+    private $tournamentsAttendedCount;
 
     /**
      * RankingDto constructor.
@@ -24,54 +19,48 @@ class RankingDto
      * @param $points
      * @param $tournamentCount
      * @param $tournamentsIncluded
+     * @param $tournamentsAttendedCount
      */
-    public function __construct($id, $player, $points, $tournamentCount, $tournamentsIncluded)
+    public function __construct(string $id, RankingPlayerDto $player, int $points, int $tournamentCount, array $tournamentsIncluded, int $tournamentsAttendedCount)
     {
         $this->id = $id;
         $this->player = $player;
         $this->points = $points;
         $this->tournamentCount = $tournamentCount;
         $this->tournamentsIncluded = $tournamentsIncluded;
+        $this->tournamentsAttendedCount = $tournamentsAttendedCount;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPlayer()
+    public function getPlayer(): RankingPlayerDto
     {
         return $this->player;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPoints()
+    public function getPoints(): int
     {
         return $this->points;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTournamentCount()
+    public function getTournamentCount(): int
     {
         return $this->tournamentCount;
     }
 
     /**
-     * @return mixed
+     * @return array Array of strings - tournament ids
      */
-    public function getTournamentsIncluded()
+    public function getTournamentsIncluded(): array
     {
         return $this->tournamentsIncluded;
+    }
+
+    public function getTournamentsAttendedCount(): int
+    {
+        return $this->tournamentsAttendedCount;
     }
 }

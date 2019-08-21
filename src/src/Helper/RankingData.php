@@ -7,6 +7,7 @@ class RankingData
     private $tournamentLimit;
     private $tournamentsIncluded;
     private $tournamentsIncludedCount;
+    private $tournamentsAttendedCount;
     private $mastersIncluded;
     private $teamMastersIncluded;
     private $doubleMastersIncluded;
@@ -24,6 +25,7 @@ class RankingData
         $this->tournamentLimit = $tournamentLimit;
         $this->tournamentsIncluded = [];
         $this->tournamentsIncludedCount = 0;
+        $this->tournamentsAttendedCount = 0;
         $this->mastersIncluded = 0;
         $this->teamMastersIncluded = 0;
         $this->doubleMastersIncluded = 0;
@@ -204,5 +206,25 @@ class RankingData
         $this->headJudgeBonusReceived = $headJudgeBonusReceived;
     }
 
+    /**
+     * @return int
+     */
+    public function getTournamentsAttendedCount(): int
+    {
+        return $this->tournamentsAttendedCount;
+    }
+
+    /**
+     * @param int $tournamentsAttendedCount
+     */
+    public function setTournamentsAttendedCount(int $tournamentsAttendedCount): void
+    {
+        $this->tournamentsAttendedCount = $tournamentsAttendedCount;
+    }
+
+    public function increaseTournamentsAttendedCount(): void
+    {
+        $this->tournamentsAttendedCount++;
+    }
 
 }

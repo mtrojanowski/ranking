@@ -39,6 +39,11 @@ class Ranking
     private $tournamentCount;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $tournamentsAttendedCount;
+
+    /**
      * @MongoDB\Field(type="hash")
      */
     private $tournamentsIncluded = [];
@@ -195,5 +200,21 @@ class Ranking
     public function setArmy(string $army): void
     {
         $this->army = $army;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getTournamentsAttendedCount(): int
+    {
+        return $this->tournamentsAttendedCount;
+    }
+
+    /**
+     * @param integer $tournamentsAttendedCount
+     */
+    public function setTournamentsAttendedCount(int $tournamentsAttendedCount): void
+    {
+        $this->tournamentsAttendedCount = $tournamentsAttendedCount;
     }
 }
