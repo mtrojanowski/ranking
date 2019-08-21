@@ -16,6 +16,15 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ResultsController extends AppController
 {
+    /**
+     * @param Request $request
+     * @param ResultsService $resultsService
+     * @param RankingService $rankingService
+     * @param TournamentsService $tournamentsService
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \App\Exception\PlayerNotFoundException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService, TournamentsService $tournamentsService)
     {
         try {
@@ -60,7 +69,7 @@ class ResultsController extends AppController
             return $this->json($this->getError($e->getMessage()), 422);
         }
 
-        $this->removeCurrentTournamentResults($tournament->getLegacyId());
+        $currentResults = $this->popCurrentTournamentResults($tournament->getLegacyId());
 
         $em = $this->getMongo()->getManager();
         foreach ($results as $result) {
@@ -73,19 +82,39 @@ class ResultsController extends AppController
         $season = $this->getMongo()->getRepository('App:Season')->find($tournament->getSeason());
 
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
+
+        $resultsToRecalculate = [];
+
         foreach ($results as $result) {
+            /** @var Result $result */
+            $resultsToRecalculate[$result->getPlayerId()] = $result;
+        }
+
+        foreach ($currentResults as $currentResult) {
+            /** @var Result $currentResult */
+            if (!isset($resultsToRecalculate[$currentResult->getPlayerId()])) {
+                $resultsToRecalculate[$currentResult->getPlayerId()] = $currentResult;
+            }
+        }
+
+        foreach ($resultsToRecalculate as $result) {
             /** @var Result $result */
             $currentRanking = $rankingRepository->findOneBy([
                 'playerId' => $result->getPlayerId(),
                 'seasonId' => $season->getId()
             ]);
 
-
             if (!$currentRanking) {
                 $currentRanking = $rankingService->createInitialRanking($result->getPlayerId(), $season->getId());
             }
 
-            $em->persist($rankingService->recalculateRanking($currentRanking, $season));
+            $recalculatedRanking = $rankingService->recalculateRanking($currentRanking, $season);
+
+            if ($recalculatedRanking->getTournamentCount() > 0) {
+                $em->persist($recalculatedRanking);
+            } else {
+                $em->remove($recalculatedRanking);
+            }
 
             $currentArmyRanking = $rankingRepository->findOneBy([
                 'playerId' => $result->getPlayerId(),
@@ -101,7 +130,13 @@ class ResultsController extends AppController
                 );
             }
 
-            $em->persist($rankingService->recalculateRanking($currentArmyRanking, $season));
+            $currentArmyRecalculatedRanking = $rankingService->recalculateRanking($currentArmyRanking, $season);
+
+            if ($currentArmyRecalculatedRanking->getTournamentCount() > 0) {
+                $em->persist($currentArmyRecalculatedRanking);
+            } else {
+                $em->remove($currentArmyRecalculatedRanking);
+            }
         }
 
         $datetime = new \DateTime();
@@ -113,9 +148,11 @@ class ResultsController extends AppController
         return $this->json(['message' => 'Tournament results saved'], 201);
     }
 
-    private function removeCurrentTournamentResults(string $tournamentId) {
+    private function popCurrentTournamentResults(string $tournamentId): array {
         /** @var ResultsRepository $resultsRepository */
         $resultsRepository = $this->getMongo()->getRepository('App:Result');
+        $currentResults = $resultsRepository->getTournamentResults($tournamentId);
         $resultsRepository->deleteTournamentResults($tournamentId);
+        return $currentResults;
     }
 }
