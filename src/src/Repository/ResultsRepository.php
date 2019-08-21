@@ -33,6 +33,11 @@ class ResultsRepository extends DocumentRepository
         return $queryBuilder->getQuery()->execute();
     }
 
+    public function getTournamentResults(string $tournamentId)
+    {
+        return $this->findBy(['tournamentId' => $tournamentId]);
+    }
+
     private function getPlayersResultsQuery(string $playerId, string $seasonId): Builder
     {
         $queryBuilder = $this->createQueryBuilder();

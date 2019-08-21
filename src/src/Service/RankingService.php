@@ -46,6 +46,7 @@ class RankingService
         $newRanking->setPoints($rankingData->getPointsSum());
         $newRanking->setTournamentsIncluded($rankingData->getTournamentsIncluded());
         $newRanking->setTournamentCount($rankingData->getTournamentsIncludedCount());
+        $newRanking->setTournamentsAttendedCount($rankingData->getTournamentsAttendedCount());
         $newRanking->setHeadJudgeBonusReceived($rankingData->getHeadJudgeBonusReceived());
 
         return $newRanking;
@@ -78,6 +79,8 @@ class RankingService
     private function sumPointsForRanking(RankingData $rankingData, Season $season): RankingData {
         foreach ($rankingData->getResults() as $key => $result) {
             /** @var Result $result */
+            $rankingData->increaseTournamentsAttendedCount();
+
             if ($rankingData->getTournamentsIncludedCount() >= $rankingData->getTournamentLimit()) {
                 break;
             }

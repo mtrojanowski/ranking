@@ -70,7 +70,8 @@ class RankingController extends AppController
                 ),
                 $player->getPoints(),
                 $player->getTournamentCount(),
-                $player->getTournamentsIncluded()
+                $player->getTournamentsIncluded(),
+                $player->getTournamentsAttendedCount()
             );
         }
 

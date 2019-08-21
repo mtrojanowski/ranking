@@ -61,7 +61,7 @@ export default class Ranking extends Component {
                         <th>Klub</th>
                         <th>Miasto</th>
                         <th>Suma</th>
-                        <th>Turnieje</th>
+                        <th>Turnieje <span className="originalPoints">(zaliczone / zagrane)</span></th>
                         <th>Ind.</th>
                     </tr>
                     </thead>
@@ -74,7 +74,7 @@ export default class Ranking extends Component {
                             <td>{position.player.association}</td>
                             <td>{position.player.town}</td>
                             <td>{position.points}</td>
-                            <td>{position.tournamentCount}</td>
+                            <td>{position.tournamentCount} / {position.tournamentsAttendedCount}</td>
                             <td><Link
                                 to={"/ranking/" + (seasonId !== undefined ? seasonId + '/' : '') + "individual/" + position.player.legacyId}
                                 className="nav-link">Wyniki
