@@ -17,6 +17,8 @@ class SeasonController extends AppController
             /** @var Season $season */
             $season = $this->getMongo()->getRepository('App:Season')->getActiveSeason();
             $seasonId = $season->getId();
+        } else {
+            $season = $this->getMongo()->getRepository('App:Season')->find($seasonId);
         }
 
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
