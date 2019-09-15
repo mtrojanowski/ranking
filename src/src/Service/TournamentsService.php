@@ -51,19 +51,49 @@ class TournamentsService
         $playersInDb = $playerRepository->getPlayersIds($playerIds);
 
         if (count($playersInDb) !== count($playerIds)) {
-            $dbPlayerIds = [];
-            foreach ($playersInDb as $player) {
-                $dbPlayerIds[] = $player['legacyId'];
-            }
 
-            $playersNotInDb = [];
-            foreach ($playerIds as $player) {
-                if (array_search($player, $dbPlayerIds) === false) {
-                    $playersNotInDb[] = $player;
-                }
-            }
-
-            throw new IncorrectPlayersException($playersNotInDb);
+            throw new IncorrectPlayersException(
+                $this->findPlayersNotInDb($playerIds, $playersInDb),
+                $this->findDuplicatePlayers($playerIds)
+            );
         }
+    }
+
+    private function findPlayersNotInDb($playerIds, $playersInDb)
+    {
+        $dbPlayerIds = [];
+        foreach ($playersInDb as $player) {
+            $dbPlayerIds[] = $player['legacyId'];
+        }
+
+        $playersNotInDb = [];
+        foreach ($playerIds as $player) {
+            if (array_search($player, $dbPlayerIds) === false) {
+                $playersNotInDb[] = $player;
+            }
+        }
+
+        return $playersNotInDb;
+    }
+
+    private function findDuplicatePlayers($playerIds)
+    {
+        $playerIdsStats = [];
+        foreach ($playerIds as $playerId) {
+            if (!isset($playerIdsStats[$playerId])) {
+                $playerIdsStats[$playerId] = 1;
+            } else {
+                $playerIdsStats[$playerId]++;
+            }
+        }
+
+        $duplicateIds = [];
+        foreach ($playerIdsStats as $playerId => $count) {
+            if ($count > 1) {
+                $duplicateIds[] = $playerId;
+            }
+        }
+
+        return $duplicateIds;
     }
 }

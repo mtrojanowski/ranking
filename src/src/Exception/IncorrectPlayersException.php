@@ -3,19 +3,21 @@ namespace App\Exception;
 
 class IncorrectPlayersException extends \Exception
 {
-    public function __construct($missingPlayersIds)
+    public function __construct($missingPlayersIds, $duplicatePlayerIds)
     {
-        return parent::__construct('Players with ids: ' . $this->printIds($missingPlayersIds) . ' not found in the database.');
-    }
-
-    private function printIds(array $playersId): string
-    {
-        $result = "";
-
-        foreach ($playersId as $id) {
-            $result .= "$id, ";
+        if (isset($missingPlayersIds[0])) {
+            $missingText =  'Players with ids: ' . join(", ", $missingPlayersIds) . ' not found in the database.';
+        } else {
+            $missingText = '';
         }
 
-        return substr($result, 0, -2);
+        if (isset($duplicatePlayerIds[0])) {
+            $duplicateText = 'Players with ids: ' . join(", ", $duplicatePlayerIds) . ' appear more than once in the results.';
+        } else {
+            $duplicateText = '';
+        }
+
+
+        return parent::__construct($missingText . ' ' . $duplicateText);
     }
 }
