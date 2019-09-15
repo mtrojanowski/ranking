@@ -19,7 +19,7 @@ export default class Navbar extends Component {
                 <ul className="navbar-nav mr-auto">
                     <li className={homeClasses}>
                         <Link
-                            to="/"
+                            to="/home"
                             className="nav-link">Home
                         </Link>
                     </li>

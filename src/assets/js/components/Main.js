@@ -18,7 +18,8 @@ export default class Main extends Component {
                 <div>
                     <Navbar />
                     <Switch>
-                        <Route exact path="/" component={Home}/>
+                        <Route exact path="/" component={Ranking}/>
+                        <Route exact path="/home" component={Home}/>
                         <Route exact path="/players" component={Players} />
                         <Route exact path="/previous-tournaments" component={PreviousTournaments} />
                         <Route exact path="/future-tournaments" component={FutureTournaments} />

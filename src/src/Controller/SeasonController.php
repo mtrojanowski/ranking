@@ -5,15 +5,22 @@ namespace App\Controller;
 use App\Document\Ranking;
 use App\Document\Season;
 use App\Service\RankingService;
+use Symfony\Component\HttpFoundation\Request;
 
 class SeasonController extends AppController
 {
-    public function recalculateRanking(RankingService $rankingService) {
-        /** @var Season $season */
-        $season = $this->getMongo()->getRepository('App:Season')->getActiveSeason();
+    public function recalculateRanking(RankingService $rankingService, Request $request)
+    {
+        $seasonId = $request->query->get('seasonId');
+
+        if (empty($seasonId)) {
+            /** @var Season $season */
+            $season = $this->getMongo()->getRepository('App:Season')->getActiveSeason();
+            $seasonId = $season->getId();
+        }
 
         $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
-        $rankings = $rankingRepository->findBy(['seasonId' => $season->getId()]);
+        $rankings = $rankingRepository->findBy(['seasonId' => $seasonId]);
 
         $em = $this->getMongo()->getManager();
 
