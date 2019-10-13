@@ -314,6 +314,7 @@ class ResultsServiceTest extends TestCase
             $this->assertEquals($expectedResults[$i]->getPoints(), $result->getPoints());
             $this->assertEquals($expectedResults[$i]->getTournamentRank(), $result->getTournamentRank());
             $this->assertEquals($expectedResults[$i]->getTournamentType(), $result->getTournamentType());
+            $this->assertEquals($expectedResults[$i]->getJudge(), $result->getJudge());
         }
     }
 
