@@ -66,6 +66,7 @@ class ResultsService
             $result->setPlayerId($tournamentResult->getPlayerId());
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
+            $result->setJudge($tournamentResult->getJudge());
 
             $points = 0;
             if ($tournamentResult->getJudge() == 0) {
@@ -127,6 +128,7 @@ class ResultsService
             $result->setPoints($this->calculatePointsForLocal($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier));
             $result->setTournamentRank($tournamentRank);
             $result->setTournamentType($tournamentType);
+            $result->setJudge(0);
 
             $results[] = $result;
         }

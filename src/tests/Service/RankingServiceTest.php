@@ -23,6 +23,7 @@ class RankingServiceTest extends TestCase
     {
         $this->currentRanking = new Ranking();
         $this->currentRanking->setPlayerId($this->playerId);
+        $this->currentRanking->setArmy("");
 
         $season = new Season();
         $season->setId('1234');
