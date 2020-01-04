@@ -102,7 +102,7 @@ class ResultsService
         ->field('judge')->equals(1)
         ->field('tournamentId')->notEqual($tournamentId);
 
-        $headJudgeBonusesInSeason = $qb->getQuery()->execute();
+        $headJudgeBonusesInSeason = $qb->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
 
         return isset($headJudgeBonusesInSeason[0]);
     }
