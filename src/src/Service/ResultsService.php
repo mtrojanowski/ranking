@@ -7,6 +7,8 @@ use App\Document\Tournament;
 use App\Exception\HeadJudgeBonusException;
 use App\Exception\InvalidTournamentException;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Query;
 
 class ResultsService
 {
@@ -30,26 +32,26 @@ class ResultsService
             }
         } elseif ($tournament->getRank() === 'master') {
             if ($tournament->getType() === 'single') {
-                return $this->createMasterSingleResults($tournamentResults, $tournament->getSeason(), $tournament->getRank(), $tournament->getType());
+                return $this->createMasterSingleResults($tournamentResults, $tournament->getSeason(), $tournament->getRank(), $tournament->getType(), $tournament->getId());
             } elseif ($tournament->getType() === 'team' || $tournament->getType() === 'double' ) {
-                return $this->createMasterTeamResults($tournamentResults, $tournament->getSeason(), $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType());
+                return $this->createMasterTeamResults($tournamentResults, $tournament->getSeason(), $tournament->getPlayersInTeam(), $tournament->getRank(), $tournament->getType(), $tournament->getId());
             }
         }
 
         throw new InvalidTournamentException();
     }
 
-    private function createMasterSingleResults(TournamentResults $tournamentResults, string $seasonId, string $tournamentRank, string $tournamentType) : array
+    private function createMasterSingleResults(TournamentResults $tournamentResults, string $seasonId, string $tournamentRank, string $tournamentType, string $tournamentId) : array
     {
-        return $this->createMasterResults($tournamentResults, $seasonId, 1, $tournamentRank, $tournamentType);
+        return $this->createMasterResults($tournamentResults, $seasonId, 1, $tournamentRank, $tournamentType, $tournamentId);
     }
 
-    private function createMasterTeamResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
+    private function createMasterTeamResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType, string $tournamentId) : array
     {
-        return $this->createMasterResults($tournamentResults, $seasonId, $playersInTeam, $tournamentRank, $tournamentType);
+        return $this->createMasterResults($tournamentResults, $seasonId, $playersInTeam, $tournamentRank, $tournamentType, $tournamentId);
     }
 
-    private function createMasterResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType) : array
+    private function createMasterResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType, string $tournamentId) : array
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
@@ -72,7 +74,7 @@ class ResultsService
             if ($tournamentResult->getJudge() == 0) {
                 $points = $this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
             } elseif ($tournamentResult->getJudge() == 1) {
-                if ($this->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId)) {
+                if ($this->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId, $tournamentId)) {
                     throw new HeadJudgeBonusException();
                 }
                 $points = $this->headJudgePoints;
@@ -91,10 +93,16 @@ class ResultsService
         return $results;
     }
 
-    private function playerHasHeadJudgeBonus($playerId, $seasonId): bool
+    private function playerHasHeadJudgeBonus($playerId, $seasonId, string $tournamentId): bool
     {
-        $headJudgeBonusesInSeason = $this->managerRegistry->getRepository('App:Result')
-            ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId, 'judge' => 1]);
+        /** @var Query\Builder $qb */
+        $qb = $this->managerRegistry->getManager()->createQueryBuilder(Result::class);
+        $qb->field('seasonId')->equals($seasonId)
+        ->field('playerId')->equals($playerId)
+        ->field('judge')->equals(1)
+        ->field('tournamentId')->notEqual($tournamentId);
+
+        $headJudgeBonusesInSeason = $qb->getQuery()->execute();
 
         return isset($headJudgeBonusesInSeason[0]);
     }
