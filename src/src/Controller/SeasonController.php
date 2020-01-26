@@ -29,7 +29,13 @@ class SeasonController extends AppController
         foreach ($rankings as $currentRanking) {
             /** @var Ranking $currentRanking */
 
-            $em->persist($rankingService->recalculateRanking($currentRanking, $season));
+            $recalculatedRanking = $rankingService->recalculateRanking($currentRanking, $season);
+
+            if ($recalculatedRanking->getTournamentCount() > 0) {
+                $em->persist($recalculatedRanking);
+            } else {
+                $em->remove($recalculatedRanking);
+            }
         }
 
         $em->flush();
