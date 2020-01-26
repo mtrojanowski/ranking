@@ -9,7 +9,7 @@ const getRanking = (seasonId, army) => {
 
 const getIndividualRanking = (playerId, seasonId) => {
     if (seasonId === undefined) {
-        seasonId = '5c36642979dab7965c7e5d23';
+        seasonId = '5e2df502d43f1c6d54a8b277';
     }
     return fetch('/api/ranking/' + seasonId + '/' + playerId)
         .then(response => response.json());
