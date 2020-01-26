@@ -76,7 +76,7 @@ export default class Navbar extends Component {
                         </a>
                         <div className="dropdown-menu nav-item dropright">
                             <div className="dropdown-submenu">
-                                <a href="" id="label2018" className="nav-link text-dark">2018</a>
+                                <a href="" id="label2018" className="nav-link submenu-link text-dark">2018</a>
                                 <div className="dropdown-menu nav-item archive-submenu" aria-labelledby="label2018">
                                     <Link to="/ranking/5b0d7c33fd0f9b6a4991169b" className="nav-link text-dark">Generalny</Link>
                                     <div className="dropdown-divider" />
@@ -100,7 +100,7 @@ export default class Navbar extends Component {
                                 </div>
                             </div>
                             <div className="dropdown-submenu">
-                                <a href="" id="label2019" className="nav-link text-dark">2019</a>
+                                <a href="" id="label2019" className="nav-link submenu-link text-dark">2019</a>
                                 <div className="dropdown-menu nav-item archive-submenu" aria-labelledby="label2019">
                                     <Link to="/ranking/5c36642979dab7965c7e5d23" className="nav-link text-dark">Generalny</Link>
                                     <div className="dropdown-divider" />
