@@ -6,7 +6,7 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class TournamentRepository extends DocumentRepository
 {
-    const ACTIVE_SEASON_ID = "5c36642979dab7965c7e5d23";
+    const ACTIVE_SEASON_ID = "5e2df502d43f1c6d54a8b277";
 
     public function getTournaments(string $previous)
     {
