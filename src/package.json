@@ -13,7 +13,7 @@
         "build": "encore production"
     },
     "dependencies": {
-        "node-fetch": "^2.1.2",
+        "node-fetch": "^2.6.1",
         "prop-types": "^15.6.1",
         "react": "^16.3.2",
         "react-datepicker": "^2.0.0",
