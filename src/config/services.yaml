@@ -35,6 +35,6 @@ services:
         arguments:
             $managerRegistry: "@doctrine_mongodb"
 
-    App\Service\ResultsService:
+    App\Service\HeadJudgeBonusCheckerService:
         arguments:
             $managerRegistry: "@doctrine_mongodb"

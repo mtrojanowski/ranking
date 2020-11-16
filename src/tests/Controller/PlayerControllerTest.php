@@ -1,23 +1,16 @@
 <?php
 namespace App\Controller;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class PlayerControllerTest extends TestCase
+class PlayerControllerTest extends WebTestCase
 {
     public function testGetPlayersList() {
-        $client = new Client([
-            'base_uri' => 'http://localhost:8000/api',
-            'http_errors' =>  false
-        ]);
+        $client = static::createClient();
 
-        try {
-            $response = $client->get("/players");
-            $this->assertEquals(200, $response->getStatusCode());
-        } catch (GuzzleException $e) {
-            $this->fail($e->getMessage());
-        }
+        $client->request('GET', '/players');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+
     }
 }
