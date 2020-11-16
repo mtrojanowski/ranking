@@ -11,6 +11,5 @@ class PlayerControllerTest extends WebTestCase
         $client->request('GET', '/players');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
     }
 }
