@@ -24,7 +24,7 @@ class Ranking
     private $playerId;
 
     /**
-     * @MongoDb\EmbedOne(targetDocument="RankingPlayer")
+     * @MongoDb\EmbedOne(targetDocument="App\Document\RankingPlayer")
      */
     private $player;
 

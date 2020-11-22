@@ -7,7 +7,7 @@ use App\Document\Result;
 use App\Document\Season;
 use App\Repository\PlayerRepository;
 use App\Repository\ResultsRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class RankingServiceTest extends TestCase
     /** @var Season */
     private $season;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->currentRanking = new Ranking();
         $this->currentRanking->setPlayerId($this->playerId);

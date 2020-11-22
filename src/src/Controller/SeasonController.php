@@ -5,26 +5,25 @@ namespace App\Controller;
 use App\Document\Ranking;
 use App\Document\Season;
 use App\Service\RankingService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class SeasonController extends AppController
 {
-    public function recalculateRanking(RankingService $rankingService, Request $request)
+    public function recalculateRanking(RankingService $rankingService, Request $request, DocumentManager $dm)
     {
         $seasonId = $request->query->get('seasonId');
 
         if (empty($seasonId)) {
             /** @var Season $season */
-            $season = $this->getMongo()->getRepository('App:Season')->getActiveSeason();
+            $season = $dm->getRepository('App:Season')->getActiveSeason();
             $seasonId = $season->getId();
         } else {
-            $season = $this->getMongo()->getRepository('App:Season')->find($seasonId);
+            $season = $dm->getRepository('App:Season')->find($seasonId);
         }
 
-        $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository('App:Ranking');
         $rankings = $rankingRepository->findBy(['seasonId' => $seasonId]);
-
-        $em = $this->getMongo()->getManager();
 
         foreach ($rankings as $currentRanking) {
             /** @var Ranking $currentRanking */
@@ -32,22 +31,22 @@ class SeasonController extends AppController
             $recalculatedRanking = $rankingService->recalculateRanking($currentRanking, $season);
 
             if ($recalculatedRanking->getTournamentCount() > 0) {
-                $em->persist($recalculatedRanking);
+                $dm->persist($recalculatedRanking);
             } else {
-                $em->remove($recalculatedRanking);
+                $dm->remove($recalculatedRanking);
             }
         }
 
-        $em->flush();
+        $dm->flush();
 
         return $this->json(['message' => 'Ranking recalculated'], 200);
     }
 
-    public function initializeArmyRankings(RankingService $rankingService) {
+    public function initializeArmyRankings(RankingService $rankingService, DocumentManager $dm) {
         /** @var Season $season */
-        $season = $this->getMongo()->getRepository('App:Season')->getActiveSeason();
+        $season = $dm->getRepository('App:Season')->getActiveSeason();
 
-        $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository('App:Ranking');
         $rankings = $rankingRepository->findBy([
             'seasonId' => $season->getId()]);
         $playersInRanking = [];
@@ -57,7 +56,7 @@ class SeasonController extends AppController
             $playersInRanking[] = $playerInRanking->getPlayerId();
         }
 
-        $resultsRepository = $this->getMongo()->getRepository('App:Result');
+        $resultsRepository = $dm->getRepository('App:Result');
 
         $armies = [
             "UD",
@@ -77,7 +76,6 @@ class SeasonController extends AppController
             "SA",
             "ID",
         ];
-        $em = $this->getMongo()->getManager();
 
         foreach ($armies as $army) {
             foreach ($playersInRanking as $playerId) {
@@ -98,11 +96,11 @@ class SeasonController extends AppController
                     $army
                 );
 
-                $em->persist($rankingService->recalculateRanking($currentRanking, $season));
+                $dm->persist($rankingService->recalculateRanking($currentRanking, $season));
             }
         }
 
-        $em->flush();
+        $dm->flush();
 
         return $this->json(['message' => 'Ranking recalculated'], 200);
     }

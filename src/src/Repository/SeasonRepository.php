@@ -1,10 +1,9 @@
 <?php
 namespace App\Repository;
 
-
 use App\Document\Season;
 use App\Exception\NoActiveSeasonException;
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class SeasonRepository extends DocumentRepository
 {

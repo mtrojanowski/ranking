@@ -7,13 +7,16 @@ use App\Document\Season;
 use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
 use App\Exception\InvalidTournamentException;
+use App\Exception\PlayerNotFoundException;
 use App\Repository\RankingRepository;
 use App\Repository\ResultsRepository;
 use App\Service\RankingService;
 use App\Service\ResultsService;
 use App\Service\TournamentsService;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ResultsController extends AppController
@@ -23,11 +26,11 @@ class ResultsController extends AppController
      * @param ResultsService $resultsService
      * @param RankingService $rankingService
      * @param TournamentsService $tournamentsService
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \App\Exception\PlayerNotFoundException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @return JsonResponse
+     * @throws PlayerNotFoundException
+     * @throws ExceptionInterface
      */
-    public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService, TournamentsService $tournamentsService)
+    public function createTournamentResults(Request $request, ResultsService $resultsService, RankingService $rankingService, TournamentsService $tournamentsService, DocumentManager $dm)
     {
         try {
             /** @var TournamentResults $tournamentResults */
@@ -47,7 +50,7 @@ class ResultsController extends AppController
             return $this->json($this->getError('Invalid data'), 400);
         }
 
-        $tournamentRepository = $this->getMongo()->getRepository('App:Tournament');
+        $tournamentRepository = $dm->getRepository('App:Tournament');
         /** @var Tournament $tournament */
         $tournament = $tournamentRepository->find((int) $tournamentResults->getTournamentId());
 
@@ -71,20 +74,21 @@ class ResultsController extends AppController
             return $this->json($this->getError($e->getMessage()), 422);
         }
 
-        $currentResults = $this->popCurrentTournamentResults($tournament->getLegacyId());
+        /** @var ResultsRepository $resultsRepository */
+        $resultsRepository = $dm->getRepository('App:Result');
+        $currentResults = $this->popCurrentTournamentResults($tournament->getLegacyId(), $resultsRepository);
 
-        $em = $this->getMongo()->getManager();
         foreach ($results as $result) {
-            $em->persist($result);
+            $dm->persist($result);
         }
         $tournament->setStatus('OK');
-        $em->flush();
+        $dm->flush();
 
         /** @var Season $season */
-        $season = $this->getMongo()->getRepository('App:Season')->find($tournament->getSeason());
+        $season = $dm->getRepository('App:Season')->find($tournament->getSeason());
 
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $this->getMongo()->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository('App:Ranking');
 
         $resultsToRecalculate = [];
 
@@ -118,38 +122,36 @@ class ResultsController extends AppController
             $recalculatedRanking = $rankingService->recalculateRanking($currentRanking, $season);
 
             if ($recalculatedRanking->getTournamentCount() > 0) {
-                $em->persist($recalculatedRanking);
+                $dm->persist($recalculatedRanking);
             } else {
-                $em->remove($recalculatedRanking);
+                $dm->remove($recalculatedRanking);
             }
 
             $currentArmy = isset($currentArmies[$result->getPlayerId()]) ? $currentArmies[$result->getPlayerId()] : null;
            if (empty($currentArmy) || $currentArmy == $result->getArmy()) {
-               $this->recalculateArmyRanking($rankingService, $rankingRepository, $em, $result, $season, $result->getArmy());
+               $this->recalculateArmyRanking($rankingService, $rankingRepository, $dm, $result, $season, $result->getArmy());
            } else {
-               $this->recalculateArmyRanking($rankingService, $rankingRepository, $em, $result, $season, $result->getArmy());
-               $this->recalculateArmyRanking($rankingService, $rankingRepository, $em, $result, $season, $currentArmy);
+               $this->recalculateArmyRanking($rankingService, $rankingRepository, $dm, $result, $season, $result->getArmy());
+               $this->recalculateArmyRanking($rankingService, $rankingRepository, $dm, $result, $season, $currentArmy);
            }
         }
 
         $datetime = new \DateTime();
         $season->setRankingLastModified($datetime->getTimestamp());
-        $em->persist($season);
+        $dm->persist($season);
 
-        $em->flush();
+        $dm->flush();
 
         return $this->json(['message' => 'Tournament results saved'], 201);
     }
 
-    private function popCurrentTournamentResults(string $tournamentId): array {
-        /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $this->getMongo()->getRepository('App:Result');
+    private function popCurrentTournamentResults(string $tournamentId, ResultsRepository $resultsRepository): array {
         $currentResults = $resultsRepository->getTournamentResults($tournamentId);
         $resultsRepository->deleteTournamentResults($tournamentId);
         return $currentResults;
     }
 
-    private function recalculateArmyRanking(RankingService $rankingService, RankingRepository $rankingRepository, ObjectManager $em, \App\Document\Result $result, Season $season, string $army) {
+    private function recalculateArmyRanking(RankingService $rankingService, RankingRepository $rankingRepository, DocumentManager $dm, dto\Result $result, Season $season, string $army) {
         $currentArmyRanking = $rankingRepository->findOneBy([
             'playerId' => $result->getPlayerId(),
             'seasonId' => $season->getId(),
@@ -167,9 +169,9 @@ class ResultsController extends AppController
         $currentArmyRecalculatedRanking = $rankingService->recalculateRanking($currentArmyRanking, $season);
 
         if ($currentArmyRecalculatedRanking->getTournamentCount() > 0) {
-            $em->persist($currentArmyRecalculatedRanking);
+            $dm->persist($currentArmyRecalculatedRanking);
         } else {
-            $em->remove($currentArmyRecalculatedRanking);
+            $dm->remove($currentArmyRecalculatedRanking);
         }
     }
 }

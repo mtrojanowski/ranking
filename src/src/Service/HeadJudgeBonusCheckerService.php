@@ -5,8 +5,8 @@ namespace App\Service;
 
 
 use App\Document\Result;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\MongoDB\Query\Builder;
+use Doctrine\ODM\MongoDB\Query\Builder;
+use Doctrine\Persistence\ManagerRegistry;
 
 class HeadJudgeBonusCheckerService implements HeadJudgeBonusChecker
 {

@@ -9,7 +9,7 @@ use App\Document\Season;
 use App\Exception\PlayerNotFoundException;
 use App\Helper\RankingData;
 use App\Repository\ResultsRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class RankingService
 {

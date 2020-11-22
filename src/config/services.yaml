@@ -38,3 +38,6 @@ services:
     App\Service\HeadJudgeBonusCheckerService:
         arguments:
             $managerRegistry: "@doctrine_mongodb"
+
+    App\DataFixtures\MongoDB\AppFixtures:
+        tags: ['doctrine.fixture.orm']

@@ -1,7 +1,7 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class RankingRepository extends DocumentRepository
 {

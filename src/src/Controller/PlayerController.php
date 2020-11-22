@@ -3,14 +3,16 @@ namespace App\Controller;
 
 use App\Controller\dto\PlayerDto;
 use App\Document\Player;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\MongoDBException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class PlayerController extends AppController
 {
 
-    public function listPlayers() {
-        $players = $this->getMongo()
+    public function listPlayers(DocumentManager $dm) {
+        $players = $dm
             ->getRepository('App:Player')
             ->findAll();
 
@@ -22,7 +24,7 @@ class PlayerController extends AppController
         return $this->json($this->getSerializer()->normalize($playerDtos, 'json'));
     }
 
-    public function createPlayer(Request $request) {
+    public function createPlayer(Request $request, DocumentManager $mongoManager) {
 
         try {
             /** @var Player $player */
@@ -35,15 +37,14 @@ class PlayerController extends AppController
             return $this->json($this->getError('Incorrect input data'), 400);
         }
 
-        $mongoManager = $this->getMongo()
-            ->getManager();
-
         $mongoManager->persist($player);
 
         try {
             $mongoManager->flush();
         } catch (\MongoDuplicateKeyException $e) {
             return $this->json($this->getError('Player already exists'), 409);
+        } catch (MongoDBException $e) {
+            return $this->json($this->getError('Database exception'), 500);
         }
 
         return $this->json(['id' => $player->getLegacyId()], 201);

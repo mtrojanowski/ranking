@@ -1,8 +1,7 @@
 <?php
 namespace App\Repository;
 
-
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class TournamentRepository extends DocumentRepository
 {

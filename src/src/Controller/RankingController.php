@@ -12,6 +12,7 @@ use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\RankingRepository;
 use App\Repository\SeasonRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class RankingController extends AppController
@@ -36,13 +37,12 @@ class RankingController extends AppController
         "ID" => "Infernal Dwrves",
     ];
 
-    public function list(Request $request, string $seasonId = null) {
+    public function list(Request $request, DocumentManager $dm, string $seasonId = null) {
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $this->getMongo()
-            ->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository('App:Ranking');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $this->getMongo()->getRepository('App:Season');
+        $seasonRepository = $dm->getRepository('App:Season');
 
         if (!$seasonId) {
             $season = $seasonRepository->getActiveSeason();
@@ -81,11 +81,11 @@ class RankingController extends AppController
         return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
     }
 
-    public function individual($seasonId, $playerId) {
-        $playersResults = $this->getMongo()->getRepository('App:Result')
+    public function individual(DocumentManager $dm, string $seasonId, string $playerId) {
+        $playersResults = $dm->getRepository('App:Result')
             ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
         /** @var Ranking $rankingData */
-        $rankingData = $this->getMongo()->getRepository('App:Ranking')
+        $rankingData = $dm->getRepository('App:Ranking')
             ->findOneBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
 
         $tournamentIds = [];
@@ -97,7 +97,7 @@ class RankingController extends AppController
             $resultsByTournament[$result->getTournamentId()] = $result;
         }
 
-        $tournaments = $this->getMongo()->getRepository('App:Tournament')
+        $tournaments = $dm->getRepository('App:Tournament')
             ->findTournaments($tournamentIds);
 
         $individualTournaments = [];

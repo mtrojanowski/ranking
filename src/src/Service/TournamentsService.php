@@ -8,7 +8,7 @@ use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
 use App\Repository\PlayerRepository;
 use App\Repository\SeasonRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class TournamentsService
 {
