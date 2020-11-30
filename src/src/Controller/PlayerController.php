@@ -3,8 +3,10 @@ namespace App\Controller;
 
 use App\Controller\dto\PlayerDto;
 use App\Document\Player;
+use App\Repository\PlayerRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\MongoDBException;
+use MongoDB\Driver\Exception\BulkWriteException;
+use MongoDB\Driver\Exception\Exception as MongoException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
@@ -37,14 +39,25 @@ class PlayerController extends AppController
             return $this->json($this->getError('Incorrect input data'), 400);
         }
 
+        /** @var PlayerRepository $playerRepository */
+        $playerRepository = $mongoManager->getRepository('App\Document\Player');
+
+        if ($player->getLegacyId() == null) {
+            $player->setLegacyId($playerRepository->getLatestLegacyId() + 1);
+        }
+
         $mongoManager->persist($player);
 
         try {
             $mongoManager->flush();
-        } catch (\MongoDuplicateKeyException $e) {
-            return $this->json($this->getError('Player already exists'), 409);
-        } catch (MongoDBException $e) {
-            return $this->json($this->getError('Database exception'), 500);
+        } catch (BulkWriteException $e) {
+            if ($e->getCode() == 11000) {
+                return $this->json($this->getError('Player with id ' . $player->getLegacyId() . 'already exists '), 409);
+            } else {
+                return $this->json($this->getError('Database exception' . get_class($e)), 500);
+            }
+        } catch (MongoException $e) {
+            return $this->json($this->getError('Database exception' . get_class($e)), 500);
         }
 
         return $this->json(['id' => $player->getLegacyId()], 201);
