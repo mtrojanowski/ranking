@@ -5,28 +5,26 @@ use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class TournamentRepository extends DocumentRepository
 {
-    const ACTIVE_SEASON_ID = "5e2df502d43f1c6d54a8b277";
-
-    public function getTournaments(string $previous)
+    public function getTournaments(string $previous, string $activeSeasonId)
     {
         $queryBuilder = $this->createQueryBuilder();
         $todayDate = new \DateTime();
-        $today = new \MongoDate($todayDate->setTime(0, 0, 0)->getTimestamp());
+        $todayDate->setTime(0, 0, 0);
 
         $queryBuilder
-            ->field("season")->equals(self::ACTIVE_SEASON_ID);
+            ->field("season")->equals($activeSeasonId);
 
         if ($previous == 'true') {
             $queryBuilder
-                ->field('date')->lt($today);
+                ->field('date')->lt($todayDate);
         } else {
             $queryBuilder
-                ->field('date')->gte($today);
+                ->field('date')->gte($todayDate);
         }
 
         $queryBuilder->sort("date", 1);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->getQuery()->execute()->toArray();
     }
 
     public function getLastLegacyId()

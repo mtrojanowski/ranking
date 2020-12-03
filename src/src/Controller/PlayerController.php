@@ -5,6 +5,7 @@ use App\Controller\dto\PlayerDto;
 use App\Document\Player;
 use App\Repository\PlayerRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\MongoDBException;
 use MongoDB\Driver\Exception\BulkWriteException;
 use MongoDB\Driver\Exception\Exception as MongoException;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +44,7 @@ class PlayerController extends AppController
         $playerRepository = $mongoManager->getRepository('App\Document\Player');
 
         if ($player->getLegacyId() == null) {
-            $player->setLegacyId($playerRepository->getLatestLegacyId() + 1);
+            $player->setLegacyId((string)($playerRepository->getHighestLegacyId() + 1));
         }
 
         $mongoManager->persist($player);
@@ -56,7 +57,7 @@ class PlayerController extends AppController
             } else {
                 return $this->json($this->getError('Database exception' . get_class($e)), 500);
             }
-        } catch (MongoException $e) {
+        } catch (MongoException | MongoDBException $e) {
             return $this->json($this->getError('Database exception' . get_class($e)), 500);
         }
 

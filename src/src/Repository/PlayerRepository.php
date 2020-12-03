@@ -23,7 +23,7 @@ class PlayerRepository extends DocumentRepository
         return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
     }
 
-    function getLatestLegacyId(): string {
+    function getHighestLegacyId(): int {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->select(['legacyId'])
             ->sort("legacyId", -1)
@@ -32,9 +32,9 @@ class PlayerRepository extends DocumentRepository
         $result = $queryBuilder->hydrate(false)->getQuery()->execute()->current();
 
         if (is_array($result)) {
-            return $result["legacyId"];
+            return (int) $result["legacyId"];
         }
 
-        return "0";
+        return 0;
     }
 }

@@ -8,6 +8,7 @@ use App\Document\Result;
 use App\Document\Tournament;
 use App\Repository\PlayerRepository;
 use App\Repository\ResultsRepository;
+use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
 use App\Service\TournamentsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -25,9 +26,13 @@ class TournamentController extends AppController
             return $this->json($this->getError('Parameter \'previous\' is required'), 400);
         }
 
+        /** @var SeasonRepository $seasonRepository */
+        $seasonRepository = $dm->getRepository('App:Season');
+        $activeSeason = $seasonRepository->getActiveSeason();
+
         /** @var TournamentRepository $repository */
         $repository = $dm->getRepository('App:Tournament');
-        $tournaments = $repository->getTournaments($previous);
+        $tournaments = $repository->getTournaments($previous, $activeSeason->getId());
 
         foreach ($tournaments as $tournament) {
             $tournament->setDate($tournament->getDate()->format("d.m.Y"));
