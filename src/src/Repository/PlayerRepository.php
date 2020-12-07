@@ -11,7 +11,7 @@ class PlayerRepository extends DocumentRepository
             ->field('legacyId')
             ->in($playerIds);
 
-        return $queryBuilder->hydrate(false)->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->hydrate(false)->getQuery()->execute()->toArray();
     }
 
     function getPlayersByIds(array $playerIds) {
@@ -20,7 +20,7 @@ class PlayerRepository extends DocumentRepository
             ->field('legacyId')
             ->in($playerIds);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->getQuery()->execute()->toArray();
     }
 
     function getHighestLegacyId(): int {
