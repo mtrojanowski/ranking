@@ -81,7 +81,21 @@ class RankingController extends AppController
         return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
     }
 
-    public function individual(DocumentManager $dm, string $seasonId, string $playerId) {
+    public function individual(Request $request, DocumentManager $dm, string $playerId, string $seasonId = null) {
+        /** @var SeasonRepository $seasonRepository */
+        $seasonRepository = $dm->getRepository('App:Season');
+
+        if (!$seasonId) {
+            // Try to get seasonId from Query
+            $seasonId = $request->get('seasonId');
+
+            if (!$seasonId) {
+                // Get active season by default
+                $season = $seasonRepository->getActiveSeason();
+                $seasonId = $season->getId();
+            }
+        }
+
         $playersResults = $dm->getRepository('App:Result')
             ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
         /** @var Ranking $rankingData */

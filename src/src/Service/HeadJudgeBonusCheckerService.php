@@ -20,13 +20,15 @@ class HeadJudgeBonusCheckerService implements HeadJudgeBonusChecker
     public function playerHasHeadJudgeBonus($playerId, $seasonId, string $tournamentId): bool
     {
         /** @var Builder $qb */
-        $qb = $this->managerRegistry->getManager()->createQueryBuilder(Result::class);
-        $qb->field('seasonId')->equals($seasonId)
+        $qb = $this->managerRegistry->getManager()->createQueryBuilder();
+
+        $qb->find(Result::class)
+            ->field('seasonId')->equals($seasonId)
             ->field('playerId')->equals($playerId)
             ->field('judge')->equals(1)
             ->field('tournamentId')->notEqual($tournamentId);
 
-        $headJudgeBonusesInSeason = $qb->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        $headJudgeBonusesInSeason = $qb->getQuery()->execute()->toArray();
 
         return isset($headJudgeBonusesInSeason[0]);
     }

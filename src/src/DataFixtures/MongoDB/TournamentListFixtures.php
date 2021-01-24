@@ -6,35 +6,19 @@ use App\Document\Player;
 use App\Document\Result;
 use App\Document\Season;
 use App\Document\Tournament;
-use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use MongoDB\BSON\ObjectId;
 
-class TournamentListFixtures extends Fixture
+class TournamentListFixtures extends TournamentFixture
 {
     public function load(ObjectManager $manager)
     {
         for ($i = 0; $i < 10; $i++) {
-            $player = new Player();
-            $player->setLegacyId($i + 1000);
-            $player->setFirstName('Player' . $i);
-            $player->setName('Name' . $i);
-            $player->setCountry('PL');
-            $player->setAssociation('Club' . $i);
-            $player->setNickname('alias' . $i);
-            $player->setTown('Town' . $i);
+            $player = $this->createPlayer($i);
             $manager->persist($player);
         }
 
-        $currentSeason = new Season();
-        $currentSeason->setName('Current season');
-        $currentSeason->setActive(true);
-        $currentSeason->setEndDate('2120-12-31');
-        $currentSeason->setStartDate('2020-01-01');
-        $currentSeason->setLimitOfMasterTournaments(4);
-        $currentSeason->setLimitOfPairMasterTournaments(1);
-        $currentSeason->setLimitOfTeamMasterTournaments(2);
-        $currentSeason->setLimitOfTournaments(10);
+        $currentSeason = $this->createActiveSeason();
         $manager->persist($currentSeason);
 
         // Add previous tournaments
@@ -74,24 +58,5 @@ class TournamentListFixtures extends Fixture
         }
 
         $manager->flush();
-    }
-
-    private function getTournament(int $i, \DateTime $date, Season $currentSeason): Tournament
-    {
-        $tournament = new Tournament();
-        $tournament->setLegacyId(1000 + $i);
-        $tournament->setName("Tournament$i");
-        $tournament->setTown('ATown');
-        $tournament->setDate($date);
-        $tournament->setOrganiser("Org");
-        $tournament->setPlayersInTeam(1);
-        $tournament->setPoints(4500);
-        $tournament->setRank('local');
-        $tournament->setSeason($currentSeason->getId());
-        $tournament->setType('single');
-        $tournament->setStatus('NEW');
-        $tournament->setVenue("A venue");
-
-        return $tournament;
     }
 }

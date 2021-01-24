@@ -1,7 +1,10 @@
 <?php
 namespace App\Repository;
 
+use App\Document\Tournament;
 use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Driver\Exception\InvalidArgumentException;
 
 class TournamentRepository extends DocumentRepository
 {
@@ -27,7 +30,7 @@ class TournamentRepository extends DocumentRepository
         return $queryBuilder->getQuery()->execute()->toArray();
     }
 
-    public function getLastLegacyId()
+    public function getLastLegacyId(): int
     {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder
@@ -39,12 +42,31 @@ class TournamentRepository extends DocumentRepository
         return !empty($tournament) ? $tournament->getLegacyId() : 0;
     }
 
-    public function findTournaments(array $tournamentIds)
+    public function findTournaments(array $tournamentIds): array
     {
         $queryBuilder = $this->createQueryBuilder();
         $queryBuilder->field('legacyId')->in($tournamentIds);
         $queryBuilder->sort('date', -1);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->getQuery()->execute()->toArray();
+    }
+
+    public function getById($id): Tournament {
+        // First try with id as ObjectId
+        /** @var Tournament $tournament */
+        $tournament = null;
+        try {
+            $tournamentId = new ObjectId($id);
+            $tournament = $this->find($tournamentId);
+        } catch (InvalidArgumentException $exception) {
+            // Most probably legacy ID was used
+        }
+        // Then try to use id as legacyId
+
+        if ($tournament == null) {
+            $tournament = $this->findOneBy(['legacyId' => (int) $id]);
+        }
+
+        return $tournament;
     }
 }

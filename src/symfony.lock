@@ -92,6 +92,9 @@
     "doctrine/sql-formatter": {
         "version": "1.1.1"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
+    },
     "guzzlehttp/guzzle": {
         "version": "7.2.0"
     },
@@ -103,6 +106,15 @@
     },
     "jean85/pretty-package-versions": {
         "version": "1.5.1"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.1"
     },
     "liip/test-fixtures-bundle": {
         "version": "1.10.0"
@@ -175,6 +187,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.0.6"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.0.6"
@@ -295,6 +310,9 @@
     },
     "symfony/property-access": {
         "version": "v4.0.6"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v4.4.18"
     },
     "symfony/routing": {
         "version": "4.0",

@@ -10,7 +10,7 @@ class ResultsRepository extends DocumentRepository
     {
         $queryBuilder = $this->getPlayersResultsQuery($playerId, $seasonId);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->getQuery()->execute()->toArray();
     }
 
     public function getPlayersResultsForArmy(string $playerId, string $seasonId, string $army)
@@ -19,7 +19,7 @@ class ResultsRepository extends DocumentRepository
             ->getPlayersResultsQuery($playerId, $seasonId)
             ->field('army')->equals($army);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        return $queryBuilder->getQuery()->execute()->toArray();
     }
 
     public function deleteTournamentResults(string $tournamentId)

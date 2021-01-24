@@ -10,10 +10,13 @@ use App\Exception\InvalidTournamentException;
 use App\Exception\PlayerNotFoundException;
 use App\Repository\RankingRepository;
 use App\Repository\ResultsRepository;
+use App\Repository\TournamentRepository;
 use App\Service\RankingService;
 use App\Service\ResultsService;
 use App\Service\TournamentsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Driver\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -40,27 +43,27 @@ class ResultsController extends AppController
                 'json'
             );
 
-            $results = $this->getSerializer()->denormalize(
+            $resultsDto = $this->getSerializer()->denormalize(
                 $tournamentResults->getResults(),
                 'App\Controller\dto\Result[]'
             );
 
-            $tournamentResults->setResults($results);
+            $tournamentResults->setResults($resultsDto);
         } catch(NotEncodableValueException $e) {
             return $this->json($this->getError('Invalid data'), 400);
         }
 
+        /** @var TournamentRepository $tournamentRepository */
         $tournamentRepository = $dm->getRepository('App:Tournament');
-        /** @var Tournament $tournament */
-        $tournament = $tournamentRepository->find((int) $tournamentResults->getTournamentId());
 
-        if (!$tournament) {
-            $tournament = $tournamentRepository->findOneBy(['legacyId' => (int) $tournamentResults->getTournamentId()]);
-        }
+        $tournament = $tournamentRepository->getById($tournamentResults->getTournamentId());
 
         if (!$tournament) {
             return $this->json($this->getError('Invalid tournament'), 400);
         }
+
+        // Make sure tournament's legacy ID is used in the results
+        $tournamentResults->setTournamentId($tournament->getLegacyId());
 
         try {
             $results = $resultsService->createTournamentResults($tournament, $tournamentResults);
@@ -93,14 +96,14 @@ class ResultsController extends AppController
         $resultsToRecalculate = [];
 
         foreach ($results as $result) {
-            /** @var Result $result */
+            /** @var \App\Document\Result $result */
             $resultsToRecalculate[$result->getPlayerId()] = $result;
         }
 
         $currentArmies = [];
 
         foreach ($currentResults as $currentResult) {
-            /** @var Result $currentResult */
+            /** @var \App\Document\Result $currentResult */
             if (!isset($resultsToRecalculate[$currentResult->getPlayerId()])) {
                 $resultsToRecalculate[$currentResult->getPlayerId()] = $currentResult;
             }
@@ -109,7 +112,7 @@ class ResultsController extends AppController
         }
 
         foreach ($resultsToRecalculate as $result) {
-            /** @var Result $result */
+            /** @var \App\Document\Result $result */
             $currentRanking = $rankingRepository->findOneBy([
                 'playerId' => $result->getPlayerId(),
                 'seasonId' => $season->getId()
@@ -151,7 +154,7 @@ class ResultsController extends AppController
         return $currentResults;
     }
 
-    private function recalculateArmyRanking(RankingService $rankingService, RankingRepository $rankingRepository, DocumentManager $dm, dto\Result $result, Season $season, string $army) {
+    private function recalculateArmyRanking(RankingService $rankingService, RankingRepository $rankingRepository, DocumentManager $dm, \App\Document\Result $result, Season $season, string $army) {
         $currentArmyRanking = $rankingRepository->findOneBy([
             'playerId' => $result->getPlayerId(),
             'seasonId' => $season->getId(),

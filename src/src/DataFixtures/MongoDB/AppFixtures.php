@@ -7,19 +7,12 @@ use App\Document\Season;
 use Doctrine\Bundle\MongoDBBundle\Fixture\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class AppFixtures extends TournamentFixture
 {
     public function load(ObjectManager $manager)
     {
         for ($i = 0; $i < 10; $i++) {
-            $player = new Player();
-            $player->setLegacyId($i + 1000);
-            $player->setFirstName('Player' . $i);
-            $player->setName('Name' . $i);
-            $player->setCountry('PL');
-            $player->setAssociation('Club' . $i);
-            $player->setNickname('alias' . $i);
-            $player->setTown('Town' . $i);
+            $player = $this->createPlayer($i);
             $manager->persist($player);
         }
 
