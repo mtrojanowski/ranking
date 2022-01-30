@@ -53,7 +53,7 @@ class RecalculateRanking extends Command
             $season = $this->documentManager->getRepository('App:Season')->find($seasonId);
         }
 
-        $output->writeln('Recalculating ranking for season: '.$seasonId);
+        $output->writeln("Recalculating ranking for season: {$season->getName()}(ID: {$seasonId}) ");
 
         $rankingRepository = $this->documentManager->getRepository('App:Ranking');
         $rankings = $rankingRepository->findBy(['seasonId' => $seasonId]);

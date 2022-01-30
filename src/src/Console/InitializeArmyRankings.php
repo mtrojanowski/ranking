@@ -6,6 +6,7 @@ use App\Document\Season;
 use App\Service\RankingService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,7 +29,8 @@ class InitializeArmyRankings extends Command
     {
         $this
             ->setDescription('Initializes army rankings')
-            ->setHelp('Initializes army rankings for current season. Can be used when new armies are configured.');
+            ->setHelp('Initializes army rankings for current season. Can be used when new armies are configured.')
+            ->addArgument('seasonId', InputArgument::OPTIONAL, 'ID of the season to recalculate. The active season is recalculated by default.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -39,12 +41,19 @@ class InitializeArmyRankings extends Command
             '',
         ]);
 
-        /** @var Season $season */
-        $season = $this->documentManager->getRepository('App:Season')->getActiveSeason();
+        $seasonId = $input->getArgument('seasonId');
+
+        if (empty($seasonId)) {
+            /** @var Season $season */
+            $season = $this->documentManager->getRepository('App:Season')->getActiveSeason();
+            $seasonId = $season->getId();
+        } else {
+            $season = $this->documentManager->getRepository('App:Season')->find($seasonId);
+        }
 
         $rankingRepository = $this->documentManager->getRepository('App:Ranking');
         $rankings = $rankingRepository->findBy([
-            'seasonId' => $season->getId()]);
+            'seasonId' => $seasonId]);
         $playersInRanking = [];
 
         foreach ($rankings as $playerInRanking) {
