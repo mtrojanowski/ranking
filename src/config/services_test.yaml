@@ -9,5 +9,5 @@ services:
     # test.App\Service\MyService: '@App\Service\MyService'
 
     App\DataFixtures\:
-        resource: '../src/DataFixtures'
+        resource: '%kernel.project_dir%/src/DataFixtures'
         tags: ['doctrine.fixture.orm']

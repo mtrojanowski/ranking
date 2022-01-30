@@ -12,11 +12,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InitializeArmyRankings extends Command
 {
     protected static $defaultName = 'ranking:army:initialize';
-    /** @var RankingService */
-    private $rankingService;
+    private RankingService $rankingService;
 
-    /** @var DocumentManager */
-    private $documentManager;
+    private DocumentManager $documentManager;
 
     public function __construct(RankingService $rankingService, DocumentManager $documentManager)
     {

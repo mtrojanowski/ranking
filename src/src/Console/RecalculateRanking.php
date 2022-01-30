@@ -15,11 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RecalculateRanking extends Command
 {
     protected static $defaultName = 'ranking:recalculate';
-    /** @var RankingService */
-    private $rankingService;
+    private RankingService $rankingService;
 
-    /** @var DocumentManager */
-    private $documentManager;
+    private DocumentManager $documentManager;
 
     public function __construct(RankingService $rankingService, DocumentManager $documentManager)
     {

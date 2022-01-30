@@ -8,13 +8,13 @@
   - name: ensure python-apt and unzip are installed
     apt: name='python-apt,unzip'
 
-  - name: add php repository
-    apt_repository:
-      repo: 'ppa:ondrej/php'
-      update_cache: true
+#  - name: add php repository
+#    apt_repository:
+#      repo: 'ppa:ondrej/php'
+#      update_cache: true
 
-  - name: ensure php 7.2 is installed
-    apt: name='php7.2,php7.2-zip,php7.2-xml,php7.2-mbstring,php7.2-intl,php7.2-mongodb'
+  - name: ensure php 7.4 is installed
+    apt: name='php,php-zip,php-xml,php-mbstring,php-intl,php-mongodb'
 
   - name: ensure getcomposer is executable
     file: 
@@ -39,12 +39,13 @@
 
   - name: add mongo repository key
     apt_key:
-       keyserver: https://www.mongodb.org/static/pgp/server-4.4.asc
+       keyserver: https://www.mongodb.org/static/pgp/server-5.0.asc
+       id: B00A0BD1E2C63C11
 
   - name: create a list file for mongodb
-    shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+    shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
     args:
-      creates: /etc/apt/sources.list.d/mongodb-org-4.4.list
+      creates: /etc/apt/sources.list.d/mongodb-org-5.0.list
 
   - name: install mongo
     apt: 
@@ -58,7 +59,7 @@
 
   - name: Download nodejs install script
     get_url:
-      url: https://deb.nodesource.com/setup_10.x 
+      url: https://deb.nodesource.com/setup_14.x
       dest: /tmp/install_node.sh
       mode: 777
 
@@ -72,22 +73,22 @@
       name: nodejs
       update_cache: true
   
-  - name: add yarn repository key
-    apt_key:
-      url: https://dl.yarnpkg.com/debian/pubkey.gpg
-      state: present
+#  - name: add yarn repository key
+#    apt_key:
+#      url: https://dl.yarnpkg.com/debian/pubkey.gpg
+#      state: present
+#
+#  - name: add yarn source list
+#    shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+#    args:
+#      creates: /etc/apt/sources.list.d/yarn.list
+#
+#  - name: install yarn
+#    apt:
+#      name: yarn
+#      install_recommends: false
+#      update_cache: true
 
-  - name: add yarn source list
-    shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    args:
-      creates: /etc/apt/sources.list.d/yarn.list
-
-  - name: install yarn
-    apt:
-      name: yarn
-      install_recommends: false
-      update_cache: true
-
-  - name: ensure php 7.2 is the default
-    shell: update-alternatives --set php /usr/bin/php7.2
+#  - name: ensure php 7.4 is the default
+#    shell: update-alternatives --set php /usr/bin/php7.4
 

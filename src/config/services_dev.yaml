@@ -1,0 +1,9 @@
+services:
+    App\DataFixtures\MongoDB\Development\:
+        resource: '%kernel.project_dir%/src/DataFixtures/MongoDB/Development'
+        tags: [ 'doctrine.fixture.odm.mongodb' ]
+
+    App\DataFixtures\MongoDB\Development\TournamentsFixtures:
+        arguments:
+            $resultsService: "@App\\Service\\ResultsService"
+        tags: [ 'doctrine.fixture.odm.mongodb' ]
