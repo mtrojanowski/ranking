@@ -16,26 +16,14 @@ class AppFixtures extends TournamentFixture
             $manager->persist($player);
         }
 
-        $oldSeason = new Season();
-        $oldSeason->setName('Sezon 2017');
-        $oldSeason->setActive(false);
-        $oldSeason->setEndDate('2017-12-31');
-        $oldSeason->setStartDate('2017-01-01');
-        $oldSeason->setLimitOfMasterTournaments(4);
-        $oldSeason->setLimitOfPairMasterTournaments(1);
-        $oldSeason->setLimitOfTeamMasterTournaments(2);
-        $oldSeason->setLimitOfTournaments(10);
+        $oldSeason = FixturesBase::getSeason(
+            false, new \DateTime('2017-01-01'), new \DateTime('2017-12-31')
+        );
         $manager->persist($oldSeason);
 
-        $currentSeason = new Season();
-        $currentSeason->setName('Sezon obecny');
-        $currentSeason->setActive(true);
-        $currentSeason->setEndDate('2120-12-31');
-        $currentSeason->setStartDate('2020-01-01');
-        $currentSeason->setLimitOfMasterTournaments(4);
-        $currentSeason->setLimitOfPairMasterTournaments(1);
-        $currentSeason->setLimitOfTeamMasterTournaments(2);
-        $currentSeason->setLimitOfTournaments(10);
+        $currentSeason = FixturesBase::getSeason(
+            true, new \DateTime('2020-01-01'), new \DateTime('2120-12-31')
+        );
         $manager->persist($currentSeason);
 
         $manager->flush();

@@ -10,6 +10,7 @@ import Ranking from "./Ranking";
 import AddTournament from "./AddTournament";
 import Individual from "./Individual";
 import TournamentResults from "./TournamentResults";
+import ArchiveSeasons from "./ArchiveSeasons";
 
 export default class Main extends Component {
     render() {
@@ -31,6 +32,7 @@ export default class Main extends Component {
                         <Route path="/ranking/:seasonId" component={Ranking} />
                         <Route exact path="/add-tournament" component={AddTournament} />
                         <Route path="/tournament/:tournamentId" component={TournamentResults} />
+                        <Route path="/archive-seasons" component={ArchiveSeasons} />
                     </Switch>
                 </div>
             </Router>);

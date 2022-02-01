@@ -40,3 +40,4 @@ From the `/vagrant/src` directory you can run these utility commands:
 - `npm run dev` to build the frontend files.
 - `php bin/console server:start 0.0.0.0` to start the development server on port 8000. You can then access it from your
   host's browser through `http://localhost:8000`.
+- `php bin/phpunit` to run the test suite.

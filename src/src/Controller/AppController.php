@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Serializer;
 
 class AppController extends AbstractController
 {
-    private $serializer;
+    private ?Serializer $serializer = null;
 
     protected function getSerializer() : Serializer
     {

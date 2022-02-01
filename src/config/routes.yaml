@@ -58,6 +58,12 @@ new_individual_ranking:
   methods:
     - GET
 
+archive_seasons_list:
+  path: /api/archive-seasons
+  controller: App\Controller\SeasonsController::listArchive
+  methods:
+    - GET
+
 
 frontend:
     path: /{token}

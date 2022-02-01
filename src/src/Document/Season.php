@@ -31,27 +31,27 @@ class Season
     private $endDate;
 
     /**
-     * @MongoDB\Field(type="boolean")
+     * @MongoDB\Field(type="bool")
      */
     private $active;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $limitOfTournaments;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $limitOfMasterTournaments;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $limitOfTeamMasterTournaments;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $limitOfPairMasterTournaments;
 

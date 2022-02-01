@@ -72,22 +72,10 @@
     apt:
       name: nodejs
       update_cache: true
-  
-#  - name: add yarn repository key
-#    apt_key:
-#      url: https://dl.yarnpkg.com/debian/pubkey.gpg
-#      state: present
-#
-#  - name: add yarn source list
-#    shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-#    args:
-#      creates: /etc/apt/sources.list.d/yarn.list
-#
-#  - name: install yarn
-#    apt:
-#      name: yarn
-#      install_recommends: false
-#      update_cache: true
+
+  - name: ensure npm is up to date
+    shell: npm install -g npm
+
 
 #  - name: ensure php 7.4 is the default
 #    shell: update-alternatives --set php /usr/bin/php7.4

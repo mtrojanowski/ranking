@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DataFixtures\MongoDB\ArchiveSeasonsFixtures;
 use App\DataFixtures\MongoDB\RankingFixtures;
 use App\Document\Tournament;
 use App\Repository\SeasonRepository;
@@ -168,6 +169,29 @@ class RankingControllerTest extends WebTestCase
 
         foreach ($results->tournaments as $tournament) {
             $this->assertContains($tournament->legacyId, $seasonTournamentIds);
+        }
+    }
+
+    public function testListOfArchiveSeasonsShouldReturnList()
+    {
+        $client = static::createClient();
+
+        $this->loadFixtures([
+            ArchiveSeasonsFixtures::class
+        ], false, null, 'doctrine_mongodb');
+
+        $client->request('GET', '/api/archive-seasons', [], [], ["HTTP_CONTENT_TYPE" => "application/json"]);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Response status is not 200');
+
+
+        $listOfArchiveSeasons = json_decode($client->getResponse()->getContent());
+
+        $this->assertCount(2, $listOfArchiveSeasons->seasons);
+
+        $archiveSeasonNames = ['2018', '2017'];
+
+        foreach ($listOfArchiveSeasons->seasons as $season) {
+            $this->assertContains($season->name, $archiveSeasonNames);
         }
     }
 

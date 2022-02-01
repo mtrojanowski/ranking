@@ -10,4 +10,5 @@ services:
 
     App\DataFixtures\:
         resource: '%kernel.project_dir%/src/DataFixtures'
+        exclude: '%kernel.project_dir%/src/DataFixtures/MongoDB/{Development,FixturesBase.php}'
         tags: ['doctrine.fixture.orm']

@@ -39,12 +39,12 @@ class Result
     private $playerId;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $place;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $points;
 
@@ -54,7 +54,7 @@ class Result
     private $army;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      * 0 - regular player,
      * 1 - head judge,
      * 2 - line judge

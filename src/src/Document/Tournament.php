@@ -15,7 +15,7 @@ class Tournament
     private $id;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $legacyId;
 
@@ -40,7 +40,7 @@ class Tournament
     private $venue;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $points;
 
