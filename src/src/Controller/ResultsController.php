@@ -15,8 +15,6 @@ use App\Service\RankingService;
 use App\Service\ResultsService;
 use App\Service\TournamentsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use MongoDB\BSON\ObjectId;
-use MongoDB\Driver\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -140,7 +138,7 @@ class ResultsController extends AppController
         }
 
         $datetime = new \DateTime();
-        $season->setRankingLastModified($datetime->getTimestamp());
+        $season->setRankingLastModified($datetime);
         $dm->persist($season);
 
         $dm->flush();

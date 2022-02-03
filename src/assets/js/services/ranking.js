@@ -1,7 +1,7 @@
 const getRanking = (seasonId, army) => {
     const url = '/api/ranking' + (seasonId === undefined ? '' : '/' + seasonId ) + (army !== undefined && army !== '' ? '?army=' + army : '');
 
-    return fetch(url)
+    return fetch(url, { cache: "default" })
         .then(response => response.json());
 };
 

@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SeasonsController extends AppController
 {
+    private const CACHE_FOR_AN_HOUR = [
+        'Cache-Control' => 'public, max-age=3600'
+    ];
 
     public function listArchive(DocumentManager $dm): JsonResponse {
         $seasons = $dm
@@ -20,7 +23,12 @@ class SeasonsController extends AppController
             $seasonDtos[] = $this->toSeasonsDto($season);
         }
 
-        return $this->json($this->getSerializer()->normalize(["seasons" => $seasonDtos], 'json'));
+        $headers = self::CACHE_FOR_AN_HOUR;
+        /** @var Season $latestSeason */
+        $latestSeason = $seasons[0];
+        $headers["Last-Modified"] = $latestSeason->getEndDate()->format("D, d M Y H:i:s"). " GMT";
+
+        return $this->json($this->getSerializer()->normalize(["seasons" => $seasonDtos], 'json'), 200, $headers);
     }
 
     private function toSeasonsDto(Season $season) : SeasonDto

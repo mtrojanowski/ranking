@@ -15,6 +15,7 @@ class FixturesBase
         $season->setLimitOfPairMasterTournaments(1);
         $season->setLimitOfTeamMasterTournaments(2);
         $season->setLimitOfTournaments(10);
+        $season->setRankingLastModified($startOfSeason);
 
         if ($endOfSeason) {
             $season->setEndDate($endOfSeason);

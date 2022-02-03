@@ -75,10 +75,13 @@ class RankingController extends AppController
             );
         }
 
-        $modificationDate = $season->getRankingLastModified() != null ? new \DateTime('@'.$season->getRankingLastModified()) : null;
+        $modificationDate = $season->getRankingLastModified();
         $rankingData = new RankingDataDto($ranking, $modificationDate, $this->generateRankingTitle($season, $army));
 
-        return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
+        $headers = self::CACHE_FOR_A_MINUTE;
+        $headers['Last-Modified'] = $modificationDate->format("D, d M Y H:i:s") . "GMT";
+
+        return $this->json($this->getSerializer()->normalize($rankingData, 'json'), 200, $headers);
     }
 
     public function individual(Request $request, DocumentManager $dm, string $playerId, string $seasonId = null) {
@@ -133,7 +136,7 @@ class RankingController extends AppController
                 $result->getPoints(),
                 $result->getArmy(),
                 isset($includedTournaments[$tournament->getLegacyId()]),
-                isset($includedTournaments[$tournament->getLegacyId()]) ? $includedTournaments[$tournament->getLegacyId()] : 0,
+                $includedTournaments[$tournament->getLegacyId()] ?? 0,
                 $result->getJudge() ?: 0
             );
         }
@@ -152,7 +155,7 @@ class RankingController extends AppController
             $individualTournaments
         );
 
-        return $this->json($this->getSerializer()->normalize($individualRanking, 'json'));
+        return $this->json($this->getSerializer()->normalize($individualRanking, 'json'), 200, self::CACHE_FOR_A_MINUTE);
     }
 
     private function generateRankingTitle(Season $season, string $army): string {

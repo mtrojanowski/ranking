@@ -26,15 +26,7 @@ class RankingFixtures extends TournamentFixture
         $manager->persist($currentSeason);
 
         // Create previous season
-        $previousSeason = new Season();
-        $previousSeason->setName('Previous season');
-        $previousSeason->setActive(false);
-        $previousSeason->setEndDate('2019-12-31');
-        $previousSeason->setStartDate('2019-01-01');
-        $previousSeason->setLimitOfMasterTournaments(4);
-        $previousSeason->setLimitOfPairMasterTournaments(1);
-        $previousSeason->setLimitOfTeamMasterTournaments(2);
-        $previousSeason->setLimitOfTournaments(10);
+        $previousSeason = FixturesBase::getSeason(false, new \DateTime('2019-01-01'), new \DateTime('2019-12-31'));
         $manager->persist($previousSeason);
 
         //Add tournaments with results for current season

@@ -70,8 +70,8 @@ EOL;
 
         // Verify Last updated is within last 5 seconds
         $now = time();
-        $this->assertLessThanOrEqual($now, $season->getRankingLastModified());
-        $this->assertGreaterThanOrEqual($now - 5, $season->getRankingLastModified());
+        $this->assertLessThanOrEqual($now, $season->getRankingLastModified()->getTimestamp());
+        $this->assertGreaterThanOrEqual($now - 5, $season->getRankingLastModified()->getTimestamp());
     }
 
     // should create results for a tournament when legacyId used

@@ -1,6 +1,7 @@
 <?php
 namespace App\Document;
 
+use DateTime;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -56,7 +57,7 @@ class Season
     private $limitOfPairMasterTournaments;
 
     /**
-     * @MongoDB\Field(type="timestamp")
+     * @MongoDB\Field(type="date")
      */
     private $rankingLastModified;
 
@@ -205,9 +206,9 @@ class Season
     }
 
     /**
-     * @return \MongoTimestamp
+     * @return DateTime
      */
-    public function getRankingLastModified()
+    public function getRankingLastModified(): DateTime
     {
         return $this->rankingLastModified;
     }

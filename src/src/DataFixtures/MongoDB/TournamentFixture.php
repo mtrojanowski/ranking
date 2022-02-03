@@ -44,18 +44,8 @@ abstract class TournamentFixture extends Fixture
             return $player;
     }
 
-    protected function createActiveSeason()
+    protected function createActiveSeason(): Season
     {
-        $currentSeason = new Season();
-        $currentSeason->setName('Current season');
-        $currentSeason->setActive(true);
-        $currentSeason->setEndDate('2120-12-31');
-        $currentSeason->setStartDate('2020-01-01');
-        $currentSeason->setLimitOfMasterTournaments(4);
-        $currentSeason->setLimitOfPairMasterTournaments(1);
-        $currentSeason->setLimitOfTeamMasterTournaments(2);
-        $currentSeason->setLimitOfTournaments(10);
-
-        return $currentSeason;
+        return FixturesBase::getSeason(true, new \DateTime('2020-01-01'), new \DateTime('2120-12-31'));
     }
 }

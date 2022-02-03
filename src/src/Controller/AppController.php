@@ -11,6 +11,10 @@ class AppController extends AbstractController
 {
     private ?Serializer $serializer = null;
 
+    protected const CACHE_FOR_A_MINUTE = [
+        'Cache-Control' => 'public, max-age=60'
+    ];
+
     protected function getSerializer() : Serializer
     {
         if ($this->serializer == null) {
