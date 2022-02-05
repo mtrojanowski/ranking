@@ -56,7 +56,7 @@ EOL;
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var TournamentRepository $tournamentsRepository */
-        $tournamentsRepository = $dm->getRepository('App\Document\Tournament');
+        $tournamentsRepository = $dm->getRepository(Tournament::class);
 
         /** @var Tournament $updatedTournament */
         $updatedTournament = $tournamentsRepository->find(new ObjectId($tournamentId));
@@ -64,7 +64,7 @@ EOL;
         $this->assertEquals("OK", $updatedTournament->getStatus());
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
 
         $season = $seasonRepository->getActiveSeason();
 
@@ -99,7 +99,7 @@ EOL;
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var TournamentRepository $tournamentsRepository */
-        $tournamentsRepository = $dm->getRepository('App\Document\Tournament');
+        $tournamentsRepository = $dm->getRepository(Tournament::class);
 
         /** @var Tournament $updatedTournament */
         $updatedTournament = $tournamentsRepository->find(new ObjectId(TournamentResultsFixtures::TOURNAMENT_ID));
@@ -220,7 +220,7 @@ EOL;
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $dm->getRepository('App\Document\Result');
+        $resultsRepository = $dm->getRepository(Result::class);
 
         $tournamentResults = $resultsRepository->getTournamentResults($tournamentId);
 
@@ -245,10 +245,10 @@ EOL;
         /** @var ManagerRegistry $dm **/
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $dm->getRepository('App\Document\Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
 
         $season = $seasonRepository->getActiveSeason();
 
@@ -315,10 +315,10 @@ EOL;
         /** @var ManagerRegistry $dm **/
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $dm->getRepository('App\Document\Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $season = $seasonRepository->getActiveSeason();
 
         $rankingAfterFirstTournament = $rankingRepository->getRanking($season->getId());
@@ -367,10 +367,10 @@ EOL;
         /** @var ManagerRegistry $dm **/
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $dm->getRepository('App\Document\Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $season = $seasonRepository->getActiveSeason();
         $activeSeasonId = $season->getId();
 

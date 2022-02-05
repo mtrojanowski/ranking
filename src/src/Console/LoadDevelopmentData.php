@@ -55,7 +55,7 @@ EOF
         $command->run($fixturesInput, $output);
 
         // Get seasons from DB
-        $seasons = $this->documentManager->getRepository('App:Season')->findAll();
+        $seasons = $this->documentManager->getRepository(Season::class)->findAll();
 
         $initializeArmyRankingCommand = $this->getApplication()->find('ranking:army:initialize');
         $recalculateRankingCommand = $this->getApplication()->find('ranking:recalculate');

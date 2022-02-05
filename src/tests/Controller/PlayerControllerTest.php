@@ -46,7 +46,7 @@ class PlayerControllerTest extends WebTestCase
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var PlayerRepository $playersRepository */
-        $playersRepository = $dm->getRepository('App\Document\Player');
+        $playersRepository = $dm->getRepository(Player::class);
 
         $players = $playersRepository->findBy(['legacyId' => 100]);
 

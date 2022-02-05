@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DataFixtures\MongoDB\ArchiveSeasonsFixtures;
 use App\DataFixtures\MongoDB\RankingFixtures;
+use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
@@ -29,7 +30,7 @@ class RankingControllerTest extends WebTestCase
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $season = $seasonRepository->getActiveSeason();
 
         $results = json_decode($client->getResponse()->getContent());
@@ -51,7 +52,7 @@ class RankingControllerTest extends WebTestCase
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $inactiveSeason = $seasonRepository->findOneBy(['active' => 0]);
         $inactiveSeasonId = $inactiveSeason->getId();
 
@@ -81,7 +82,7 @@ class RankingControllerTest extends WebTestCase
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $season = $seasonRepository->getActiveSeason();
 
         $results = json_decode($client->getResponse()->getContent());
@@ -102,7 +103,7 @@ class RankingControllerTest extends WebTestCase
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $inactiveSeason = $seasonRepository->findOneBy(['active' => 0]);
         $inactiveSeasonId = $inactiveSeason->getId();
 
@@ -152,7 +153,7 @@ class RankingControllerTest extends WebTestCase
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App\Document\Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $inactiveSeason = $seasonRepository->findOneBy(['active' => 0]);
         $inactiveSeasonId = $inactiveSeason->getId();
 
@@ -199,7 +200,7 @@ class RankingControllerTest extends WebTestCase
     {
         $tournamentId = $results->ranking[0]->tournamentsIncluded[0];
         /** @var TournamentRepository $tournamentsRepository **/
-        $tournamentsRepository = $dm->getRepository('App\Document\Tournament');
+        $tournamentsRepository = $dm->getRepository(Tournament::class);
         /** @var Tournament $tournament */
         $tournament = $tournamentsRepository->findOneBy(["legacyId" => $tournamentId]);
         $this->assertEquals($season->getId(), $tournament->getSeason());

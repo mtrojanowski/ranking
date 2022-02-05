@@ -14,7 +14,7 @@ class SeasonsController extends AppController
 
     public function listArchive(DocumentManager $dm): JsonResponse {
         $seasons = $dm
-            ->getRepository('App:Season')
+            ->getRepository(Season::class)
             ->findBy(['active' => false], ['endDate' => -1]);
 
         $seasonDtos = [];

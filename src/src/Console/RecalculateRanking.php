@@ -35,7 +35,7 @@ class RecalculateRanking extends Command
             ->addArgument('seasonId', InputArgument::OPTIONAL, 'ID of the season to recalculate. The active season is recalculated by default.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
             'Recalculate ranking',
@@ -47,15 +47,15 @@ class RecalculateRanking extends Command
 
         if (empty($seasonId)) {
             /** @var Season $season */
-            $season = $this->documentManager->getRepository('App:Season')->getActiveSeason();
+            $season = $this->documentManager->getRepository(Season::class)->getActiveSeason();
             $seasonId = $season->getId();
         } else {
-            $season = $this->documentManager->getRepository('App:Season')->find($seasonId);
+            $season = $this->documentManager->getRepository(Season::class)->find($seasonId);
         }
 
         $output->writeln("Recalculating ranking for season: {$season->getName()}(ID: {$seasonId}) ");
 
-        $rankingRepository = $this->documentManager->getRepository('App:Ranking');
+        $rankingRepository = $this->documentManager->getRepository(Ranking::class);
         $rankings = $rankingRepository->findBy(['seasonId' => $seasonId]);
 
         $toRecalculate = count($rankings);

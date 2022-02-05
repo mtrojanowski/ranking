@@ -26,7 +26,7 @@ class TournamentsServiceTest extends TestCase
             ->with(["123", "456", "789"])
             ->willReturn([["legacyId" => "123"], ["legacyId" => "456"]]);
 
-        $registry = $this->getRegistryMock('App:Player', $playerRepository);
+        $registry = $this->getRegistryMock(Player::class, $playerRepository);
 
         $tournamentService = new TournamentsService($registry);
 
@@ -73,7 +73,7 @@ class TournamentsServiceTest extends TestCase
             ->with(["123", "456", "456"])
             ->willReturn([["legacyId" => "123"], ["legacyId" => "456"]]);
 
-        $registry = $this->getRegistryMock('App:Player', $playerRepository);
+        $registry = $this->getRegistryMock(Player::class, $playerRepository);
 
         $tournamentService = new TournamentsService($registry);
 

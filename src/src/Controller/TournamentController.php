@@ -5,6 +5,7 @@ use App\Controller\dto\TournamentDataDto;
 use App\Controller\dto\TournamentDataResult;
 use App\Document\Player;
 use App\Document\Result;
+use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\PlayerRepository;
 use App\Repository\ResultsRepository;
@@ -27,11 +28,11 @@ class TournamentController extends AppController
         }
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App:Season');
+        $seasonRepository = $dm->getRepository(Season::class);
         $activeSeason = $seasonRepository->getActiveSeason();
 
         /** @var TournamentRepository $repository */
-        $repository = $dm->getRepository('App:Tournament');
+        $repository = $dm->getRepository(Tournament::class);
         $tournaments = $repository->getTournaments($previous, $activeSeason->getId());
 
         foreach ($tournaments as $tournament) {
@@ -69,11 +70,11 @@ class TournamentController extends AppController
 
     public function getTournament(DocumentManager $dm, string $id)
     {
-        $tournamentRepository = $dm->getRepository('App:Tournament');
+        $tournamentRepository = $dm->getRepository(Tournament::class);
         /** @var Tournament $tournament */
         $tournament = $tournamentRepository->find($id);
         /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $dm->getRepository('App:Result');
+        $resultsRepository = $dm->getRepository(Result::class);
         $results = $resultsRepository->findBy(['tournamentId' => (string)$tournament->getLegacyId()], ['place' => 1]);
 
         $playerIds = [];
@@ -86,7 +87,7 @@ class TournamentController extends AppController
         }
 
 
-        $playersRepository = $dm->getRepository('App:Player');
+        $playersRepository = $dm->getRepository(Player::class);
         /** @var PlayerRepository $playersRepository */
         $players = $playersRepository->getPlayersByIds($playerIds);
 

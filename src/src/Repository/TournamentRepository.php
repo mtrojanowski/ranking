@@ -51,7 +51,7 @@ class TournamentRepository extends DocumentRepository
         return $queryBuilder->getQuery()->execute()->toArray();
     }
 
-    public function getById($id): Tournament {
+    public function getById($id): ?Tournament {
         // First try with id as ObjectId
         /** @var Tournament $tournament */
         $tournament = null;

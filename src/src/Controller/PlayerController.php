@@ -17,7 +17,7 @@ class PlayerController extends AppController
 
     public function listPlayers(DocumentManager $dm): JsonResponse {
         $players = $dm
-            ->getRepository('App:Player')
+            ->getRepository(Player::class)
             ->findAll();
 
         $playerDtos = [];
@@ -42,7 +42,7 @@ class PlayerController extends AppController
         }
 
         /** @var PlayerRepository $playerRepository */
-        $playerRepository = $mongoManager->getRepository('App\Document\Player');
+        $playerRepository = $mongoManager->getRepository(Player::class);
 
         if ($player->getLegacyId() == null) {
             $player->setLegacyId((string)($playerRepository->getHighestLegacyId() + 1));

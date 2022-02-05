@@ -39,10 +39,10 @@ class RankingController extends AppController
 
     public function list(Request $request, DocumentManager $dm, string $seasonId = null) {
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $dm->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App:Season');
+        $seasonRepository = $dm->getRepository(Season::class);
 
         if (!$seasonId) {
             $season = $seasonRepository->getActiveSeason();
@@ -86,7 +86,7 @@ class RankingController extends AppController
 
     public function individual(Request $request, DocumentManager $dm, string $playerId, string $seasonId = null) {
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $dm->getRepository('App:Season');
+        $seasonRepository = $dm->getRepository(Season::class);
 
         if (!$seasonId) {
             // Try to get seasonId from Query
@@ -99,10 +99,10 @@ class RankingController extends AppController
             }
         }
 
-        $playersResults = $dm->getRepository('App:Result')
+        $playersResults = $dm->getRepository(Result::class)
             ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
         /** @var Ranking $rankingData */
-        $rankingData = $dm->getRepository('App:Ranking')
+        $rankingData = $dm->getRepository(Ranking::class)
             ->findOneBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
 
         $tournamentIds = [];
@@ -114,7 +114,7 @@ class RankingController extends AppController
             $resultsByTournament[$result->getTournamentId()] = $result;
         }
 
-        $tournaments = $dm->getRepository('App:Tournament')
+        $tournaments = $dm->getRepository(Tournament::class)
             ->findTournaments($tournamentIds);
 
         $individualTournaments = [];

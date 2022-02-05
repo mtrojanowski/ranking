@@ -8,13 +8,13 @@
   - name: ensure python-apt and unzip are installed
     apt: name='python-apt,unzip'
 
-#  - name: add php repository
-#    apt_repository:
-#      repo: 'ppa:ondrej/php'
-#      update_cache: true
+  - name: add php repository
+    apt_repository:
+      repo: 'ppa:ondrej/php'
+      update_cache: true
 
-  - name: ensure php 7.4 is installed
-    apt: name='php,php-zip,php-xml,php-mbstring,php-intl,php-mongodb'
+  - name: ensure php 8.1 is installed
+    apt: name='php8.1,php8.1-zip,php8.1-xml,php8.1-mbstring,php8.1-intl,php8.1-mongodb'
 
   - name: ensure getcomposer is executable
     file: 
@@ -57,6 +57,16 @@
       name: mongod
       state: started
 
+  - name: create a list file for symfony-cli
+    shell:  echo 'deb [trusted=yes] https://repo.symfony.com/apt/ /' | sudo tee /etc/apt/sources.list.d/symfony-cli.list
+    args:
+      creates: /etc/apt/sources.list.d/symfony-cli.list
+
+  - name: install symfony-cli
+    apt:
+      name: symfony-cli
+      update_cache: true
+
   - name: Download nodejs install script
     get_url:
       url: https://deb.nodesource.com/setup_14.x
@@ -77,6 +87,6 @@
     shell: npm install -g npm
 
 
-#  - name: ensure php 7.4 is the default
-#    shell: update-alternatives --set php /usr/bin/php7.4
+  - name: ensure php 8.1 is the default
+    shell: update-alternatives --set php /usr/bin/php8.1
 

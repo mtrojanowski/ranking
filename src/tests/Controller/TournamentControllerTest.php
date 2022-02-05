@@ -76,7 +76,7 @@ EOL;
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
         /** @var TournamentRepository $tournamentsRepository */
-        $tournamentsRepository = $dm->getRepository('App\Document\Tournament');
+        $tournamentsRepository = $dm->getRepository(Tournament::class);
 
         /** @var Tournament $newTournament */
         $newTournament = $tournamentsRepository->findOneBy(['legacyId' => $tournamentId]);

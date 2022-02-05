@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\dto\Result;
 use App\Controller\dto\TournamentResults;
+use App\Document\Ranking;
 use App\Document\Season;
 use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
@@ -52,7 +53,7 @@ class ResultsController extends AppController
         }
 
         /** @var TournamentRepository $tournamentRepository */
-        $tournamentRepository = $dm->getRepository('App:Tournament');
+        $tournamentRepository = $dm->getRepository(Tournament::class);
 
         $tournament = $tournamentRepository->getById($tournamentResults->getTournamentId());
 
@@ -76,7 +77,7 @@ class ResultsController extends AppController
         }
 
         /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $dm->getRepository('App:Result');
+        $resultsRepository = $dm->getRepository(\App\Document\Result::class);
         $currentResults = $this->popCurrentTournamentResults($tournament->getLegacyId(), $resultsRepository);
 
         foreach ($results as $result) {
@@ -86,10 +87,10 @@ class ResultsController extends AppController
         $dm->flush();
 
         /** @var Season $season */
-        $season = $dm->getRepository('App:Season')->find($tournament->getSeason());
+        $season = $dm->getRepository(Season::class)->find($tournament->getSeason());
 
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $dm->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         $resultsToRecalculate = [];
 

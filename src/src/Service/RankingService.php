@@ -25,7 +25,7 @@ class RankingService
         $newRanking = $currentRanking;
 
         /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $this->managerRegistry->getRepository('App:Result');
+        $resultsRepository = $this->managerRegistry->getRepository(\App\Document\Result::class);
 
         if ($currentRanking->getArmy() == "") {
             $results = $resultsRepository->getPlayersResults($currentRanking->getPlayerId(), $season->getId());
@@ -124,7 +124,7 @@ class RankingService
 
     public function createInitialRanking($playerId, $seasonId, $army = "") : Ranking
     {
-        $playerRepository = $this->managerRegistry->getRepository('App:Player');
+        $playerRepository = $this->managerRegistry->getRepository(Player::class);
         /** @var Player $player */
         $player = $playerRepository->findOneBy([ 'legacyId' => $playerId ]);
 
