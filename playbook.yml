@@ -14,7 +14,7 @@
       update_cache: true
 
   - name: ensure php 8.1 is installed
-    apt: name='php8.1,php8.1-zip,php8.1-xml,php8.1-mbstring,php8.1-intl,php8.1-mongodb'
+    apt: name='php8.1,php8.1-zip,php8.1-xml,php8.1-mbstring,php8.1-intl,php8.1-mongodb,php8.1-curl'
 
   - name: ensure getcomposer is executable
     file: 
@@ -25,6 +25,17 @@
     command: /vagrant/files/getcomposer.sh
     args:
       creates: /usr/local/bin/composer
+
+  - name: ensure security checker is executable
+    file:
+      path: /vagrant/files/local-php-security-checker
+      mode: "+x"
+
+  - name: link security checker to bin dir
+    file:
+      src: /vagrant/files/local-php-security-checker
+      dest: /usr/local/bin/local-php-security-checker
+      state: link
 
   - name: stop apache2
     service:

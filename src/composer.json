@@ -9,12 +9,12 @@
         "alcaeus/mongo-php-adapter": "^1.1",
         "doctrine/mongodb-odm-bundle": "^4.2",
         "guzzlehttp/guzzle": "^7.2",
-        "sensiolabs/security-checker": "^6.0",
         "symfony/console": "^5.4",
-        "symfony/flex": "^1.0",
+        "symfony/flex": "^2.1",
         "symfony/framework-bundle": "^5.4",
         "symfony/monolog-bundle": "^3.4",
         "symfony/property-access": "^5.4",
+        "symfony/runtime": "5.4.*",
         "symfony/serializer": "^5.4",
         "symfony/twig-bundle": "^5.4",
         "symfony/webpack-encore-bundle": "^1.8",
@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "liip/test-fixtures-bundle": "^1.0.0",
+        "liip/test-fixtures-bundle": "^2.2.1",
         "symfony/browser-kit": "^5.4",
         "symfony/dotenv": "^5.4",
         "symfony/phpunit-bridge": "^6.0",
@@ -38,7 +38,8 @@
             "ext-mongo": "1.6.16"
         },
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     },
     "autoload": {
@@ -60,9 +61,9 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "security-checker security:check": "script",
-            "yarn install": "script",
-            "if [$COMPOSER_DEV_MODE -eq 0] \n then \n yarn run encore production \n else \n yarn run encore dev \n fi": "script",
+            "npm install": "script",
+            "local-php-security-checker": "script",
+            "if [$COMPOSER_DEV_MODE -eq 0] \n then \n npm run build \n else \n npm run dev \n fi": "script",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [

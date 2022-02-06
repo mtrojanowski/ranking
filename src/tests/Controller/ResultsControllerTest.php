@@ -13,25 +13,24 @@ use App\Repository\RankingRepository;
 use App\Repository\ResultsRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\Persistence\ManagerRegistry;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use MongoDB\BSON\ObjectId;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ResultsControllerTest extends WebTestCase
 {
-    use FixturesTrait;
 
     // should create results for a tournament and change status to OK and lastModified on ranking to current datetime, code 201
     public function testShouldCreateResults()
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_ID;
 
@@ -79,9 +78,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_LEGACY_ID;
 
@@ -132,9 +131,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::INVALID_TYPE_TOURNAMENT_ID;
 
@@ -156,9 +155,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_ID;
 
@@ -180,9 +179,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_LEGACY_ID;
 
@@ -236,9 +235,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $this->sendFirstTournamentResults($client, TournamentResultsFixtures::DIFFERENT_TOURNAMENT_ID);
 
@@ -305,9 +304,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_ID;
         $this->sendFirstTournamentResults($client, $tournamentId);
@@ -357,9 +356,9 @@ EOL;
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentResultsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $tournamentId = TournamentResultsFixtures::TOURNAMENT_ID;
         $this->sendFirstTournamentResults($client, $tournamentId);
@@ -413,5 +412,9 @@ EOL;
 EOL;
         $client->request('POST', '/api/tournament-results', [], [], ["HTTP_CONTENT_TYPE" => "application/json"], $body);
 
+    }
+
+    private function getDocumentManager(): AbstractDatabaseTool {
+        return static::getContainer()->get(DatabaseToolCollection::class)->get(null, 'doctrine_mongodb');
     }
 }

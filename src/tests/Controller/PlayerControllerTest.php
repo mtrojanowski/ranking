@@ -5,19 +5,18 @@ use App\DataFixtures\MongoDB\AppFixtures;
 use App\DataFixtures\MongoDB\OnePlayerFixtures;
 use App\Document\Player;
 use App\Repository\PlayerRepository;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PlayerControllerTest extends WebTestCase
 {
-    use FixturesTrait;
-
     public function testGetPlayersList() {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             AppFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/players');
 
@@ -58,9 +57,9 @@ class PlayerControllerTest extends WebTestCase
     public function testCreatePlayerWithSameIdShouldThrowException() {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             OnePlayerFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $playerData = [
             'legacyId'    => 1000,
@@ -78,9 +77,9 @@ class PlayerControllerTest extends WebTestCase
 
     public function testCreatePlayerShouldSetNextLegacyIdAutomatically() {
         $client = static::createClient();
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             OnePlayerFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $playerData = [
             'name'        => 'Tester',
@@ -106,5 +105,9 @@ class PlayerControllerTest extends WebTestCase
         $this->assertEquals($playerArray['country'], $player->getCountry(), 'Country does not equal');
         $this->assertEquals($playerArray['nickname'], $player->getNickname(), 'Nickname does not equal');
         $this->assertEquals($playerArray['town'], $player->getTown(), 'Town does not equal');
+    }
+
+    private function getDocumentManager(): AbstractDatabaseTool {
+        return static::getContainer()->get(DatabaseToolCollection::class)->get(null, 'doctrine_mongodb');
     }
 }

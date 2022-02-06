@@ -4,13 +4,12 @@ namespace App\Controller;
 use App\DataFixtures\MongoDB\TournamentListFixtures;
 use App\Document\Tournament;
 use App\Repository\TournamentRepository;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TournamentControllerTest extends WebTestCase
 {
-    use FixturesTrait;
-
     public function testListTournamentsShouldRequirePreviousParameter() {
         $client = static::createClient();
 
@@ -22,9 +21,9 @@ class TournamentControllerTest extends WebTestCase
     public function testListTournamentsShouldReturnPreviousTournaments() {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentListFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/tournaments?previous=true');
 
@@ -41,9 +40,9 @@ class TournamentControllerTest extends WebTestCase
     public function testListTournamentsShouldReturnFutureTournaments() {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentListFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/tournaments?previous=false');
 
@@ -89,9 +88,9 @@ EOL;
     public function testGetTournamentShouldReturnTournamentWithResults() {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             TournamentListFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/tournaments/5fca99fd752742d853ccfd23');
 
@@ -102,5 +101,9 @@ EOL;
         $this->assertEquals(1123, $tournamentData->legacyId);
         $this->assertCount(10, $tournamentData->results);
         $this->assertEquals(1000, $tournamentData->results[0]->playerId);
+    }
+
+    private function getDocumentManager(): AbstractDatabaseTool {
+        return static::getContainer()->get(DatabaseToolCollection::class)->get(null, 'doctrine_mongodb');
     }
 }

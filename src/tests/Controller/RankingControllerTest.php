@@ -8,20 +8,19 @@ use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RankingControllerTest extends WebTestCase
 {
-    use FixturesTrait;
-
     public function testShouldReturnRankingForActiveSeasonByDefault()
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/ranking', [], [], ["HTTP_CONTENT_TYPE" => "application/json"]);
 
@@ -45,9 +44,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
@@ -71,9 +70,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/ranking', ["army" => "VC"], [], ["HTTP_CONTENT_TYPE" => "application/json"]);
 
@@ -96,9 +95,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
@@ -122,9 +121,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/ranking-individual/1001', [], [], ["HTTP_CONTENT_TYPE" => "application/json"]);
 
@@ -146,9 +145,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             RankingFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $dm = $client->getContainer()->get('doctrine_mongodb');
 
@@ -177,9 +176,9 @@ class RankingControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->loadFixtures([
+        $this->getDocumentManager()->loadFixtures([
             ArchiveSeasonsFixtures::class
-        ], false, null, 'doctrine_mongodb');
+        ], false);
 
         $client->request('GET', '/api/archive-seasons', [], [], ["HTTP_CONTENT_TYPE" => "application/json"]);
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'Response status is not 200');
@@ -204,5 +203,9 @@ class RankingControllerTest extends WebTestCase
         /** @var Tournament $tournament */
         $tournament = $tournamentsRepository->findOneBy(["legacyId" => $tournamentId]);
         $this->assertEquals($season->getId(), $tournament->getSeason());
+    }
+
+    private function getDocumentManager(): AbstractDatabaseTool {
+        return static::getContainer()->get(DatabaseToolCollection::class)->get(null, 'doctrine_mongodb');
     }
 }

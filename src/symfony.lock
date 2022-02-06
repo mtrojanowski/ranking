@@ -161,18 +161,6 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
-    "sensiolabs/security-checker": {
-        "version": "6.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.0",
-            "ref": "160c9b600564faa1224e8f387d49ef13ceb8b793"
-        },
-        "files": [
-            "config/packages/security_checker.yaml"
-        ]
-    },
     "symfony/asset": {
         "version": "v4.2.0"
     },
@@ -264,20 +252,11 @@
             "src/Kernel.php"
         ]
     },
-    "symfony/http-client": {
-        "version": "v4.3.1"
-    },
-    "symfony/http-client-contracts": {
-        "version": "v1.1.5"
-    },
     "symfony/http-foundation": {
         "version": "v4.0.6"
     },
     "symfony/http-kernel": {
         "version": "v4.0.6"
-    },
-    "symfony/mime": {
-        "version": "v5.1.8"
     },
     "symfony/monolog-bridge": {
         "version": "v4.2.9"
@@ -321,9 +300,6 @@
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.24.0"
     },
-    "symfony/polyfill-intl-idn": {
-        "version": "v1.20.0"
-    },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.20.0"
     },
@@ -363,6 +339,9 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/runtime": {
+        "version": "v5.4.3"
     },
     "symfony/serializer": {
         "version": "v4.0.6"
