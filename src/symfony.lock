@@ -78,12 +78,11 @@
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "master",
-            "version": "3.3",
-            "ref": "1fd8598bf42227a1c8905edd32f640e4c5d15eff"
+            "version": "4.1",
+            "ref": "68562ca89de9f97a952535cd3eee49f5541b76a7"
         },
         "files": [
             "config/packages/doctrine_mongodb.yaml",
-            "config/packages/prod/doctrine_mongodb.yaml",
             "src/Document/.gitignore"
         ]
     },
