@@ -1,7 +1,7 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Repository\DocumentRepository;
 
 class RankingRepository extends DocumentRepository
 {
@@ -11,8 +11,13 @@ class RankingRepository extends DocumentRepository
         $queryBuilder
             ->field("seasonId")->equals($seasonId)
             ->field('army')->equals($army)
-            ->sort(['points' => -1, 'tournamentsCount' => -1]);
+            ->sort(['points' => -1, 'tournamentsCount' => -1])
+        ->refresh(true);
 
-        return $queryBuilder->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
+        $query = $queryBuilder->getQuery();
+        $query->setRefresh(true);
+
+        return $query->execute()->toArray();
     }
+
 }

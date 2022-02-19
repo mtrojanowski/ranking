@@ -4,11 +4,12 @@ namespace App\Service;
 use App\Controller\dto\TournamentResults;
 use App\Controller\dto\Result;
 use App\Document\Player;
+use App\Document\Season;
 use App\Document\Tournament;
 use App\Exception\IncorrectPlayersException;
 use App\Repository\PlayerRepository;
 use App\Repository\SeasonRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class TournamentsService
 {
@@ -22,13 +23,13 @@ class TournamentsService
     public function prepareTournament(Tournament $tournament)
     {
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $this->managerRegistry->getRepository('App:Season');
+        $seasonRepository = $this->managerRegistry->getRepository(Season::class);
         $activeSeason = $seasonRepository->getActiveSeason();
 
         $tournament->setSeason($activeSeason->getId());
         $tournament->setStatus("NEW");
 
-        $lastId = $this->managerRegistry->getRepository('App:Tournament')->getLastLegacyId();
+        $lastId = $this->managerRegistry->getRepository(Tournament::class)->getLastLegacyId();
         $tournament->setLegacyId($lastId + 1);
 
         return $tournament;
@@ -47,7 +48,7 @@ class TournamentsService
         }
 
         /** @var PlayerRepository $playerRepository */
-        $playerRepository = $this->managerRegistry->getRepository('App:Player');
+        $playerRepository = $this->managerRegistry->getRepository(Player::class);
         $playersInDb = $playerRepository->getPlayersIds($playerIds);
 
         if (count($playersInDb) !== count($playerIds)) {

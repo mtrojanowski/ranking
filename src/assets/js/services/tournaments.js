@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import MissingDataException from "../exceptions/MissingDataException";
 import WrongPlayersInTeamException from "../exceptions/WrongPlayersInTeamException";
 

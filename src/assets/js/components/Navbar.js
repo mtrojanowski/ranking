@@ -70,62 +70,9 @@ export default class Navbar extends Component {
                             <Link to="/army-ranking/WDG" className="nav-link text-dark">Warriors of the Dark Gods</Link>
                         </div>
                     </li>
-                    <li className="dropdown nav-item">
-                        <a href="" id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">
-                            Rankingi archiwalne
-                        </a>
-                        <div className="dropdown-menu nav-item dropright">
-                            <div className="dropdown-submenu">
-                                <a href="" id="label2018" className="nav-link submenu-link text-dark">2018</a>
-                                <div className="dropdown-menu nav-item archive-submenu" aria-labelledby="label2018">
-                                    <Link to="/ranking/5b0d7c33fd0f9b6a4991169b" className="nav-link text-dark">Generalny</Link>
-                                    <div className="dropdown-divider" />
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/BH" className="nav-link text-dark">Beast Herds</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/DL" className="nav-link text-dark">Daemon Legions</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/DE" className="nav-link text-dark">Dread Elves</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/DH" className="nav-link text-dark">Dwarven Holds</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/EOS" className="nav-link text-dark">Empire of Sonnstahl</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/HE" className="nav-link text-dark">Highborn Elves</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/ID" className="nav-link text-dark">Infernal Dwarves</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/KOE" className="nav-link text-dark">Kingdom of Equitaine</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/OK" className="nav-link text-dark">Ogre Khans</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/OG" className="nav-link text-dark">Orcs and Goblins</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/SA" className="nav-link text-dark">Saurian Ancients</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/SE" className="nav-link text-dark">Sylvan Elves</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/VS" className="nav-link text-dark">The Vermin Swarm</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/UD" className="nav-link text-dark">Undying Dynasties</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/VC" className="nav-link text-dark">Vampire Covenant</Link>
-                                    <Link to="/army-ranking/5b0d7c33fd0f9b6a4991169b/WDG" className="nav-link text-dark">Warriors of the Dark Gods</Link>
-
-                                </div>
-                            </div>
-                            <div className="dropdown-submenu">
-                                <a href="" id="label2019" className="nav-link submenu-link text-dark">2019</a>
-                                <div className="dropdown-menu nav-item archive-submenu" aria-labelledby="label2019">
-                                    <Link to="/ranking/5c36642979dab7965c7e5d23" className="nav-link text-dark">Generalny</Link>
-                                    <div className="dropdown-divider" />
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/BH" className="nav-link text-dark">Beast Herds</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/DL" className="nav-link text-dark">Daemon Legions</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/DE" className="nav-link text-dark">Dread Elves</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/DH" className="nav-link text-dark">Dwarven Holds</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/EOS" className="nav-link text-dark">Empire of Sonnstahl</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/HE" className="nav-link text-dark">Highborn Elves</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/ID" className="nav-link text-dark">Infernal Dwarves</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/KOE" className="nav-link text-dark">Kingdom of Equitaine</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/OK" className="nav-link text-dark">Ogre Khans</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/OG" className="nav-link text-dark">Orcs and Goblins</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/SA" className="nav-link text-dark">Saurian Ancients</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/SE" className="nav-link text-dark">Sylvan Elves</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/VS" className="nav-link text-dark">The Vermin Swarm</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/UD" className="nav-link text-dark">Undying Dynasties</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/VC" className="nav-link text-dark">Vampire Covenant</Link>
-                                    <Link to="/army-ranking/5c36642979dab7965c7e5d23/WDG" className="nav-link text-dark">Warriors of the Dark Gods</Link>
-
-                                </div>
-                            </div>
-                        </div>
+                    <li className="nav-item">
+                        <Link to="/archive-seasons" className="nav-link">Rankingi archiwalne</Link>
                     </li>
-
                     <li className="nav-item">
                         <Link
                             to="/add-tournament"

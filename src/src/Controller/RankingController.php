@@ -12,6 +12,7 @@ use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\RankingRepository;
 use App\Repository\SeasonRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class RankingController extends AppController
@@ -36,13 +37,12 @@ class RankingController extends AppController
         "ID" => "Infernal Dwrves",
     ];
 
-    public function list(Request $request, string $seasonId = null) {
+    public function list(Request $request, DocumentManager $dm, string $seasonId = null) {
         /** @var RankingRepository $rankingRepository */
-        $rankingRepository = $this->getMongo()
-            ->getRepository('App:Ranking');
+        $rankingRepository = $dm->getRepository(Ranking::class);
 
         /** @var SeasonRepository $seasonRepository */
-        $seasonRepository = $this->getMongo()->getRepository('App:Season');
+        $seasonRepository = $dm->getRepository(Season::class);
 
         if (!$seasonId) {
             $season = $seasonRepository->getActiveSeason();
@@ -75,17 +75,34 @@ class RankingController extends AppController
             );
         }
 
-        $modificationDate = $season->getRankingLastModified() != null ? new \DateTime('@'.$season->getRankingLastModified()) : null;
+        $modificationDate = $season->getRankingLastModified();
         $rankingData = new RankingDataDto($ranking, $modificationDate, $this->generateRankingTitle($season, $army));
 
-        return $this->json($this->getSerializer()->normalize($rankingData, 'json'));
+        $headers = self::CACHE_FOR_A_MINUTE;
+        $headers['Last-Modified'] = $modificationDate->format("D, d M Y H:i:s") . "GMT";
+
+        return $this->json($this->getSerializer()->normalize($rankingData, 'json'), 200, $headers);
     }
 
-    public function individual($seasonId, $playerId) {
-        $playersResults = $this->getMongo()->getRepository('App:Result')
+    public function individual(Request $request, DocumentManager $dm, string $playerId, string $seasonId = null) {
+        /** @var SeasonRepository $seasonRepository */
+        $seasonRepository = $dm->getRepository(Season::class);
+
+        if (!$seasonId) {
+            // Try to get seasonId from Query
+            $seasonId = $request->get('seasonId');
+
+            if (!$seasonId) {
+                // Get active season by default
+                $season = $seasonRepository->getActiveSeason();
+                $seasonId = $season->getId();
+            }
+        }
+
+        $playersResults = $dm->getRepository(Result::class)
             ->findBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
         /** @var Ranking $rankingData */
-        $rankingData = $this->getMongo()->getRepository('App:Ranking')
+        $rankingData = $dm->getRepository(Ranking::class)
             ->findOneBy(['seasonId' => $seasonId, 'playerId' => $playerId]);
 
         $tournamentIds = [];
@@ -97,7 +114,7 @@ class RankingController extends AppController
             $resultsByTournament[$result->getTournamentId()] = $result;
         }
 
-        $tournaments = $this->getMongo()->getRepository('App:Tournament')
+        $tournaments = $dm->getRepository(Tournament::class)
             ->findTournaments($tournamentIds);
 
         $individualTournaments = [];
@@ -119,7 +136,7 @@ class RankingController extends AppController
                 $result->getPoints(),
                 $result->getArmy(),
                 isset($includedTournaments[$tournament->getLegacyId()]),
-                isset($includedTournaments[$tournament->getLegacyId()]) ? $includedTournaments[$tournament->getLegacyId()] : 0,
+                $includedTournaments[$tournament->getLegacyId()] ?? 0,
                 $result->getJudge() ?: 0
             );
         }
@@ -138,7 +155,7 @@ class RankingController extends AppController
             $individualTournaments
         );
 
-        return $this->json($this->getSerializer()->normalize($individualRanking, 'json'));
+        return $this->json($this->getSerializer()->normalize($individualRanking, 'json'), 200, self::CACHE_FOR_A_MINUTE);
     }
 
     private function generateRankingTitle(Season $season, string $army): string {

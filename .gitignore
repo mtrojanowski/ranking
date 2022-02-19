@@ -47,3 +47,6 @@ playbook.retry
 ubuntu*.log
 
 /backup/*
+/src/.env.local
+/src/.env.test.local
+

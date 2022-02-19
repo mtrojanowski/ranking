@@ -5,18 +5,21 @@ use App\Controller\dto\TournamentDataDto;
 use App\Controller\dto\TournamentDataResult;
 use App\Document\Player;
 use App\Document\Result;
+use App\Document\Season;
 use App\Document\Tournament;
 use App\Repository\PlayerRepository;
 use App\Repository\ResultsRepository;
+use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
 use App\Service\TournamentsService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 
 class TournamentController extends AppController
 {
-    public function listTournaments(Request $request)
+    public function listTournaments(Request $request, DocumentManager $dm)
     {
         $previous = $request->query->get('previous');
 
@@ -24,9 +27,13 @@ class TournamentController extends AppController
             return $this->json($this->getError('Parameter \'previous\' is required'), 400);
         }
 
+        /** @var SeasonRepository $seasonRepository */
+        $seasonRepository = $dm->getRepository(Season::class);
+        $activeSeason = $seasonRepository->getActiveSeason();
+
         /** @var TournamentRepository $repository */
-        $repository = $this->getMongo()->getRepository('App:Tournament');
-        $tournaments = $repository->getTournaments($previous);
+        $repository = $dm->getRepository(Tournament::class);
+        $tournaments = $repository->getTournaments($previous, $activeSeason->getId());
 
         foreach ($tournaments as $tournament) {
             $tournament->setDate($tournament->getDate()->format("d.m.Y"));
@@ -40,7 +47,7 @@ class TournamentController extends AppController
         );
     }
 
-    public function addTournament(Request $request, TournamentsService $tournamentsService)
+    public function addTournament(Request $request, TournamentsService $tournamentsService, DocumentManager $manager)
     {
         try {
             /** @var Tournament $tournament */
@@ -55,20 +62,19 @@ class TournamentController extends AppController
 
         $tournamentsService->prepareTournament($tournament);
 
-        $manager = $this->getMongo()->getManager();
         $manager->persist($tournament);
         $manager->flush();
 
         return $this->json(['id' => $tournament->getLegacyId()], 201);
     }
 
-    public function getTournament(string $id)
+    public function getTournament(DocumentManager $dm, string $id)
     {
-        $tournamentRepository = $this->getMongo()->getRepository('App:Tournament');
+        $tournamentRepository = $dm->getRepository(Tournament::class);
         /** @var Tournament $tournament */
         $tournament = $tournamentRepository->find($id);
         /** @var ResultsRepository $resultsRepository */
-        $resultsRepository = $this->getMongo()->getRepository('App:Result');
+        $resultsRepository = $dm->getRepository(Result::class);
         $results = $resultsRepository->findBy(['tournamentId' => (string)$tournament->getLegacyId()], ['place' => 1]);
 
         $playerIds = [];
@@ -81,7 +87,7 @@ class TournamentController extends AppController
         }
 
 
-        $playersRepository = $this->getMongo()->getRepository('App:Player');
+        $playersRepository = $dm->getRepository(Player::class);
         /** @var PlayerRepository $playersRepository */
         $players = $playersRepository->getPlayersByIds($playerIds);
 

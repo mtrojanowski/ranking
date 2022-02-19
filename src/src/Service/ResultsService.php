@@ -6,20 +6,17 @@ use App\Document\Result;
 use App\Document\Tournament;
 use App\Exception\HeadJudgeBonusException;
 use App\Exception\InvalidTournamentException;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\Query;
 
 class ResultsService
 {
     private $headJudgePoints = 150;
     private $lineJudgePoints = 100;
 
-    private $managerRegistry;
+    private $headJudgeBonusCheckerService;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(HeadJudgeBonusChecker $headJudgeBonusCheckerService = null)
     {
-        $this->managerRegistry = $managerRegistry;
+        $this->headJudgeBonusCheckerService = $headJudgeBonusCheckerService;
     }
 
     public function createTournamentResults(Tournament $tournament, TournamentResults $tournamentResults) : array
@@ -74,7 +71,7 @@ class ResultsService
             if ($tournamentResult->getJudge() == 0) {
                 $points = $this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
             } elseif ($tournamentResult->getJudge() == 1) {
-                if ($this->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId, $tournamentId)) {
+                if ($this->headJudgeBonusCheckerService->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId, $tournamentId)) {
                     throw new HeadJudgeBonusException();
                 }
                 $points = $this->headJudgePoints;
@@ -91,20 +88,6 @@ class ResultsService
         }
 
         return $results;
-    }
-
-    private function playerHasHeadJudgeBonus($playerId, $seasonId, string $tournamentId): bool
-    {
-        /** @var Query\Builder $qb */
-        $qb = $this->managerRegistry->getManager()->createQueryBuilder(Result::class);
-        $qb->field('seasonId')->equals($seasonId)
-        ->field('playerId')->equals($playerId)
-        ->field('judge')->equals(1)
-        ->field('tournamentId')->notEqual($tournamentId);
-
-        $headJudgeBonusesInSeason = $qb->getQuery()->execute()->setUseIdentifierKeys(false)->toArray();
-
-        return isset($headJudgeBonusesInSeason[0]);
     }
 
     private function createLocalTeamResults(TournamentResults $tournamentResults, string $seasonId, int $playersInTeam, string $tournamentRank, string $tournamentType) : array

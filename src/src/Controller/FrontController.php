@@ -1,9 +1,9 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class FrontController extends Controller
+class FrontController extends AbstractController
 {
     public function front()
     {

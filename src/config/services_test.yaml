@@ -7,3 +7,8 @@ services:
     # aliases are prefixed with test. For example:
     #
     # test.App\Service\MyService: '@App\Service\MyService'
+
+    App\DataFixtures\:
+        resource: '%kernel.project_dir%/src/DataFixtures'
+        exclude: '%kernel.project_dir%/src/DataFixtures/MongoDB/{Development,FixturesBase.php}'
+        tags: ['doctrine.fixture.orm']

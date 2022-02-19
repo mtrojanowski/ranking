@@ -13,8 +13,8 @@
       repo: 'ppa:ondrej/php'
       update_cache: true
 
-  - name: ensure php 7.2 is installed
-    apt: name='php7.2,php7.2-zip,php7.2-xml,php7.2-mbstring,php7.2-intl,php7.2-mongodb'
+  - name: ensure php 8.1 is installed
+    apt: name='php8.1,php8.1-zip,php8.1-xml,php8.1-mbstring,php8.1-intl,php8.1-mongodb,php8.1-curl'
 
   - name: ensure getcomposer is executable
     file: 
@@ -25,6 +25,17 @@
     command: /vagrant/files/getcomposer.sh
     args:
       creates: /usr/local/bin/composer
+
+  - name: ensure security checker is executable
+    file:
+      path: /vagrant/files/local-php-security-checker
+      mode: "+x"
+
+  - name: link security checker to bin dir
+    file:
+      src: /vagrant/files/local-php-security-checker
+      dest: /usr/local/bin/local-php-security-checker
+      state: link
 
   - name: stop apache2
     service:
@@ -39,13 +50,13 @@
 
   - name: add mongo repository key
     apt_key:
-      keyserver: hkp://keyserver.ubuntu.com:80
-      id: 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+       keyserver: https://www.mongodb.org/static/pgp/server-5.0.asc
+       id: B00A0BD1E2C63C11
 
   - name: create a list file for mongodb
-    shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+    shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
     args:
-      creates: /etc/apt/sources.list.d/mongodb-org-3.6.list
+      creates: /etc/apt/sources.list.d/mongodb-org-5.0.list
 
   - name: install mongo
     apt: 
@@ -57,9 +68,19 @@
       name: mongod
       state: started
 
+  - name: create a list file for symfony-cli
+    shell:  echo 'deb [trusted=yes] https://repo.symfony.com/apt/ /' | sudo tee /etc/apt/sources.list.d/symfony-cli.list
+    args:
+      creates: /etc/apt/sources.list.d/symfony-cli.list
+
+  - name: install symfony-cli
+    apt:
+      name: symfony-cli
+      update_cache: true
+
   - name: Download nodejs install script
     get_url:
-      url: https://deb.nodesource.com/setup_10.x 
+      url: https://deb.nodesource.com/setup_14.x
       dest: /tmp/install_node.sh
       mode: 777
 
@@ -72,23 +93,11 @@
     apt:
       name: nodejs
       update_cache: true
-  
-  - name: add yarn repository key
-    apt_key:
-      url: https://dl.yarnpkg.com/debian/pubkey.gpg
-      state: present
 
-  - name: add yarn source list
-    shell: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    args:
-      creates: /etc/apt/sources.list.d/yarn.list
+  - name: ensure npm is up to date
+    shell: npm install -g npm
 
-  - name: install yarn
-    apt:
-      name: yarn
-      install_recommends: false
-      update_cache: true
 
-  - name: ensure php 7.2 is the default
-    shell: update-alternatives --set php /usr/bin/php7.2
+  - name: ensure php 8.1 is the default
+    shell: update-alternatives --set php /usr/bin/php8.1
 

@@ -24,22 +24,22 @@ class Ranking
     private $playerId;
 
     /**
-     * @MongoDb\EmbedOne(targetDocument="RankingPlayer")
+     * @MongoDb\EmbedOne(targetDocument="App\Document\RankingPlayer")
      */
     private $player;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $points;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $tournamentCount;
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $tournamentsAttendedCount;
 
@@ -49,7 +49,7 @@ class Ranking
     private $tournamentsIncluded = [];
 
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\Field(type="int")
      */
     private $headJudgeBonusReceived;
 
