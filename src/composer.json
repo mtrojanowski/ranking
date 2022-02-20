@@ -62,7 +62,7 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "npm install": "script",
-            "local-php-security-checker": "script",
+            "if [$COMPOSER_DEV_MODE -neq 0] \n then \n local-php-security-checker \n fi": "script",
             "if [$COMPOSER_DEV_MODE -eq 0] \n then \n npm run build \n else \n npm run dev \n fi": "script",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
