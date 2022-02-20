@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Home from './Home';
 import Navbar from './Navbar';
-import Players from './Players';
-import PreviousTournaments from "./PreviousTournaments";
-import FutureTournaments from "./FutureTournaments";
-import Ranking from "./Ranking";
-import AddTournament from "./AddTournament";
-import Individual from "./Individual";
-import TournamentResults from "./TournamentResults";
-import ArchiveSeasons from "./ArchiveSeasons";
+import * as RankingRoutes from "../routes";
 
 export default class Main extends Component {
     render() {
@@ -18,22 +10,22 @@ export default class Main extends Component {
             <Router>
                 <div>
                     <Navbar />
-                    <Switch>
-                        <Route exact path="/" component={Ranking}/>
-                        <Route exact path="/home" component={Home}/>
-                        <Route exact path="/players" component={Players} />
-                        <Route exact path="/previous-tournaments" component={PreviousTournaments} />
-                        <Route exact path="/future-tournaments" component={FutureTournaments} />
-                        <Route exact path="/ranking" component={Ranking} />
-                        <Route path="/army-ranking/:seasonId/:army" component={Ranking} />
-                        <Route path="/army-ranking/:army" component={Ranking} />
-                        <Route path="/ranking/:seasonId/individual/:playerId" component={Individual} />
-                        <Route path="/ranking/individual/:playerId" component={Individual} />
-                        <Route path="/ranking/:seasonId" component={Ranking} />
-                        <Route exact path="/add-tournament" component={AddTournament} />
-                        <Route path="/tournament/:tournamentId" component={TournamentResults} />
-                        <Route path="/archive-seasons" component={ArchiveSeasons} />
-                    </Switch>
+                    <Routes>
+                        <Route exact path="/" element={<RankingRoutes.RankingRoute />} />
+                        <Route exact path="/home" element={<RankingRoutes.HomeRoute />}/>
+                        <Route exact path="/players" element={<RankingRoutes.PlayersRoute />} />
+                        <Route exact path="/previous-tournaments" element={<RankingRoutes.PreviousTournamentsRoute />} />
+                        <Route exact path="/future-tournaments" element={<RankingRoutes.FutureTournamentsRoute />} />
+                        <Route exact path="/ranking" element={<RankingRoutes.RankingRoute />} />
+                        <Route path="/army-ranking/:seasonId/:army" element={<RankingRoutes.RankingRoute />} />
+                        <Route path="/army-ranking/:army" element={<RankingRoutes.RankingRoute />} />
+                        <Route path="/ranking/:seasonId/individual/:playerId" element={<RankingRoutes.IndividualRoute />} />
+                        <Route path="/ranking/individual/:playerId" element={<RankingRoutes.IndividualRoute />} />
+                        <Route path="/ranking/:seasonId" element={<RankingRoutes.RankingRoute />} />
+                        <Route exact path="/add-tournament" element={<RankingRoutes.AddTournamentRoute />} />
+                        <Route path="/tournament/:tournamentId" element={<RankingRoutes.TournamentResultsRoute />} />
+                        <Route path="/archive-seasons" element={<RankingRoutes.ArchiveSeasonsRoute />} />
+                    </Routes>
                 </div>
             </Router>);
         }

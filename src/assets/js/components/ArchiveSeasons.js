@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {Link} from "react-router-dom";
-import shortId from "shortid";
+import { nanoid } from "nanoid";
 import {getArchiveSeasons} from "../services/seasons";
 
 export default class ArchiveSeasons extends Component {
@@ -24,7 +24,7 @@ export default class ArchiveSeasons extends Component {
         return (<>
             <h1>Rankingi z poprzednich sezonów</h1>
             {this.state.seasons.map(season => {
-                return (<div key={shortId()} className="">
+                return (<div key={nanoid()} className="">
                     <h2>Sezon {season.name}</h2>
                     <div className="">
                         <Link to={`/ranking/${season.seasonId}`} className="nav-link text-dark">Ranking Generalny</Link>

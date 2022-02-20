@@ -7,7 +7,7 @@ export default class TournamentResults extends Component {
         super(props);
         this.state = {
             tournament: null,
-            tournamentId: props.match.params.tournamentId
+            tournamentId: props.tournamentId
         };
     }
 
