@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import shortId from 'shortid';
+import { nanoid } from 'nanoid';
 
 import { getRank } from '../services/tournaments';
 import {Link} from "react-router-dom";
@@ -33,7 +33,7 @@ export default class TournamentsTable extends Component {
                         const status = tournament.status === 'OK' ? 'Zaliczony' : '-';
                         const showResultsLink = tournament.status === 'OK';
 
-                        return (<tr key={shortId()}>
+                        return (<tr key={nanoid()}>
                             <th scope="row">{tournament.legacyId}</th>
                             <td>{tournament.date}</td>
                             <td>

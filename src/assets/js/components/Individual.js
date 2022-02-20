@@ -13,8 +13,8 @@ export default class Individual extends Component {
                 tournaments: {},
                 points: null
             },
-            playerId: props.match.params.playerId,
-            seasonId: props.match.params.seasonId
+            playerId: props.playerId,
+            seasonId: props.seasonId
         };
     }
 
@@ -27,10 +27,10 @@ export default class Individual extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.match.params.seasonId !== this.state.seasonId) {
+        if (nextProps.seasonId !== this.state.seasonId) {
             Promise.resolve()
-                .then(() => getIndividualRanking(nextProps.match.params.playerId, nextProps.match.params.seasonId))
-                .then((result) => this.setState({ result, seasonId: nextProps.match.params.seasonId }));
+                .then(() => getIndividualRanking(nextProps.playerId, nextProps.seasonId))
+                .then((result) => this.setState({ result, seasonId: nextProps.seasonId }));
         }
     }
 

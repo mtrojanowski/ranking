@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
 import DatePicker from 'react-datepicker';
+import { Navigate } from 'react-router-dom';
 
 import {createTournament} from "../services/tournaments";
 
@@ -62,7 +62,7 @@ export default class AddTournament extends Component {
 
         return (
             <div>
-                {redirectToList && <Redirect push to={{
+                {redirectToList && <Navigate to={{
                     pathname: '/future-tournaments',
                     state: { newTournamentId: tournamentId }
                 }} />}

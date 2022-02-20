@@ -9,8 +9,8 @@ export default class Ranking extends Component {
         super(props);
         this.state = {
             ranking: [],
-            seasonId: props.match.params.seasonId,
-            army: props.match.params.army,
+            seasonId: props.seasonId,
+            army: props.army,
             rankingLastModified: null,
             rankingTitle: "Ranking"
         };
@@ -27,8 +27,8 @@ export default class Ranking extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContent) {
-        const seasonId = nextProps.match.params.seasonId;
-        const army = nextProps.match.params.army;
+        const seasonId = nextProps.seasonId;
+        const army = nextProps.army;
         if (seasonId !== this.state.seasonId || army !== this.state.army) {
             const newSeason = seasonId !== this.state.seasonId ? seasonId : this.state.seasonId;
             const newArmy  = army !== this.state.army ? army : this.state.army;
