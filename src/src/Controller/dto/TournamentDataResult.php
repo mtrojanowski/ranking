@@ -3,15 +3,16 @@ namespace App\Controller\dto;
 
 class TournamentDataResult
 {
-    private $place;
-    private $playerId;
-    private $judge;
-    private $points;
-    private $playerName;
-    private $playerNickname;
-    private $playerFirstName;
-    private $playerAssociation;
-    private $playerTown;
+    private int $place;
+    private string $playerId;
+    private int $judge;
+    private int $points;
+    private string $playerName;
+    private string $playerNickname;
+    private string $playerFirstName;
+    private string $playerAssociation;
+    private string $playerTown;
+    private string $army;
 
     /**
      * TournamentDataResult constructor.
@@ -24,8 +25,11 @@ class TournamentDataResult
      * @param string $playerFirstName
      * @param string $playerAssociation
      * @param string $playerTown
+     * @param string $army
      */
-    public function __construct(int $place, string $playerId, int $judge, int $points, string $playerName, string $playerNickname, string $playerFirstName, string $playerAssociation, string $playerTown)
+    public function __construct(int $place, string $playerId, int $judge, int $points, string $playerName,
+                                string $playerNickname, string $playerFirstName, string $playerAssociation,
+                                string $playerTown, string $army)
     {
         $this->place = $place;
         $this->playerId = $playerId;
@@ -36,6 +40,7 @@ class TournamentDataResult
         $this->playerFirstName = $playerFirstName;
         $this->playerAssociation = $playerAssociation;
         $this->playerTown = $playerTown;
+        $this->army = $army;
     }
 
 
@@ -183,4 +188,11 @@ class TournamentDataResult
         $this->playerFirstName = $playerFirstName;
     }
 
+    /**
+     * @return string
+     */
+    public function getArmy(): string
+    {
+        return $this->army;
+    }
 }

@@ -13,6 +13,7 @@ use App\Repository\SeasonRepository;
 use App\Repository\TournamentRepository;
 use App\Service\TournamentsService;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
@@ -68,7 +69,7 @@ class TournamentController extends AppController
         return $this->json(['id' => $tournament->getLegacyId()], 201);
     }
 
-    public function getTournament(DocumentManager $dm, string $id)
+    public function getTournament(DocumentManager $dm, string $id): JsonResponse
     {
         $tournamentRepository = $dm->getRepository(Tournament::class);
         /** @var Tournament $tournament */
@@ -105,7 +106,8 @@ class TournamentController extends AppController
                 $player->getNickname(),
                 $player->getFirstName(),
                 $player->getAssociation(),
-                $player->getTown()
+                $player->getTown(),
+                $result->getArmy()
             );
         }
 

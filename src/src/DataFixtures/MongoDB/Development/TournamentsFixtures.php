@@ -38,12 +38,14 @@ class TournamentsFixtures extends Fixture implements DependentFixtureInterface
         $today = new \DateTime();
 
         for ($j = $i; $j < $i + 3; $j++) {
-            $this->persistTournamentWithResults($manager, $activeSeason, $today->sub(new \DateInterval("P{$j}D")), $j);
+            $this->persistTournamentWithResults($manager, $activeSeason, new \DateTime("-{$j} day"), $j);
         }
 
-        // Future tournament
-        $futureTournament = $this->getTournament($j, new \DateTime("+1 day"), $activeSeason);
+        // Future tournaments
+        $futureTournament = $this->getTournament($j, new \DateTime("+8 year"), $activeSeason);
         $manager->persist($futureTournament);
+        $futureTournament2 = $this->getTournament($j+1, new \DateTime("+10 year"), $activeSeason);
+        $manager->persist($futureTournament2);
 
         $manager->flush();
     }

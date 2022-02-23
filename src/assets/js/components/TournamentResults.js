@@ -34,6 +34,7 @@ export default class TournamentResults extends Component {
                     <thead className="thead-dark">
                     <tr>
                         <th>Miejsce</th>
+                        <th>Armia</th>
                         <th>Imię</th>
                         <th>Nick</th>
                         <th>Klub</th>
@@ -46,6 +47,7 @@ export default class TournamentResults extends Component {
                     {tournament.results.map(position => {
                         return (<tr key={i++}>
                             <th scope="row">{position.place}</th>
+                            <td>{position.army}</td>
                             <td>{position.playerFirstName}</td>
                             <td>{position.playerNickname}</td>
                             <td>{position.playerAssociation}</td>

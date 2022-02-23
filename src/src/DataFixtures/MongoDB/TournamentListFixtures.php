@@ -54,6 +54,7 @@ class TournamentListFixtures extends TournamentFixture
             $result->setTournamentRank($tournament->getRank());
             $result->setTournamentType($tournament->getType());
             $result->setPoints(100 - 9*$i);
+            $result->setArmy("VC");
             $manager->persist($result);
         }
 

@@ -12,20 +12,22 @@ class TournamentRepository extends DocumentRepository
     {
         $queryBuilder = $this->createQueryBuilder();
         $todayDate = new \DateTime();
-        $todayDate->setTime(0, 0, 0);
+        $todayDate->setTime(0, 0);
 
         $queryBuilder
             ->field("season")->equals($activeSeasonId);
 
+        $sort = -1;
         if ($previous == 'true') {
             $queryBuilder
                 ->field('date')->lt($todayDate);
         } else {
+            $sort = 1;
             $queryBuilder
                 ->field('date')->gte($todayDate);
         }
 
-        $queryBuilder->sort("date", 1);
+        $queryBuilder->sort("date", $sort);
 
         return $queryBuilder->getQuery()->execute()->toArray();
     }

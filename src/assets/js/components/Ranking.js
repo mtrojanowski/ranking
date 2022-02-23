@@ -56,6 +56,7 @@ export default class Ranking extends Component {
                     <thead className="thead-dark">
                     <tr>
                         <th>Lp.</th>
+                        <th>ID</th>
                         <th>Imię</th>
                         <th>Nick</th>
                         <th>Klub</th>
@@ -69,6 +70,7 @@ export default class Ranking extends Component {
                     {ranking.map(position => {
                         return (<tr key={position.id}>
                             <th scope="row">{lp++}</th>
+                            <td>{position.player.legacyId}</td>
                             <td>{position.player.firstName}</td>
                             <td>{position.player.nickname}</td>
                             <td>{position.player.association}</td>
