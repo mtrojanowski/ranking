@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow: /api
+
+Sitemap: https://ranking.wfb-pol.org/sitemap.xml

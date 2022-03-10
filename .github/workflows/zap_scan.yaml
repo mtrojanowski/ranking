@@ -8,7 +8,7 @@ jobs:
     name: Scan ZAP website
     steps:
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.4.0
+        uses: zaproxy/action-baseline@v0.6.1
         with:
-          target: 'http://ranking.wfb-pol.org'
+          target: 'https://ranking.wfb-pol.org'
 
