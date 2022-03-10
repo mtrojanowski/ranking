@@ -26,12 +26,11 @@ export default class Ranking extends Component {
             }));
     }
 
-    componentWillReceiveProps(nextProps, nextContent) {
-        const seasonId = nextProps.seasonId;
-        const army = nextProps.army;
-        if (seasonId !== this.state.seasonId || army !== this.state.army) {
-            const newSeason = seasonId !== this.state.seasonId ? seasonId : this.state.seasonId;
-            const newArmy  = army !== this.state.army ? army : this.state.army;
+    componentDidUpdate(previousProps, previousState, snapshot) {
+        const { seasonId, army } = previousProps;
+        if (seasonId !== this.props.seasonId || army !== this.props.army) {
+            const newSeason = seasonId === this.props.seasonId ? seasonId : this.props.seasonId;
+            const newArmy  = army === this.props.army ? army : this.props.army;
             Promise.resolve()
                 .then(() => getRanking(newSeason, newArmy))
                 .then((rankingData) => this.setState({

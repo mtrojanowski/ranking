@@ -26,11 +26,11 @@ export default class Individual extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.seasonId !== this.state.seasonId) {
+    componentDidUpdate(previousProps, previousState, snapshot) {
+        if (previousProps.seasonId !== this.props.seasonId) {
             Promise.resolve()
-                .then(() => getIndividualRanking(nextProps.playerId, nextProps.seasonId))
-                .then((result) => this.setState({ result, seasonId: nextProps.seasonId }));
+                .then(() => getIndividualRanking(this.props.playerId, this.props.seasonId))
+                .then((result) => this.setState({ result, seasonId: this.props.seasonId }));
         }
     }
 
