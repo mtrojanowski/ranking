@@ -1,6 +1,6 @@
 on:
-  schedule:
-    - cron: '0 1 1,15 * *'
+  push:
+    branches: master
 
 jobs:
   zap_scan:
