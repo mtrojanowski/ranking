@@ -28,13 +28,13 @@ export default class Home extends Component {
 
                     <h3>Zgłaszanie wyników</h3>
                     <p>
-                        Wyniki turniejów należy przesyłać na adres e-mail wyniki( at )wfb-pol.org w formacie tekstowym,
+                        Wyniki turniejów należy przesyłać na adres e-mail wynikiligi( at )gmail.com w formacie tekstowym,
                         podając: miejsce gracza, jego ID, armię którą grał. Przesyłając wyniki podaj także ID turnieju,
                         oraz wskaż kto powinien dostać punkty za sędziowanie.
                     </p>
                     <p>
                         W sprawie wyników, zmiany w turniejach, rankingu, edycja graczy prosimy o kontakt na adres
-                        e-mail wyniki( at )wfb-pol.org [ ( at ) = @]
+                        e-mail wynikiligi( at )gmail.com [ ( at ) = @]
                     </p>
                 </div>
             </div>
