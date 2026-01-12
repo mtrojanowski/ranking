@@ -52,10 +52,14 @@ class ResultsService
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
-        $playersInTournament = count(array_filter($tournamentResults->getResults(), function ($results) { return $results->getPlace() > 0; }));
+//        $playersInTournament = count(array_filter($tournamentResults->getResults(), function ($results) { return $results->getPlace() > 0; }));
 
-        $multiplier1 = ( $playersInTournament > 24 ? 249 : (10*$playersInTournament - 1) ) / ( $playersInTournament / $playersInTeam - 1 );
-        $multiplier2 = ( $playersInTournament > 34 ? 50 : ($playersInTournament > 25 ? (5 * ($playersInTournament - 25)) : 0) );
+        $numberOfPlaces = $this->getLastPlace($tournamentResults->getResults());
+
+        $theoreticalNumberOfPlayers = $numberOfPlaces * $playersInTeam;
+
+        $multiplier1 = ( $theoreticalNumberOfPlayers > 24 ? 249 : (10*$theoreticalNumberOfPlayers - 1) ) / ( $numberOfPlaces - 1 );
+        $multiplier2 = ( $theoreticalNumberOfPlayers > 34 ? 50 : ($theoreticalNumberOfPlayers > 25 ? (5 * ($theoreticalNumberOfPlayers - 25)) : 0) );
 
         foreach ($tournamentResults->getResults() as $tournamentResult) {
             /** @var \App\Controller\dto\Result $tournamentResult */
@@ -69,7 +73,7 @@ class ResultsService
 
             $points = 0;
             if ($tournamentResult->getJudge() == 0) {
-                $points = $this->calculatePointsForMaster($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
+                $points = $this->calculatePointsForMaster($numberOfPlaces, $playersInTeam, $tournamentResult->getPlace(), $multiplier1, $multiplier2);
             } elseif ($tournamentResult->getJudge() == 1) {
                 if ($this->headJudgeBonusCheckerService->playerHasHeadJudgeBonus($tournamentResult->getPlayerId(), $seasonId, $tournamentId)) {
                     throw new HeadJudgeBonusException();
@@ -104,8 +108,13 @@ class ResultsService
     {
         $results = [];
         $tournamentId = $tournamentResults->getTournamentId();
+
         $playersInTournament = count($tournamentResults->getResults());
-        $multiplier = ($playersInTournament > 9 ? 99 : (10 * $playersInTournament - 1)) / ( $playersInTournament / $playersInTeam - 1);
+
+        $numberOfPlaces = $this->getLastPlace($tournamentResults->getResults());
+//        $numberOfPlaces = $tournamentResults->getResults()[array_key_last($tournamentResults->getResults())]->getPlace();
+//        $multiplier = ($numberOfPlaces * $playersInTeam > 9 ? 99 : (10 * $numberOfPlaces * $playersInTeam - 1)) / ( $numberOfPlaces - 1);
+        $multiplier = ($playersInTournament > 9 ? 99 : (10 * $playersInTournament - 1)) / ( $numberOfPlaces - 1);
 
         foreach ($tournamentResults->getResults() as $tournamentResult) {
             /** @var \App\Controller\dto\Result $tournamentResult */
@@ -116,7 +125,7 @@ class ResultsService
             $result->setPlayerId($tournamentResult->getPlayerId());
             $result->setArmy($tournamentResult->getArmy());
             $result->setPlace($tournamentResult->getPlace());
-            $result->setPoints($this->calculatePointsForLocal($playersInTournament, $playersInTeam, $tournamentResult->getPlace(), $multiplier));
+            $result->setPoints($this->calculatePointsForLocal($numberOfPlaces, $tournamentResult->getPlace(), $multiplier));
             $result->setTournamentRank($tournamentRank);
             $result->setTournamentType($tournamentType);
             $result->setJudge(0);
@@ -127,17 +136,34 @@ class ResultsService
         return $results;
     }
 
-    private function calculatePointsForLocal(int $playersOnTournament, int $playersInTeam, int $place, float $multiplier) : int
-    {
-        return (int) (floor(($playersOnTournament / $playersInTeam - $place) * $multiplier) + 1);
+    private function getLastPlace(array $results): int {
+        /** @var Result[] $results */
+
+        return array_reduce($results, function($lastPlace, $result) {
+            /** @var Result $result */
+            if ($result->getJudge() != 0)  {
+                return $lastPlace;
+            }
+
+            if ($result->getPlace() > $lastPlace) {
+                return $result->getPlace();
+            }
+
+            return $lastPlace;
+        } );
     }
 
-    private function calculatePointsForMaster(int $playersOnTournament, int $playersInTeam, int $place, float $multiplier1, float $multiplier2) : int
+    private function calculatePointsForLocal(int $numberOfPlaces, int $place, float $multiplier) : int
+    {
+        return (int) (floor(($numberOfPlaces - $place) * $multiplier) + 1);
+    }
+
+    private function calculatePointsForMaster(int $numberOfPlaces, int $playersInTeam, int $place, float $multiplier1, float $multiplier2) : int
     {
         return (int) floor(
-            ( ($playersOnTournament / $playersInTeam - $place) * $multiplier1 )
+            ( ($numberOfPlaces - $place) * $multiplier1 )
             + 1
-            + ($multiplier2 * (exp( - ($place - 1) / ($playersOnTournament / 10) )))
+            + ($multiplier2 * (exp( - ($place - 1) / (($numberOfPlaces * $playersInTeam) / 10) )))
         );
     }
 }

@@ -11,6 +11,7 @@ class TestsDataProvider
         'largeSingleLocal' => [ 100, 96, 92, 89, 85, 82, 78, 75, 71, 68, 64, 61, 57, 54, 50, 46, 43, 39, 36, 32, 29, 25, 22, 18, 15, 11, 8, 4, 1 ],
         'veryLargeSingleLocal' => [100, 98, 97, 96, 95, 94, 92, 91, 90, 89, 88, 87, 85, 84, 83, 82, 81, 79, 78, 77, 76, 75, 74, 72, 71, 70, 69, 68, 67, 65, 64, 63, 62, 61, 59, 58, 57, 56, 55, 54, 52, 51, 50, 49, 48, 46, 45, 44, 43, 42, 41, 39, 38, 37, 36, 35, 34, 32, 31, 30, 29, 28, 26, 25, 24, 23, 22, 21, 19, 18, 17, 16, 15, 13, 12, 11, 10, 9, 8, 6, 5, 4, 3, 2, 1],
 
+        'smallDoubleLocal' => [60, 60, 30, 30, 1, 1],
         'largeDoubleLocal' => [100, 100, 95, 95, 91, 91, 87, 87, 83, 83, 79, 79, 75, 75, 71, 71, 67, 67, 62, 62, 58, 58, 54, 54, 50, 50, 46, 46, 42, 42, 38, 38, 34, 34, 29, 29, 25, 25, 21, 21, 17, 17, 13, 13, 9, 9, 5, 5, 1, 1],
 
         'smallThreePlayerTeamLocal' => [60, 60, 60, 1, 1, 1],
@@ -58,6 +59,11 @@ class TestsDataProvider
     public static function getLargeDoubleLocalTestData() : array
     {
         return self::getTournamentTestData('largeDoubleLocal', 2);
+    }
+
+    public static function getSmallDoubleLocalTestData() : array
+    {
+        return self::getTournamentTestData('smallDoubleLocal', 2);
     }
 
     public static function getSmallThreePlayerTeamLocalTestData() : array

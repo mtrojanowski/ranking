@@ -50,3 +50,4 @@ ubuntu*.log
 /src/.env.local
 /src/.env.test.local
 
+curity/

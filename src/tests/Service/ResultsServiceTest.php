@@ -285,6 +285,72 @@ class ResultsServiceTest extends TestCase
         $this->verifyResults($results, $testData['expectedResult']);
     }
 
+    public function testShouldCreateResultsForDoublesTournamentWhereSomePlayersPlayedSingle() {
+        $tournament = $this->getTournament("local", "double", 2);
+        $testData = TestsDataProvider::getLargeDoubleLocalTestData();
+
+        // Player in position 3 played on their own
+        /** @var TournamentResults $tournamentResults */
+        $tournamentResults = $testData['input'];
+        /** @var Result[] $results */
+        $results = $tournamentResults->getResults();
+        $playerToRemove = $results[5]->getPlayerId();
+        unset($results[5]);
+        $tournamentResults->setResults($results);
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $tournamentResults);
+
+        $expectedResult = array_values(array_filter($testData['expectedResult'],  function ($result) use ($playerToRemove) { return $result->getPlayerId() != $playerToRemove; }));
+
+
+        $this->verifyResults($results, $expectedResult);
+    }
+
+    public function testShouldCreateResultsForDoublesSmallLocalTournamentWhereSomePlayersPlayedSingle() {
+        $tournament = $this->getTournament("local", "double", 2);
+        $testData = TestsDataProvider::getSmallDoubleLocalTestData();
+
+        // Player in position 3 played on their own
+        /** @var TournamentResults $tournamentResults */
+        $tournamentResults = $testData['input'];
+        /** @var Result[] $results */
+        $results = $tournamentResults->getResults();
+        $playerToRemove = $results[5]->getPlayerId();
+        unset($results[5]);
+        $tournamentResults->setResults($results);
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $tournamentResults);
+
+        $expectedResult = array_values(array_filter($testData['expectedResult'],  function ($result) use ($playerToRemove) { return $result->getPlayerId() != $playerToRemove; }));
+
+
+        $this->verifyResults($results, $expectedResult);
+    }
+
+    public function testShouldCreateResultsForDoublesMasterTournamentWhereSomePlayersPlayedSingle() {
+        $tournament = $this->getTournament("master", "double", 2);
+        $testData = TestsDataProvider::getLargeDoubleMasterTestData();
+
+        // Player in position 3 played on their own
+        /** @var TournamentResults $tournamentResults */
+        $tournamentResults = $testData['input'];
+        /** @var Result[] $results */
+        $results = $tournamentResults->getResults();
+        $playerToRemove = $results[5]->getPlayerId();
+        unset($results[5]);
+        $tournamentResults->setResults($results);
+
+        $service = new ResultsService();
+        $results = $service->createTournamentResults($tournament, $tournamentResults);
+
+        $expectedResult = array_values(array_filter($testData['expectedResult'],  function ($result) use ($playerToRemove) { return $result->getPlayerId() != $playerToRemove; }));
+
+
+        $this->verifyResults($results, $expectedResult);
+    }
+
     private function verifyResults($results, $expectedResults)
     {
         $this->assertSameSize($expectedResults, $results);
